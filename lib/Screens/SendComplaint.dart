@@ -13,7 +13,7 @@ import 'package:flutter_application_1/model/ComplaintFields.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() async {
-  runApp(MaterialApp(home: SendComplaint()));
+  runApp(SendComplaint());
 }
 
 class SendComplaint extends StatelessWidget {
@@ -90,17 +90,17 @@ class _SendComplaintState extends State<SendComplaintDemo> {
         backgroundColor: Color(0xffffDD83),
         title: Text("Send Complaint"),
       ),
-      body: new Center(
-        child: new Container(
+      body: SingleChildScrollView(
           child: new Column(
-            children: [
-              new Padding(
+            children:  <Widget>[
+               Padding(
                 padding: const EdgeInsets.only(
                     left: 24.0, right: 24.0, top: 57, bottom: 24),
                 child: new Row(
                   children: <Widget>[
                     new Expanded(
                         child: new TextField(
+                          key: Key("addBinId"),
                       controller: binId,
                       decoration: new InputDecoration(
                           border: new OutlineInputBorder(
@@ -134,6 +134,7 @@ class _SendComplaintState extends State<SendComplaintDemo> {
                   children: <Widget>[
                     new Expanded(
                         child: new TextField(
+                            key: Key("addDistrict"),
                       controller: district,
                       decoration: new InputDecoration(
                           border: new OutlineInputBorder(
@@ -163,12 +164,9 @@ class _SendComplaintState extends State<SendComplaintDemo> {
               Container(
                   height: 100,
                   width: 350,
-                  child: new Theme(
-                    data: new ThemeData(
-                      primaryColor: Colors.greenAccent,
-                      primaryColorDark: Colors.green,
-                    ),
+                 
                     child: new TextField(
+                        key: Key("addSummary"),
                       controller: summary,
                       decoration: new InputDecoration(
                           border: new OutlineInputBorder(
@@ -177,18 +175,14 @@ class _SendComplaintState extends State<SendComplaintDemo> {
                           labelText: 'Summary',
                           suffixStyle: const TextStyle(color: Colors.green)),
                     ),
-                  )),
+                  ),
               Container(
                   height: 150,
                   width: 350,
-                  child: new Theme(
-                    data: new ThemeData(
-                      primaryColor: Colors.greenAccent,
-                      primaryColorDark: Colors.green,
-                    ),
-                    child: SizedBox(
-                      height: 150,
+      
+                   
                       child: new TextField(
+                          key: Key("addDescription"),
                         controller: description,
                         keyboardType: TextInputType.multiline,
                         minLines: 1, //Normal textInputField will be displayed
@@ -201,8 +195,8 @@ class _SendComplaintState extends State<SendComplaintDemo> {
                             labelText: ' Description',
                             suffixStyle: const TextStyle(color: Colors.green)),
                       ),
-                    ),
-                  )),
+                   
+                  ),
               Container(
                 height: 50,
                 width: 250,
@@ -210,7 +204,8 @@ class _SendComplaintState extends State<SendComplaintDemo> {
                 decoration: BoxDecoration(
                     color: Color(0xff28CC9E),
                     borderRadius: BorderRadius.circular(20)),
-                child: FlatButton(
+                child: FlatButton( 
+                   key: Key("addComplaint"),
                   onPressed: () async {
                     print(ComplaintFields.validateFields(selectedBinId,
                         district.text, summary.text, description.text));
@@ -284,7 +279,7 @@ class _SendComplaintState extends State<SendComplaintDemo> {
             ],
           ),
         ),
-      ),
+     
     );
   }
 

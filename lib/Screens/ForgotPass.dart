@@ -155,62 +155,50 @@ class _ForgotPasswordState extends State<ForgotPasswordDemo> {
                   child: new Row(),
                 ),
                 Container(
-                    height: 100,
-                    width: 350,
-                    child: new Theme(
-                      data: new ThemeData(
-                        primaryColor: Colors.greenAccent,
-                        primaryColorDark: Colors.green,
-                      ),
-                      child: new TextField(
-                        controller: phoneField,
-                        decoration: new InputDecoration(
-                            border: new OutlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: Colors.greenAccent)),
-                            labelText: 'Phone ',
-                            suffixStyle: const TextStyle(color: Colors.green)),
-                      ),
-                    )),
+                  height: 100,
+                  width: 350,
+                  child: new TextField(
+                    key: Key("addPhone"),
+                    controller: phoneField,
+                    decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                            borderSide:
+                                new BorderSide(color: Colors.greenAccent)),
+                        labelText: 'Phone ',
+                        suffixStyle: const TextStyle(color: Colors.green)),
+                  ),
+                ),
                 Container(
-                    height: 100,
-                    width: 350,
-                    child: new Theme(
-                      data: new ThemeData(
-                        primaryColor: Colors.greenAccent,
-                        primaryColorDark: Colors.green,
-                      ),
-                      child: new TextField(
-                        controller: newPass,
-                        decoration: new InputDecoration(
-                            border: new OutlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: Colors.greenAccent)),
-                            labelText: 'New Password',
-                            suffixStyle: const TextStyle(color: Colors.green)),
-                      ),
-                    )),
+                  height: 100,
+                  width: 350,
+                  child: new TextField(
+                    key: Key("addNewPassword"),
+                    controller: newPass,
+                    decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                            borderSide:
+                                new BorderSide(color: Colors.greenAccent)),
+                        labelText: 'New Password',
+                        suffixStyle: const TextStyle(color: Colors.green)),
+                  ),
+                ),
                 Container(
-                    height: 150,
-                    width: 350,
-                    child: new Theme(
-                      data: new ThemeData(
-                        primaryColor: Colors.greenAccent,
-                        primaryColorDark: Colors.green,
-                      ),
-                      child: new TextField(
-                        controller: confPass,
-                        keyboardType: TextInputType.multiline,
-                        minLines: 1, //Normal textInputField will be displayed
-                        maxLines: 10, //
-                        decoration: new InputDecoration(
-                            border: new OutlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: Colors.greenAccent)),
-                            labelText: 'Confirm New Password',
-                            suffixStyle: const TextStyle(color: Colors.green)),
-                      ),
-                    )),
+                  height: 150,
+                  width: 350,
+                  child: new TextField(
+                    key: Key("addConfirmedPasswrd"),
+                    controller: confPass,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1, //Normal textInputField will be displayed
+                    maxLines: 10, //
+                    decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                            borderSide:
+                                new BorderSide(color: Colors.greenAccent)),
+                        labelText: 'Confirm New Password',
+                        suffixStyle: const TextStyle(color: Colors.green)),
+                  ),
+                ),
                 Container(
                   height: 50,
                   width: 250,
@@ -219,6 +207,7 @@ class _ForgotPasswordState extends State<ForgotPasswordDemo> {
                       color: Color(0xff28CC9E),
                       borderRadius: BorderRadius.circular(20)),
                   child: FlatButton(
+                    key: Key("submit"),
                     onPressed: () async {
                       //to retrieve the phone from the login interface
                       SharedPreferences prefs =
@@ -268,7 +257,7 @@ class _ForgotPasswordState extends State<ForgotPasswordDemo> {
                                 workTime: workTime);
 
                             //update password in the database
-                            updateObj(driverId, updatedDriver , tableDriver);
+                            updateObj(driverId, updatedDriver, tableDriver);
                             showDialogSuccess();
                             print("updated successsfully");
                             //move back to the login screen

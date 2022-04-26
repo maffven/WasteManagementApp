@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/AdminDashboard.dart';
 import 'package:flutter_application_1/Screens/DistrictListTab.dart';
 import 'package:flutter_application_1/Screens/EditComplaints.dart';
+import 'package:flutter_application_1/Screens/Login.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Complaints.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_application_1/model/Driver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+
 void main() => runApp(MaterialApp(home: ViewDrivers()));
 
 class ViewDrivers extends StatefulWidget {
@@ -18,17 +20,27 @@ class ViewDrivers extends StatefulWidget {
 }
 
 class _ViewDrivers extends State<ViewDrivers>
-
     with AutomaticKeepAliveClientMixin<ViewDrivers> {
- 
   @override
   bool get wantKeepAlive => true;
   //Define variables
-  List<Driver> drivers=[];
+  final dbHelper = DatabaseHelper.instance;
+  List<Driver> drivers = [];
+  List<Driver> filteredList = [];
   List<District> district;
   List<Widget> boxWidgets = [];
   var status;
-  @override
+  bool doItJustOnce = false;
+
+  void filterList(value) {
+    setState(() {
+      filteredList = drivers
+          .where(
+              (text) => text.firstName.toLowerCase().contains(value.toString()))
+          .toList();
+    });
+  }
+  /*@override
   Widget build(BuildContext context) => Scaffold(
         body: FutureBuilder<List<Widget>>(
           future: getWidgets(),
@@ -46,111 +58,189 @@ class _ViewDrivers extends State<ViewDrivers>
             }
           },
         ),
-      );
+      );*/
 
-  Widget buildDrivers(List<Widget> drivers) {
-    return MaterialApp(
-        home: Scaffold(
-            resizeToAvoidBottomInset: false,
-             appBar: AppBar(
+  //get all drivers from database
+  Future<List<Driver>> getDrivers() async {
+    //Get drivers from DB
+    List<Driver> driv;
+    List<dynamic> driversDB = await readAll(tableDriver);
+    driv = driversDB.cast();
+    print("in get drivers method");
+    print("drivers length ${driversDB.length}");
+    return driv;
+  }
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context)),
         backgroundColor: Color(0xffffDD83),
-        title: Text("View Drivers"),
-        
+        title: Text("Drivers List"),
       ),
-            body: SingleChildScrollView(
-              child: Padding(
-                // to add search button you have to add padding
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: Wrap(spacing: 20, runSpacing: 20.0, children: drivers),
+      body: Column(
+        children: <Widget>[
+          Container(
+            height: 255,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(50),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 12, bottom: 10),
+                  
+                            ), //padding
+                          ],
+                        ), //row
+
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            height: 42,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: TextFormField(
+                              textAlign: TextAlign.start,
+                              onChanged: (value) {
+                                filterList(value);
+                                print(value);
+                              },
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.search),
+                                hintText: "Search by name",
+                                contentPadding: EdgeInsets.only(top: 10),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+              
+                  ),
+                ),
+          
+              ],
+            ),
+          ),
+
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(3.0),
+                  topRight: Radius.circular(3.0),
                 ),
               ),
-            )));
-  }
+              child: FutureBuilder<List<Driver>>(
+                  future: getDrivers(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Driver>> snapshot) {
+                    if (snapshot.hasData) {
+                      if (!doItJustOnce) {
+                        drivers = snapshot.data;
+                        filteredList = drivers;
+                        doItJustOnce = !doItJustOnce;
+                      }
+                      return ListView.builder(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        reverse: false,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: filteredList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Driver drivers = filteredList[index];
+                          return Dismissible(
+                            key: UniqueKey(),
+                            background: Container(
+                              color: Colors.red,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(338, 30, 0, 0),
+                                child: Text("delete"
+                                ),
+                              ),
+                            ),
+                            onDismissed: (direction) {
+                              setState(() {
+                                dbHelper.gneralDelete(
+                                    drivers.driverID, tableDriver);
+                              });
+                            },
 
-   
-
-
-  //get all complaints from database
-  Future<List<Driver>> getdrivers() async {
-    //Get complaints from DB
-    List<Driver> dri;
-   
-    List<dynamic> compDB = await readAll(tableDriver);
-    dri = compDB.cast();
-    for (int i=0;i<dri.length;i++){
-   
-   }
-    print("drivers length ${compDB.length}");
-    return dri;
-  }
-
-
-  //get box widgets
-  Future<List<Widget>> getWidgets() async {
-     drivers=[];
-    drivers = await getdrivers();
-    for (int i = 0; i < drivers.length; i++) {
-      boxWidgets.add(SizedBox(
-          width: 370.0,
-          height: 100.0,
-          child: InkWell(//move to the specific complaint's detail screen
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (BuildContext context) {
-              
-            })),
-            child: Card(
-              borderOnForeground: true,
-              color: Colors.white,
-              elevation: 2.0,
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Color(0xff28CC9E), width: 1),
-                  borderRadius: BorderRadius.circular(30.0)),
-              child: Center(
-                  child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 7.0,
-                    ),
-                    Text(
-                      '${drivers[i].firstName}' + '\t'+   '${drivers[i].lastName}',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 19.0),
-                    ),
-                   Text(
-                      '',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 21.0),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                  
-                  ],
-                ),
-              )),
+                          child:
+                          Card(
+                            elevation: 15.0,
+                            color: Colors.white70,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                child: Text("${drivers.driverID}"),
+                                backgroundColor: Color(0xff28CC9E),
+                                foregroundColor: Colors.white,
+                              ),
+                              title: Text(
+                                  drivers.firstName + " " + drivers.lastName,
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              subtitle: Text("${drivers.phone}"),
+                              trailing: Text("status"),
+                            
+                            ),
+                          ),
+                        
+                      );
+                      ),
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                    
+                  }),
             ),
-          )));
-    }
-    return boxWidgets;
+          ),
+        ],
+      ),
+    );
   }
 
+  Widget buildDriver(Driver driver) =>
+      ListTile(title: Text("Name"), subtitle: Text(""));
   //read objects
   //int id, String tableName, dynamic classFields, dynamic className
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
-    
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
     //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-   
   }
 }

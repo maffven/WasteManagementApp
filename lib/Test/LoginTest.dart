@@ -12,11 +12,6 @@ void main() {
 //TestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
 
-  Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
-    return await DatabaseHelper.instance.generalReadAll(tableName);
-  }
-
   //-------------------------------------------------------------
   test('Valid password check', () {
     try{
