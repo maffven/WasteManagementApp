@@ -14,6 +14,7 @@ void main() {
     // await tester.enterText(userTypeField, true);
     await tester.enterText(phoneField, "06795431420");
     await tester.enterText(passwordField, "Rina12345!");
+    await tester.press(userTypeField);
     await tester.tap(submitField);
     await tester.pump();
 
