@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
+import 'package:flutter_application_1/model/District.dart';
+import 'package:flutter_application_1/model/Driver.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/DatabaseHelper.dart';
 import '../model/Bin.dart';
@@ -26,6 +29,16 @@ List<notif> persons = [
 ];
 
 class NotificationState extends State<Notifications> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAssignedDistricts().whenComplete(() => setState(() {}));
+  }
+
+  List<District> assignedDistricts = [];
+  int driverId;
+  Driver driver;
   bool _status = true;
   List<BinLevel> binLevel;
   List<Bin> bin;
@@ -167,13 +180,36 @@ class NotificationState extends State<Notifications> {
     db.close();
   }
 
-  Future<List<BinLevel>> getDrivers() async {
-    //Get drivers from DB
-    List<BinLevel> binL;
-    List<dynamic> BinLevelDB = await readAll(tableBinLevel);
-    binL = BinLevelDB.cast();
-    // print("in get drivers method");
-    // print("drivers length ${driversDB.length}");
-    return binL;
+  Future<void> getAssignedDistricts() async {
+    List<Driver> driv;
+    List<dynamic> driversDB = await readAll(tableDriver);
+    driv = driversDB.cast();
+    await _retriveDriver(driv);
+    List<District> district;
+    List<dynamic> districtDB = await readAll(tableDistrict);
+    district = districtDB.cast();
+    print("in get distric method");
+    print("district length ${districtDB.length}");
+    setState(() {
+      for (int i = 0; i < district.length; i++) {
+        if (district[i].driverID == driverId) {
+          assignedDistricts.add(district[i]);
+        }
+      }
+    });
+  }
+
+  Future<void> _retriveDriver(List<Driver> drivers) async {
+    //to retrieve the phone from the login interface
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("driver id: ${prefs.getInt('id')}");
+    driverId = prefs.getInt('id');
+    for (var i = 0; i < drivers.length; i++) {
+      print("drivers[i].driverID ${drivers[i].driverID}");
+      if (driverId == drivers[i].driverID) {
+        driver = drivers[i];
+        break;
+      }
+    }
   }
 }
