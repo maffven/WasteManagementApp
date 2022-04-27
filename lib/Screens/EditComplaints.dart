@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/Screens/ViewComplaints.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
@@ -32,7 +33,25 @@ class _EditComplaints extends State<EditComplaints> {
     super.initState();
 
   }
-
+void showDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text("Confirmation"),
+          content: Text("Status updated successfully"),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
   bool status = false;
   _EditComplaints({this.complaint});
 
@@ -162,6 +181,7 @@ class _EditComplaints extends State<EditComplaints> {
                       onChanged: (bool value) {
                         setState(() {
                           status = value;
+                          print(status);
                         });
                       },
                     ),
@@ -177,8 +197,8 @@ class _EditComplaints extends State<EditComplaints> {
                   child: FlatButton(
                     onPressed: () async {
                      
-                      if (status == true) {
-                        print("it is true");
+                      if (status== true) {
+                 
                         print("${complaint.status}");
                         print(complaint.complaintID);
                         print(complaint.subject);
@@ -193,8 +213,20 @@ class _EditComplaints extends State<EditComplaints> {
                           driverID: complaint.driverID,
                           districtName: complaint.districtName,
                         );
+
+                          List<dynamic> drListd = await readAll(tableComplaints);
+                      complaints = drListd.cast();
+                      for (int i = 0; i < complaints.length; i++) {
+                        print(complaints[i].status);
+                        print(complaints[i].subject);
+           
+                       
+                      }
                       //to update teh states from false (Not solved) to true (solved)
                         updateObj(complaint.complaintID, c, tableComplaints);
+                        showDialog();
+                      }else{
+                        print('true');
                       }
 
                      
@@ -241,5 +273,9 @@ class _EditComplaints extends State<EditComplaints> {
 
   Future updateObj(int id, dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalUpdate(tableName, id, obj);
+  }
+  Future deleteObj(int id, String tableName) async {
+    await DatabaseHelper.instance.gneralDelete(id, tableName);
+    print("Object is deleted");
   }
 }

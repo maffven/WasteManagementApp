@@ -213,7 +213,7 @@ class _LoginDemoState extends State<LoginDemo> {
               child: FlatButton(
                 key: Key("loginButton"),
                 onPressed: () async {
-                  
+                //  deleteObj(19, tableComplaints);
                   List<BinLevel> binLevel = [];
                   List<dynamic> compDB = await readAll(tableBinLevel);
                   binLevel = compDB.cast();
@@ -334,6 +334,15 @@ class _LoginDemoState extends State<LoginDemo> {
                     } else {
                       print("admin");
                       //admin
+                             List<dynamic> drListd = await readAll(tableComplaints);
+                      complaints = drListd.cast();
+                      for (int i = 0; i < complaints.length; i++) {
+                        print(complaints[i].status);
+                        print(complaints[i].subject);
+           
+                       
+                      }
+                     // deleteObj(19, tableComplaints);
                       List<dynamic> muniList =
                           await readAll(tableMunicipalityAdmin);
                       munList = muniList.cast();

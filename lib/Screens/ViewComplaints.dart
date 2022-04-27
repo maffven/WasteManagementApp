@@ -71,6 +71,7 @@ class _ViewComplaints extends State<ViewComplaints> {
       Column(
         children: <Widget>[
           Expanded(
+            
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -89,6 +90,7 @@ class _ViewComplaints extends State<ViewComplaints> {
                         filteredList = complaints;
                         doItJustOnce = !doItJustOnce;
                       }
+                      
                       return ListView.builder(
                         padding:
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
@@ -98,6 +100,11 @@ class _ViewComplaints extends State<ViewComplaints> {
                         itemCount: filteredList.length,
                         itemBuilder: (BuildContext context, int index) {
                           Complaints complaint = filteredList[index];
+                          if(complaint.status==true){
+                            status="Completed";
+                          }else{
+                            status="In Progress";
+                          }
                           return Dismissible(
                             key: UniqueKey(),
                             child: Card(

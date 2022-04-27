@@ -239,7 +239,7 @@ class _SendComplaintState extends State<SendComplaintDemo> {
                           driverID: prefs.getInt('id'),
                           districtName: district.text,
                           date: now);
-                      //  addObj(c, tableComplaints);
+                        addObj(c, tableComplaints);
                       /* for (int i = 16; i <= 18; i++) {
                         deleteObj(i, tableComplaints);
                       }*/
