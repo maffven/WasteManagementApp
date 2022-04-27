@@ -298,15 +298,9 @@ class ProfileState extends State<Profile> {
                                       children: <Widget>[
                                         Container(
                                           width: 100,
-                                          child: TextFormField(
+                                          child: TextField(
+                                            key: Key("addEmail"),
                                             controller: emailController,
-                                            validator: (value) {
-                                              if (!RegExp(r'\S+@\S+\.\S+')
-                                                  .hasMatch(value)) {
-                                                return "Please enter a valid email address";
-                                              }
-                                              return null;
-                                            },
                                             enabled: _Enabled,
                                           ),
                                         ),
@@ -345,14 +339,9 @@ class ProfileState extends State<Profile> {
                                       children: <Widget>[
                                         Container(
                                           width: 100,
-                                          child: TextFormField(
+                                          child: TextField(
+                                            key: Key("addPhone"),
                                             controller: phoneController,
-                                            validator: (value) {
-                                              if (value.length != 10)
-                                                return 'Mobile Number must be of 10 digit';
-                                              else
-                                                return null;
-                                            },
                                             enabled: _Enabled,
                                           ),
                                         ),

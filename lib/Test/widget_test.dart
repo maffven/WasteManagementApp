@@ -3,6 +3,7 @@ import 'package:flutter_application_1/Screens/ForgotPass.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_1/Screens/Login.dart';
 import 'package:flutter_application_1/Screens/SendComplaint.dart';
+import 'package:flutter_application_1/Screens/profileScreen.dart';
 
 void main() {
   testWidgets("login widget test", (WidgetTester tester) async {
@@ -39,15 +40,35 @@ void main() {
       await tester.enterText(binIdField, "144");
       await tester.enterText(districtieField, "Aljamea");
       await tester.enterText(summaryField, "Bin is broken");
-      await tester.enterText(descriptionField, "i came to collect the bin at afternoon it was fully broken");
+      await tester.enterText(descriptionField,
+          "i came to collect the bin at afternoon it was fully broken");
       await tester.tap(submitField);
       await tester.pump();
       //check output
       expect(find.text("144"), findsOneWidget);
       expect(find.text("Aljamea"), findsOneWidget);
       expect(find.text("Bin is broken"), findsOneWidget);
-      expect( find.text( "i came to collect the bin at afternoon it was fully broken"),
+      expect(
+          find.text(
+              "i came to collect the bin at afternoon it was fully broken"),
           findsOneWidget);
+    });
+  });
+
+  testWidgets("Profile widget test", (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      //find all widgets
+      await tester.pumpWidget(Profile());
+      //var phone = find.byType(TextField);
+      var phone = find.byKey(ValueKey("addPhone"));
+      var email = find.byKey(ValueKey("addEmail"));
+      //execute the actual test
+      await tester.enterText(phone, "05543620821");
+      await tester.enterText(email, "lina@gmail.com");
+      await tester.pump();
+      //check output
+      expect(find.text("05543620821"), findsOneWidget);
+      expect(find.text("lina@gmail.com"), findsOneWidget);
     });
   });
 }
