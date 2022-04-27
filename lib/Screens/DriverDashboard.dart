@@ -38,6 +38,10 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
   List<BinLevel> pieBinsLevelForSelectedDistrict = [];
   List<Bin> pieBinsInsideSelectedDistrict = [];
   List<BinLevel> barBinsLevelForDistrict = [];
+  List<Bin> bins;
+  List<BinLevel> binsLevel;
+  District selectedDistrict;
+  double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
 
   // items for district list
   //final items = [];

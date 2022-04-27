@@ -10,38 +10,41 @@ class DriverSatus extends StatefulWidget {
   @override
   final Driver driver;
   DriverSatus({Key key, this.driver}) : super(key: key);
-  MapScreenState createState() => MapScreenState();
+  DriverStatusScreen createState() => DriverStatusScreen();
 }
 
 //  final String BinsStatus = null;
 //  final Driver driver = null;
-List<District> Assigneddistricts = [];
-Driver driver;
-List<District> districts = [];
-List<Bin> bins;
-List<BinLevel> binsLevel;
-List<BinLevel> binsLevelForSelectedDistrict = [];
-String value;
-bool alert;
-District selectedDistrict;
-double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
 
-class MapScreenState extends State<DriverSatus> {
+class DriverStatusScreen extends State<DriverSatus> {
+  double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
+  District selectedDistrict;
+  bool alert;
+  String value;
+  List<BinLevel> binsLevelForSelectedDistrict = [];
+  List<BinLevel> binsLevel;
+  List<Bin> bins;
+  int driverId;
+  Driver driver;
+  List<District> assignedDistricts = [];
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
 
+  //initeState
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLists().whenComplete(() => setState(() {}));
+  }
+
   @override
   Widget build(BuildContext context) {
-    _generateDataForDriver(value);
     return MaterialApp(
       home: DefaultTabController(
         length: 1,
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Color(0xffffDD83),
-            title: Text("Status"),
-          ),
           body: TabBarView(
             children: [
               Padding(
@@ -64,26 +67,25 @@ class MapScreenState extends State<DriverSatus> {
                                       MainAxisAlignment.spaceBetween,
                                   mainAxisSize: MainAxisSize.max,
                                   children: <Widget>[
-                                    new Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        new Text("Districts:" +
-                                            (_generateDataForDriver(
-                                                    "assignedDistricts"))
-                                                .toString())
-                                      ],
-                                    ),
-                                    IconButton(
-                                      onPressed: () async {
-                                        SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
-                                        await prefs.setBool("stats", true);
-                                      },
-                                      icon: Icon(Icons.add_alert_rounded),
-                                    ),
+                                    new Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: textList()
+                                        //new Text("Districts:")
+
+                                        ),
+                                    // IconButton(
+                                    //   onPressed: () async {
+                                    //     SharedPreferences prefs =
+                                    //         await SharedPreferences
+                                    //             .getInstance();
+                                    //     await prefs.setBool("stats", true);
+                                    //   },
+                                    //   alignment: Alignment.center,
+                                    //   padding: new EdgeInsets.all(0.0),
+                                    //   icon: Icon(Icons.add_alert_rounded),
+                                    // ),
                                     new Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       mainAxisSize: MainAxisSize.min,
@@ -147,9 +149,8 @@ class MapScreenState extends State<DriverSatus> {
                                         ),
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10.0, horizontal: 35.0),
-                                        child: Text((_generateDataForDriver(
-                                                "totalBins"))
-                                            .toString()),
+                                        child: Text(
+                                            ("${_generateDataForDriver("totalBins")}")),
                                         // _generateDataForDistrict(totalBin);
                                         //district=await readObj(DriverFields.id, district)
                                       ),
@@ -169,11 +170,9 @@ class MapScreenState extends State<DriverSatus> {
                                             Radius.elliptical(100, 50)),
                                       ),
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0, horizontal: 35.0),
-                                      child: Text((_generateDataForDriver(
-                                                  "performancePercent"))
-                                              .toString() +
-                                          "%"),
+                                          vertical: 10.0, horizontal: 30.0),
+                                      child: Text(
+                                          "${_generateDataForDriver("performancePercent")}%"),
                                     ),
                                   ],
                                 )),
@@ -231,9 +230,8 @@ class MapScreenState extends State<DriverSatus> {
                                         ),
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10.0, horizontal: 35.0),
-                                        child: Text((_generateDataForDriver(
-                                                "emptyBins"))
-                                            .toString()),
+                                        child: Text(
+                                            ("${_generateDataForDriver("emptyBins")}")),
                                         //status = await readObj(DriverFields.id, DriverStatus)
                                       ),
                                     ),
@@ -253,9 +251,8 @@ class MapScreenState extends State<DriverSatus> {
                                       ),
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0, horizontal: 35.0),
-                                      child: Text((_generateDataForDriver(
-                                              "notCollected"))
-                                          .toString()),
+                                      child: Text(
+                                          "${_generateDataForDriver("notCollected")}"),
                                       //status = await readObj(DriverFields.id, DriverStatus)
                                     ),
                                   ],
@@ -274,24 +271,57 @@ class MapScreenState extends State<DriverSatus> {
     );
   }
 
+  List<Widget> textList() {
+    List<Widget> textList = [
+      Text(
+        "Districts: ",
+        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+      )
+    ];
+    for (var i = 0; i < assignedDistricts.length; i++) {
+      textList.add(Text("${assignedDistricts[i].name}, ",
+          style: TextStyle(fontSize: 20)));
+    }
+    return textList;
+  }
+
+  Future<void> _retriveDriver(List<Driver> drivers) async {
+    //to retrieve the phone from the login interface
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("driver id: ${prefs.getInt('id')}");
+    driverId = prefs.getInt('id');
+    for (var i = 0; i < drivers.length; i++) {
+      print("drivers[i].driverID ${drivers[i].driverID}");
+      if (driverId == drivers[i].driverID) {
+        driver = drivers[i];
+        break;
+      }
+    }
+  }
+
 //to get district lists, bins list, and bins level list
   Future<void> getLists() async {
+    //retrieve all deivers
+    List<Driver> driv;
+    List<dynamic> driversDB = await readAll(tableDriver);
+    driv = driversDB.cast();
+    print("in get drivers method");
+    print("drivers length ${driversDB.length}");
+    await _retriveDriver(driv);
     List<District> district;
     List<dynamic> districtDB = await readAll(tableDistrict);
     district = districtDB.cast();
     print("in get distric method");
     print("district length ${districtDB.length}");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int driverId = prefs.getInt('driverID');
     setState(() {
       for (int i = 0; i < district.length; i++) {
         if (district[i].driverID == driverId) {
-          districts.add(district[i]);
+          assignedDistricts.add(district[i]);
         }
       }
     });
 
-    print(districts);
+    print(assignedDistricts);
 
     List<BinLevel> bin;
     List<dynamic> binStatus = await readAll(tableBinLevel);
@@ -310,8 +340,8 @@ class MapScreenState extends State<DriverSatus> {
       bins = binsInfo;
       List<Bin> binsInsideDistricts = [];
       for (int j = 0; j < bins.length; j++) {
-        for (int k = 0; k < Assigneddistricts.length; k++) {
-          if (bins[j].districtId == Assigneddistricts[k].districtID) {
+        for (int k = 0; k < assignedDistricts.length; k++) {
+          if (bins[j].districtId == assignedDistricts[k].districtID) {
             print("inside fill binsInsideDistricts $k");
             binsInsideDistricts.add(bins[j]);
           }
@@ -321,12 +351,12 @@ class MapScreenState extends State<DriverSatus> {
     print(bins);
   }
 
-  int _generateDataForDriver(String val) {
+  double _generateDataForDriver(String val) {
     //All bins inside assigned districts for driver
     List<Bin> binsInsideDistricts = [];
     for (int j = 0; j < bins.length; j++) {
-      for (int k = 0; k < Assigneddistricts.length; k++) {
-        if (bins[j].districtId == Assigneddistricts[k].districtID) {
+      for (int k = 0; k < assignedDistricts.length; k++) {
+        if (bins[j].districtId == assignedDistricts[k].districtID) {
           print("inside fill binsInsideDistricts $k");
           binsInsideDistricts.add(bins[j]);
         }
@@ -359,14 +389,14 @@ class MapScreenState extends State<DriverSatus> {
 
     print("numberOfEmpty: $numberOfEmpty");
     int totalBin = (binsInsideDistricts.length);
-    int notCollected = (numberOfHalfFull + numberOfFull) as int;
-    int performance = ((totalBin - notCollected) / totalBin) as int;
-    int performancePercernt = performance * 100;
+    double notCollected = (numberOfHalfFull + numberOfFull);
+    double performance = ((totalBin - notCollected) / totalBin);
+    double performancePercernt = performance * 100;
 
     switch (val) {
       case ("totalBins"):
         {
-          return totalBin;
+          return totalBin.toDouble();
         }
         break;
 
@@ -382,12 +412,7 @@ class MapScreenState extends State<DriverSatus> {
         break;
       case ("emptyBins"):
         {
-          return numberOfEmpty as int;
-        }
-        break;
-      case ("assignedDistricts"):
-        {
-          return Assigneddistricts.length;
+          return numberOfEmpty;
         }
         break;
       default:
@@ -467,25 +492,6 @@ class MapScreenState extends State<DriverSatus> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _getEditIcon() {
-    return new GestureDetector(
-      child: new CircleAvatar(
-        backgroundColor: Colors.red,
-        radius: 14.0,
-        child: new Icon(
-          Icons.edit,
-          color: Colors.white,
-          size: 16.0,
-        ),
-      ),
-      onTap: () {
-        setState(() {
-          _status = false;
-        });
-      },
     );
   }
 }
