@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/DriverSatus.dart';
 import 'package:flutter_application_1/model/Driver.dart';
@@ -398,14 +399,55 @@ class ProfileState extends State<Profile> {
                 //here u have to check phone and email if it is wrong show dialog else make the update
                 onPressed: () async {
                   String email = '';
-                  String phone = phoneController.text;
-                  var phonenumber = int.parse(phone);
-// if(isEmail(emailController.text)){
-// email = emailController.text
-// }else{
-
-// }
-
+                  String phone = "";
+                  var phonenumber;
+                  if (_isEmail(emailController.text) == true) {
+                    email = emailController.text;
+                  } else {
+                    void showDialog() {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: Text("Warning"),
+                            content: Text("please enter a valid email"),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                  if (_isPhone(phoneController.text) == true) {
+                    phone = phoneController.text;
+                    phonenumber = int.parse(phone);
+                  } else {
+                    void showDialog() {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: Text("Warning"),
+                            content: Text("please enter a valid phone number"),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
                   int driverId = driver.driverID;
                   int municipalityId;
                   String firstName;
@@ -424,7 +466,7 @@ class ProfileState extends State<Profile> {
                         phone: phonenumber,
                         workTime: workTime);
 
-                    //updateObj(id, updateddriver, tableDriver);
+                    updateObj(driver.driverID, updateddriver, tableDriver);
                   } else {}
 
                   setState(() {
@@ -461,6 +503,24 @@ class ProfileState extends State<Profile> {
         ],
       ),
     );
+  }
+
+  _isEmail(String email) {
+    if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email)) {
+      return false;
+    } else
+      return true;
+  }
+
+  _isPhone(String phone) {
+    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(patttern);
+    if (phone.length == 0) {
+      return false;
+    } else if (!regExp.hasMatch(phone)) {
+      return false;
+    } else
+      return true;
   }
 
   Widget _getEditIcon() {
