@@ -455,7 +455,8 @@ class ProfileState extends State<Profile> {
                   String password;
                   String workTime;
                   //Check email and phone if its correct create new object
-                  if (checkInfo == true) {
+                  if (_isPhone(phoneController.text) == true &&
+                      _isEmail(emailController.text) == true) {
                     Driver updateddriver = new Driver(
                         driverID: driverId,
                         municpalityID: municipalityId,

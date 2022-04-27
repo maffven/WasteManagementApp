@@ -4,6 +4,7 @@ import 'dart:math';
 
 final String tableMunicipalityAdmin = 'Municipality_Admin';
 final Random random = new Random();
+
 class MunicipalityAdminFields {
   static final List<String> values = [
     //add all fields
@@ -28,14 +29,12 @@ class MunicipalityAdmin {
   final int phone;
 
   const MunicipalityAdmin(
-      {
-      @required this.municpalityID,
+      {@required this.municpalityID,
       @required this.firstName,
       @required this.lastName,
       @required this.email,
       @required this.password,
-      this.phone}
-      );
+      this.phone});
 
   //Convert MunicipalityAdmin object to json object
   Map<String, dynamic> toJson() => {
@@ -49,7 +48,7 @@ class MunicipalityAdmin {
 
   MunicipalityAdmin copy(
           {
-            //random.nextInt(8990) + 1000 
+          //random.nextInt(8990) + 1000
           int id,
           String firstName,
           String lastName,
@@ -110,6 +109,4 @@ class MunicipalityAdmin {
     return db.delete(tableMunicipalityAdmin,
         where: '${MunicipalityAdminFields.id} = ?', whereArgs: [id]);
   }
-
-
 }

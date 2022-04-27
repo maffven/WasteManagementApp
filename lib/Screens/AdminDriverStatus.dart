@@ -6,17 +6,18 @@ import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DriverSatus extends StatefulWidget {
-  @override
+class AdminDriverStatus extends StatefulWidget {
   final Driver driver;
-  DriverSatus({Key key, this.driver}) : super(key: key);
-  DriverStatusScreen createState() => DriverStatusScreen();
+  @override
+  AdminDriverStatus({Key key, this.driver}) : super(key: key);
+  AdminDriverStatusScreen createState() =>
+      AdminDriverStatusScreen(driver: driver);
 }
 
 //  final String BinsStatus = null;
 //  final Driver driver = null;
 
-class DriverStatusScreen extends State<DriverSatus> {
+class AdminDriverStatusScreen extends State<AdminDriverStatus> {
   double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
   District selectedDistrict;
   bool alert;
@@ -29,7 +30,7 @@ class DriverStatusScreen extends State<DriverSatus> {
   List<District> assignedDistricts = [];
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
-
+  AdminDriverStatusScreen({this.driver});
   //initeState
   @override
   void initState() {
