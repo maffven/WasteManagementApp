@@ -14,8 +14,11 @@ class Profile extends StatefulWidget {
 }
 
 class ProfileState extends State<Profile> {
+  Driver driver;
+  int driverId;
   bool _status = true;
   bool _Enabled = false;
+  List<Driver> drivers = [];
 
   final FocusNode myFocusNode = FocusNode();
 
@@ -31,31 +34,44 @@ class ProfileState extends State<Profile> {
   //List<DriverStatus> status;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FutureBuilder<List<Driver>>(
-        future: getDrivers(),
-        builder: (context, snapshot) {
-          final drivers = snapshot.data;
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            default:
-              if (snapshot.hasError) {
-                return Center(child: Text("${snapshot.error}"));
-              } else {
-                return buildProfile(drivers);
-              }
-          }
-        },
-      ),
-    );
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDrivers().whenComplete(() {
+      setState(() {
+        _retriveDriver(drivers);
+      });
+    });
   }
 
-  Widget buildProfile(List<Driver> drivers) {
+  // @override
+  // Widget build(BuildContext context) {
+  //   return MaterialApp(
+  //     home: FutureBuilder<List<Driver>>(
+  //       future: getDrivers(),
+  //       builder: (context, snapshot) {
+  //         final drivers = snapshot.data;
+  //         switch (snapshot.connectionState) {
+  //           case ConnectionState.waiting:
+  //             return Center(child: CircularProgressIndicator());
+  //           default:
+  //             if (snapshot.hasError) {
+  //               return Center(child: Text("${snapshot.error}"));
+  //             } else {
+  //               return buildProfile(drivers);
+  //             }R
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
+
+  @override
+  Widget build(BuildContext context) {
     // drivers = await getDrivers();
-    phoneController = TextEditingController(text: "${drivers[0].phone}");
-    emailController = TextEditingController(text: "${drivers[0].email}");
+
+    phoneController = TextEditingController(text: "${driver.phone}");
+    emailController = TextEditingController(text: "${driver.email}");
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -79,7 +95,7 @@ class ProfileState extends State<Profile> {
               child: Center(
                   child: Expanded(
                       child: Container(
-                height: 800.0,
+                height: 1000.0,
                 child: ListView(padding: const EdgeInsets.all(8), children: <
                     Widget>[
                   //Icon container
@@ -186,7 +202,7 @@ class ProfileState extends State<Profile> {
                                       child: new Row(
                                         mainAxisSize: MainAxisSize.max,
                                         children: <Widget>[
-                                          Text("$getId()")
+                                          Text("${driver.driverID}")
                                           // Text("${drivers[0].driverID}"),
                                           //new Flexible(
                                           //  child: new TextField(controller: IDController),
@@ -232,7 +248,7 @@ class ProfileState extends State<Profile> {
                                         mainAxisSize: MainAxisSize.max,
                                         children: <Widget>[
                                           Text(
-                                              "${drivers[0].firstName} ${drivers[0].lastName}"),
+                                              "${driver.firstName} ${driver.lastName}"),
                                           // new Flexible(
                                           //   child: new Text(
                                           //       "${drivers[0].firstName} ${drivers[0].lastName}"),
@@ -379,31 +395,23 @@ class ProfileState extends State<Profile> {
                 child: new Text("Save"),
                 textColor: Colors.white,
                 color: Colors.green,
+                //here u have to check phone and email if it is wrong show dialog else make the update
                 onPressed: () async {
-                  String email = emailController.text;
+                  String email = '';
                   String phone = phoneController.text;
                   var phonenumber = int.parse(phone);
+// if(isEmail(emailController.text)){
+// email = emailController.text
+// }else{
 
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  int driverId = prefs.getInt('id');
+// }
+
+                  int driverId = driver.driverID;
                   int municipalityId;
                   String firstName;
                   String lastName;
                   String password;
                   String workTime;
-                  List<dynamic> drListd = await readAll(tableDriver);
-                  dd = drListd.cast();
-                  for (int i = 0; i < dd.length; i++) {
-                    if (dd[i].driverID == driverId) {
-                      checkInfo = true;
-                      firstName = dd[i].firstName;
-                      lastName = dd[i].lastName;
-                      password = dd[i].password;
-                      municipalityId = dd[i].municpalityID;
-                      workTime = dd[i].workTime;
-                    }
-                  }
                   //Check email and phone if its correct create new object
                   if (checkInfo == true) {
                     Driver updateddriver = new Driver(
@@ -415,7 +423,9 @@ class ProfileState extends State<Profile> {
                         email: email,
                         phone: phonenumber,
                         workTime: workTime);
-                  }
+
+                    //updateObj(id, updateddriver, tableDriver);
+                  } else {}
 
                   setState(() {
                     _status = true;
@@ -453,15 +463,6 @@ class ProfileState extends State<Profile> {
     );
   }
 
-  bool isEmail(String em) {
-    String p =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-
-    RegExp regExp = new RegExp(p);
-
-    return regExp.hasMatch(em);
-  }
-
   Widget _getEditIcon() {
     //Edit icon style
     return new GestureDetector(
@@ -483,6 +484,12 @@ class ProfileState extends State<Profile> {
     );
   }
 
+  Future<List<dynamic>> readAll(String tableName) async {
+    //We have to define list here as dynamci *******
+    return await DatabaseHelper.instance.generalReadAll(tableName);
+    // print("mun object: ${munList[0].firatName}");
+  }
+
   //Method to get drivers from DB
   Future<List<Driver>> getDrivers() async {
     //Get drivers from DB
@@ -491,17 +498,25 @@ class ProfileState extends State<Profile> {
     driv = driversDB.cast();
     // print("in get drivers method");
     // print("drivers length ${driversDB.length}");
-    return driv;
+    drivers = driv;
   }
 
-  Future<int> getId() async {
+  //generalUpdate(String tablename, int id, dynamic obj)
+  Future updateObj(int id, dynamic obj, String tableName) async {
+    await DatabaseHelper.instance.generalUpdate(tableName, id, obj);
+  }
+
+  Future<void> _retriveDriver(List<Driver> drivers) async {
+    //to retrieve the phone from the login interface
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getInt('id');
-  }
-
-  Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
-    return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
+    print("driver id: ${prefs.getInt('id')}");
+    driverId = prefs.getInt('id');
+    for (var i = 0; i < drivers.length; i++) {
+      print("drivers[i].driverID ${drivers[i].driverID}");
+      if (driverId == drivers[i].driverID) {
+        driver = drivers[i];
+        break;
+      }
+    }
   }
 }
