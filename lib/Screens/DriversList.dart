@@ -19,10 +19,9 @@ class ViewDrivers extends StatefulWidget {
   _ViewDrivers createState() => _ViewDrivers();
 }
 
-class _ViewDrivers extends State<ViewDrivers>
-    with AutomaticKeepAliveClientMixin<ViewDrivers> {
+class _ViewDrivers extends State<ViewDrivers>{
   @override
-  bool get wantKeepAlive => true;
+ 
   //Define variables
   final dbHelper = DatabaseHelper.instance;
   List<Driver> drivers = [];
@@ -70,7 +69,7 @@ class _ViewDrivers extends State<ViewDrivers>
     print("drivers length ${driversDB.length}");
     return driv;
   }
-
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -83,10 +82,10 @@ class _ViewDrivers extends State<ViewDrivers>
       body: Column(
         children: <Widget>[
           Container(
-            height: 255,
+            height: 70,
             child: Stack(
               children: <Widget>[
-                Container(
+               /* Container(
                   height: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -94,17 +93,45 @@ class _ViewDrivers extends State<ViewDrivers>
                     ),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 12, bottom: 10),
-                            ), //padding
-                          ],
-                        ), //row
+                padding: EdgeInsets.only(top:40),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(children: [Padding(padding: const EdgeInsets.only(left:12, bottom: 10),
+                child: CircleAvatar(backgroundColor: Colors.black, radius: 30.0,
+                child: GestureDetector(onTap:(){
+                  Navigator.pop(context);
+                },
+                child:Icon(Icons.arrow_back_ios,size:20,color: Colors.white,
+                ),
+                 ),
+                 ),
+                 ),
+                 ],
+                 ),
+          Padding(padding: const EdgeInsets.only(top:5, left: 12),
+          child: Row(
+            children: [
+              Text("Drivers"),
+          ],
+          ),
+          ),
+     
+          Row(
+            children:[
+              Padding(padding: EdgeInsets.only(left:12),
+          child:Text('All drivers'),
+          ),
+SizedBox(width: 5,
+),
+Padding(padding: EdgeInsets.only(left:8),
+child: Text('total work hours: '),
+),//padding
+          ],//
+              ),//row
+              ],//widget
+              ),//column
+                ),//paddinf
+            ),//container*/
 
                         Positioned(
                           bottom: 0,
@@ -138,11 +165,8 @@ class _ViewDrivers extends State<ViewDrivers>
                         ),
                       ],
                     ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                   ),
+
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -163,56 +187,64 @@ class _ViewDrivers extends State<ViewDrivers>
                         doItJustOnce = !doItJustOnce;
                       }
                       return ListView.builder(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          reverse: false,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: filteredList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            Driver drivers = filteredList[index];
-                            return Dismissible(
-                              key: UniqueKey(),
-                              background: Container(
-                                color: Colors.red,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(338, 30, 0, 0),
-                                  child: Text("delete"),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        reverse: false,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: filteredList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Driver drivers = filteredList[index];
+                          return Dismissible(
+                            key: UniqueKey(),
+                            background: Container(
+                              color: Colors.red,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(338, 30, 0, 0),
+                                child: Text("delete"
                                 ),
                               ),
-                              onDismissed: (direction) {
-                                setState(() {
-                                  dbHelper.gneralDelete(
-                                      drivers.driverID, tableDriver);
-                                });
-                              },
-                              child: Card(
-                                elevation: 15.0,
-                                color: Colors.white70,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: ListTile(
-                                  leading: CircleAvatar(
-                                    child: Text("${drivers.driverID}"),
-                                    backgroundColor: Color(0xff28CC9E),
-                                    foregroundColor: Colors.white,
-                                  ),
-                                  title: Text(
-                                      drivers.firstName +
-                                          " " +
-                                          drivers.lastName,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  subtitle: Text("${drivers.phone}"),
-                                  trailing: Text("status"),
-                                ),
+                            ),
+                            onDismissed: (direction) {
+                              setState(() {
+                                dbHelper.gneralDelete(
+                                    drivers.driverID, tableDriver);
+                              });
+                            },
+
+                          child:
+                          Card(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),             
+                  side: BorderSide(color: Color(0xff28CC9E), width: 1),),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                child: Text("${drivers.driverID}"),
+                                backgroundColor: Color(0xff28CC9E),
+                                foregroundColor: Colors.white,
                               ),
-                            );
-                          });
+                              title: Text(
+                                  drivers.firstName + " " + drivers.lastName,
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                              subtitle: Text("${drivers.phone}"),
+                              trailing: Text("status"),
+                           
+                      onTap: (){
+                        
+                      },
+                            ),
+                          ),
+                          );
+                        },
+                      );
+                      
                     }
                     return Center(child: CircularProgressIndicator());
+                    
                   }),
             ),
           ),
@@ -220,7 +252,7 @@ class _ViewDrivers extends State<ViewDrivers>
       ),
     );
   }
-
+  
   Widget buildDriver(Driver driver) =>
       ListTile(title: Text("Name"), subtitle: Text(""));
   //read objects

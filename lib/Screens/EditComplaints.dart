@@ -48,7 +48,9 @@ class _EditComplaints extends State<EditComplaints> {
           backgroundColor: Color(0xffffDD83),
           title: Text("Edit Complaint"),
         ),
-        body: new Center(
+        body: 
+        
+        new Center(
           child: new Container(
             child: new Column(
               children: [
@@ -100,24 +102,23 @@ class _EditComplaints extends State<EditComplaints> {
                     ],
                   ),
                 ),
-                new Padding(
-                  padding:
-                      const EdgeInsets.only(left: 24.0, top: 24, bottom: 10),
-                  child: new Column(
-                    children: <Widget>[
-                      Text("Description: ",  textAlign:  TextAlign.left,
+               new Padding(
+                  padding: const EdgeInsets.only(
+                      left: 1.0, right: 235.0, top: 0, bottom: 0),child:    
+                Text("Description: ",
                           style: TextStyle(
                               color: Colors.black,
-                          
                               fontWeight: FontWeight.bold,
-                              fontSize: 17.0)),
-                      Text("\n ${complaint.complaintMessage} ",
+                              fontSize: 17.0)),),
+                new Padding(
+                  padding:
+                      const EdgeInsets.only(left: 20.0, top: 24, bottom: 10),
+                  child: 
+                      Text("${complaint.complaintMessage} ",
                           maxLines: 10,
-                        
                           style:
                               TextStyle(color: Colors.black, fontSize: 16.0)),
-                    ],
-                  ),
+                   
                 ),
 
                 new Padding(
@@ -148,7 +149,7 @@ class _EditComplaints extends State<EditComplaints> {
                       width: 20,
                     ), //SizedBox
                     Text(
-                      'Solved ',
+                      ' Solved ',
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,

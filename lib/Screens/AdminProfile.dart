@@ -9,10 +9,10 @@ class AdminProfile extends StatefulWidget {
   @override
   final Widget child;
   AdminProfile({Key key, this.child}) : super(key: key);
-  MapScreenState createState() => MapScreenState();
+  AdminProfileState createState() => AdminProfileState();
 }
 
-class MapScreenState extends State<AdminProfile> {
+class AdminProfileState extends State<AdminProfile> {
   @override
   bool _status = true;
   bool _Enabled = false;
