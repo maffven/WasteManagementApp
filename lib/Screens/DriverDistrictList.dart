@@ -9,7 +9,7 @@ class DriverDistrictList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //build function returns a "Widget"
-    final tabController = new DefaultTabController(
+    return DefaultTabController(
       length: 2,
       child: new Scaffold(
         appBar: new AppBar(
@@ -26,6 +26,6 @@ class DriverDistrictList extends StatelessWidget {
         body: new TabBarView(children: [new DriverList(), new DistrictList()]),
       ),
     );
-    return new MaterialApp(title: "Tabs example", home: tabController);
+    //return new MaterialApp(title: "Tabs example", home: tabController);
   }
 }

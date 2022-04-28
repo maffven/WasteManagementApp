@@ -235,7 +235,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
       bins = binsList;
       binsLevel = binsLevelList;
     });
-
     _generateDataForBarChart();
     value = driverDistricts[0].name;
     _generateDataForPieChart(value);

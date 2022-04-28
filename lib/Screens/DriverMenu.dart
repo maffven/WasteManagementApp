@@ -43,9 +43,9 @@ class DriverMenu extends StatelessWidget {
       tabBuilder: (BuildContext context, int index) {
         switch (index) {
           case 0:
-            return BarAndPieChartDashboard();
+            //return BarAndPieChartDashboard();
             //return PieChartDashboard();
-            //return DriverDistrictList();
+            return DriverDistrictList();
             break;
           case 1:
             return MapScreen();
