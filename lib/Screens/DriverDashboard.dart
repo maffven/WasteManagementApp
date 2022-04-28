@@ -1,10 +1,12 @@
 //for driver
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_1/Screens/AdminDriverDashboard.dart';
 import 'package:flutter_application_1/Screens/BinsListAllDistricts.dart';
-import 'package:flutter_application_1/Screens/DriverSatus.dart';
+import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/Bin.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
@@ -35,24 +37,72 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
   List<charts.Series<PieChartData, String>> _seriesPieDataForDistrict;
   List<BinInfo> binsInfo = [];
   List<Bin> barBinsInsideDistrict = [];
-  List<BinLevel> pieBinsLevelForSelectedDistrict = [];
   List<Bin> pieBinsInsideSelectedDistrict = [];
   List<BinLevel> barBinsLevelForDistrict = [];
+  List<BinLevel> pieBinsLevelForSelectedDistrict = [];
   List<Bin> bins;
   List<BinLevel> binsLevel;
   District selectedDistrict;
   double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
+  bool loading = true;
 
   // items for district list
   //final items = [];
 
 //to generate data
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _getLists();
+    super.initState();
+    _seriesData = List<charts.Series<BarChartData, String>>();
+    _seriesPieDataForDistrict = List<charts.Series<PieChartData, String>>(1);
+    // try {
+    //   _getLists().whenComplete(() => setState(() {
+    //         _generateDataForBarChart();
+    //         value = driverDistricts[0].name;
+    //       }));
+    // } catch (error) {
+    //   print("init error: $error");
+    // }
+
+    // () async {
+    //   await _getLists();
+    //   setState(() {
+
+    //     // Update your UI with the desired changes.
+    //   });
+    // }();
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   await this._getLists();
+    //   setState(() {
+    //     value = driverDistricts[0].name;
+    //     _generateDataForBarChart();
+    //   });
+    // });
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   await this._getLists();
+    //   setState(() {});
+    // });
+  }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return FutureBuilder<void>(
+  //     future: _getLists(),
+  //     builder: (context, snapshot) {
+  //       return buildDriverDashboard();
+  //     },
+  //   );
+  // }
+
   _generateDataForBarChart() {
     _fillDistrictInfo();
     // emptyBarData = [];
     // fullBarData = [];
     // halfFullBarData = [];
-    print("number of empty ${districtInfo[0].numberOfEmpty}");
     // for (var i = 0; i < districtInfo.length; i++) {
     //   print("districtInfo[i].districtName: ${districtInfo[i].districtName}");
     //   emptyBarData.add(BarChartData(districtInfo[i].districtName, "Empty", 15));
@@ -173,70 +223,64 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     // );
   } //generateData
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _seriesData = List<charts.Series<BarChartData, String>>();
-    _seriesPieDataForDistrict = List<charts.Series<PieChartData, String>>(1);
-    _getLists().whenComplete(() => setState(() {
-          value = driverDistricts[0].name;
-          _generateDataForBarChart();
-        }));
-  }
-
-  Future<void> _getLists() async {
-    //retrieve all deivers
-    List<Driver> driv;
-    List<dynamic> driversDB = await readAll(tableDriver);
-    driv = driversDB.cast();
-    print("in get drivers method");
-    print("drivers length ${driversDB.length}");
-    await _retriveDriver(driv);
-    driverDistricts = [];
-    //get district based on driver district
-    List<District> district;
-    List<dynamic> districtDB = await readAll(tableDistrict);
-    district = districtDB.cast();
-    print("in get distric method");
-    print("district length ${district.length}");
+  void _getLists() async {
+    CommonFunctions com = new CommonFunctions();
+    Driver driverObject = await com.retriveDriver();
+    List<District> districts = await com.getAssignedDistricts(driverObject);
+    List<Bin> binsList = await com.getBins();
+    List<BinLevel> binsLevelList = await com.getBinsLevel();
     setState(() {
-      for (int i = 0; i < district.length; i++) {
-        if (district[i].driverID == driver.driverID) {
-          driverDistricts.add(district[i]);
-        }
-      }
-      print("driver district length ${driverDistricts.length}");
+      driver = driverObject;
+      driverDistricts = districts;
+      bins = binsList;
+      binsLevel = binsLevelList;
     });
 
-    print(driverDistricts);
+    _generateDataForBarChart();
+    value = driverDistricts[0].name;
+    _generateDataForPieChart(value);
+    _fillBinsInfoList();
+
+    loading = false;
+
+    //retrieve all deivers
+    // CommonFunctions com = new CommonFunctions();
+    // List<Driver> drivers = await com.getDrivers();
+    // await _retriveDriver(drivers);
+    // driverDistricts = [];
+    // //get district based on driver district
+    // List<District> district;
+    // List<dynamic> districtDB = await readAll(tableDistrict);
+    // district = districtDB.cast();
+    // setState(() {
+    //   for (int i = 0; i < district.length; i++) {
+    //     if (district[i].driverID == driver.driverID) {
+    //       driverDistricts.add(district[i]);
+    //     }
+    //   }
+    // });
+
     //get all bins' level
-    List<BinLevel> bin;
-    binsLevel = [];
-    List<dynamic> binStatus = await readAll(tableBinLevel);
-    bin = binStatus.cast();
-    print("in get binsLevel method");
-    print("binsLevel length ${binStatus.length}");
+    // List<BinLevel> bin;
+    // binsLevel = [];
+    // List<dynamic> binStatus = await readAll(tableBinLevel);
+    // bin = binStatus.cast();
     // for (var i = 0; i < bin.length; i++) {
     //   print("binslevel id: ${bin[i].binID} ");
     // }
 
-    setState(() {
-      binsLevel = bin;
-    });
+    // setState(() {
+    //   binsLevel = bin;
+    // });
 
-    //get all bins
-    print("here inside getBins");
-    List<Bin> binsInfo;
-    bins = [];
-    List<dynamic> binDB = await readAll("bin_table");
-    binsInfo = binDB.cast();
-    print("in get bins method");
-    print("bins length ${binDB.length}");
-    setState(() {
-      bins = binsInfo;
-    });
-    print(bins);
+    // //get all bins
+    // List<Bin> binsInfo;
+    // bins = [];
+    // List<dynamic> binDB = await readAll("bin_table");
+    // binsInfo = binDB.cast();
+    // setState(() {
+    //   bins = binsInfo;
+    // });
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
@@ -248,10 +292,8 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
   Future<void> _retriveDriver(List<Driver> drivers) async {
     //to retrieve the phone from the login interface
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("driver id: ${prefs.getInt('id')}");
     driverId = prefs.getInt('id');
     for (var i = 0; i < drivers.length; i++) {
-      print("drivers[i].driverID ${drivers[i].driverID}");
       if (driverId == drivers[i].driverID) {
         driver = drivers[i];
         break;
@@ -263,26 +305,20 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     for (var i = 0; i < driverDistricts.length; i++) {
       barBinsLevelForDistrict = [];
       barBinsInsideDistrict = [];
-      for (int j = 0; j < bins.length; j++) {
-        print("${driverDistricts[i].districtID} and ${bins[j].districtId}");
 
+      //execlude the bins for specific districts
+      for (int j = 0; j < bins.length; j++) {
         if (bins[j].districtId == driverDistricts[i].districtID) {
-          print("bin id: ${bins[j].binID}");
           barBinsInsideDistrict.add(bins[j]);
-          print(
-              "driverDistricts[i].name ${driverDistricts[i].name} and id: ${driverDistricts[i].districtID}");
         }
       }
-      print(
-          "binsInsideSelectedDistrict.length: ${barBinsInsideDistrict.length}");
+
+      //execlude bins level for specific districts
       for (int k = 0; k < barBinsInsideDistrict.length; k++) {
         for (int l = 0; l < binsLevel.length; l++) {
           //       print("inside binsLevel $j");
-          print("${barBinsInsideDistrict[k].binID} and ${binsLevel[l].binID}");
           if (barBinsInsideDistrict[k].binID == binsLevel[l].binID) {
             //         print("inside second if");
-            print(
-                "${barBinsInsideDistrict[k].binID} and ${binsLevel[l].binID}");
             //check = true;
             barBinsLevelForDistrict.add(binsLevel[l]);
             //       }
@@ -291,7 +327,7 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
       }
       //binsLevelForDistrict  and binIsideDistrict are done
 
-      print("bin level: ${barBinsLevelForDistrict.length}");
+      //classify bins based on full, half-full, empty
       for (int m = 0; m < barBinsLevelForDistrict.length; m++) {
         if (barBinsLevelForDistrict[m].full == true)
           numberOfFull++;
@@ -299,38 +335,38 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
           numberOfHalfFull++;
         else if (barBinsLevelForDistrict[m].empty == true) {
           numberOfEmpty++;
-          print("inside empty");
         }
       }
+
+      //Fill District info object
       DistrictInfo district = DistrictInfo(
           driverDistricts[i].districtID,
           driverDistricts[i].name,
           numberOfEmpty,
           numberOfFull,
           numberOfHalfFull);
+      districtInfo.add(district);
+
+      //recreate numberOfEmpty, numberOfFull, numberOfHalfFullattributes
       numberOfEmpty = 0;
       numberOfFull = 0;
       numberOfHalfFull = 0;
+
+      //Fill bars with suitable information
       emptyBarData.add(
           BarChartData(district.districtName, "Empty", district.numberOfEmpty));
       fullBarData.add(
           BarChartData(district.districtName, "full", district.numberOfFull));
       halfFullBarData.add(BarChartData(
           district.districtName, "half-full", district.numberOfHalfFull));
-
-      districtInfo.add(district);
     }
   }
 
   _fillSelectedDistrict(String val) {
     //data about specific district
-    print("inside fill selected district");
     for (int i = 0; i < driverDistricts.length; i++) {
       if (val != null && val == driverDistricts[i].name) {
-        print("val: $val");
         selectedDistrict = driverDistricts[i];
-        print(
-            "${selectedDistrict.name} and id: ${selectedDistrict.districtID}");
         break;
       }
     }
@@ -339,8 +375,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
   //Generate data for pie chart
   _generateDataForPieChart(String val) {
     _fillSelectedDistrict(val);
-    print(
-        "selected district name ${selectedDistrict.name} and id ${selectedDistrict.districtID}");
     //print("district name: ${district.name}");
     //To show piechart based on specific district
     // bool check = false;
@@ -357,14 +391,10 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     bool check = false;
     pieBinsLevelForSelectedDistrict = [];
     for (int j = 0; j < binsLevel.length; j++) {
-      print(
-          "binsInsideSelectedDistrict.length: ${pieBinsInsideSelectedDistrict.length}");
       for (int k = 0; k < pieBinsInsideSelectedDistrict.length; k++) {
         //       print("inside binsLevel $j");
         if (pieBinsInsideSelectedDistrict[k].binID == binsLevel[j].binID) {
           //         print("inside second if");
-          print(
-              "${pieBinsInsideSelectedDistrict[k].districtId} and ${binsLevel[j].binID}");
           check = true;
           pieBinsLevelForSelectedDistrict.add(binsLevel[j]);
           //       }
@@ -401,7 +431,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
       new PieChartData(numberOfEmpty, 'Empty', Color(0xffa6ed8e)),
     ];
     if (check) {
-      print("yes there");
       _seriesPieDataForDistrict = [];
 
       _seriesPieDataForDistrict.add(
@@ -416,14 +445,10 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
         ),
       );
 
-      print(
-          "There is data on series ${_seriesPieDataForDistrict.elementAt(0)}");
-
       setState(() {});
     } else {
       _seriesPieDataForDistrict = [];
       setState(() {});
-      print("empty");
     }
   }
 
@@ -438,213 +463,236 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    _generateDataForPieChart(value);
-    _fillBinsInfoList();
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          /*appBar: AppBar(
+    //_generateDataForBarChart();
+
+    // _fillBinsInfoList();
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        /*appBar: AppBar(
             backgroundColor: Color(0xffffDD83),
             title: Text("Dashboard"),
           ),*/
-          appBar: AppBar(
-            backgroundColor: Color(0xffffDD83),
-            title: Text("Dashboard"),
-            bottom: TabBar(
-              indicatorColor: Colors.white,
-              tabs: [
-                Tab(
-                  icon: Icon(FontAwesomeIcons.solidChartBar),
-                ),
-                Tab(icon: Icon(FontAwesomeIcons.chartPie)),
-              ],
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              Padding(
-                padding:
-                    EdgeInsets.only(bottom: 85.0, top: 10, left: 20, right: 20),
-                child: Container(
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(
-                          child: charts.BarChart(
-                            _seriesData,
-                            animate: true,
-                            barGroupingType: charts.BarGroupingType.grouped,
-                            //behaviors: [new charts.SeriesLegend()],
-                            animationDuration: Duration(seconds: 1),
-                            selectionModels: [
-                              charts.SelectionModelConfig(changedListener:
-                                  (charts.SelectionModel model) {
-                                if (model.hasDatumSelection) {
-                                  if ((model.selectedSeries[0].measureFn(
-                                          model.selectedDatum[0].index)) ==
-                                      numberOfEmpty) {
-                                    print("it is here");
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              BinsListAllDistricts(
-                                                binsStatus: "Empty",
-                                                binsInfo: binsInfo,
-                                              )),
-                                    ).then((value) => setState(() {}));
-                                  } else if ((model.selectedSeries[0].measureFn(
-                                          model.selectedDatum[0].index)) ==
-                                      numberOfFull) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              BinsListAllDistricts(
-                                                  binsStatus: "Full",
-                                                  binsInfo: binsInfo)),
-                                    ).then((value) => setState(() {}));
-                                  } else {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              BinsListAllDistricts(
-                                                  binsStatus: "Half-full",
-                                                  binsInfo: binsInfo)),
-                                    ).then((value) => setState(() {}));
-                                  }
-                                }
-                              })
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+        appBar: AppBar(
+          backgroundColor: Color(0xffffDD83),
+          title: Text("Dashboard"),
+          bottom: TabBar(
+            indicatorColor: Colors.white,
+            tabs: [
+              Tab(
+                icon: Icon(FontAwesomeIcons.solidChartBar),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: 8.0, bottom: 40.0, right: 8.0, left: 8.0),
-                child: Container(
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(top: 70.0),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 1),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: Color(0xff28CC9E),
-                              width: 1,
-                            ),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              iconSize: 36,
-                              icon: Icon(
-                                Icons.arrow_drop_down_outlined,
-                                color: Color(0xff28CC9E),
-                              ),
-                              value: value,
-                              items: driverDistricts.map((item) {
-                                return DropdownMenuItem(
-                                    value: item.name, child: Text(item.name));
-                              }).toList(),
-                              onChanged: (value) => setState(() {
-                                this.value = value;
-                                _generateDataForPieChart(value);
-                              }),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Expanded(
-                          child: _seriesPieDataForDistrict != null &&
-                                  _seriesPieDataForDistrict.isNotEmpty
-                              ? charts.PieChart(_seriesPieDataForDistrict,
-                                  animate: true,
-                                  animationDuration: Duration(seconds: 1),
-                                  behaviors: [
-                                    new charts.DatumLegend(
-                                      outsideJustification: charts
-                                          .OutsideJustification.endDrawArea,
-                                      horizontalFirst: false,
-                                      desiredMaxRows: 1,
-                                      cellPadding: new EdgeInsets.only(
-                                          top: 30.0, right: 35.0, bottom: 0.0),
-                                      entryTextStyle: charts.TextStyleSpec(
-                                          color: charts
-                                              .MaterialPalette.black.darker,
-                                          fontFamily: 'Arial',
-                                          fontSize: 15),
-                                    )
-                                  ],
-                                  selectionModels: [
-                                    charts.SelectionModelConfig(changedListener:
-                                        (charts.SelectionModel model) {
-                                      if (model.hasDatumSelection) {
-                                        if ((model.selectedSeries[0].measureFn(
-                                                model
-                                                    .selectedDatum[0].index)) ==
-                                            numberOfEmpty) {
-                                          print("it is here");
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    BinsListAllDistricts(
-                                                      binsStatus: "Empty",
-                                                      binsInfo: binsInfo,
-                                                    )),
-                                          ).then((value) => setState(() {}));
-                                        } else if ((model.selectedSeries[0]
-                                                .measureFn(model
-                                                    .selectedDatum[0].index)) ==
-                                            numberOfFull) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    BinsListAllDistricts(
-                                                        binsStatus: "Full",
-                                                        binsInfo: binsInfo)),
-                                          ).then((value) => setState(() {}));
-                                        } else {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    BinsListAllDistricts(
-                                                        binsStatus: "Half-full",
-                                                        binsInfo: binsInfo)),
-                                          ).then((value) => setState(() {}));
-                                        }
-                                      }
-                                    })
-                                  ],
-                                  defaultRenderer: new charts.ArcRendererConfig(
-                                      arcWidth: 90,
-                                      arcRendererDecorators: [
-                                        new charts.ArcLabelDecorator(
-                                            labelPosition:
-                                                charts.ArcLabelPosition.inside)
-                                      ]))
-                              : SizedBox(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              Tab(icon: Icon(FontAwesomeIcons.chartPie)),
             ],
           ),
+        ),
+        body: TabBarView(
+          children: [
+            Padding(
+              padding:
+                  EdgeInsets.only(bottom: 85.0, top: 10, left: 20, right: 20),
+              child: loading
+                  ? Transform.scale(
+                      scale: 0.2,
+                      child: CircularProgressIndicator(),
+                    )
+                  : Container(
+                      child: Center(
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: charts.BarChart(
+                                _seriesData,
+                                animate: true,
+                                barGroupingType: charts.BarGroupingType.grouped,
+                                //behaviors: [new charts.SeriesLegend()],
+                                animationDuration: Duration(seconds: 1),
+                                selectionModels: [
+                                  charts.SelectionModelConfig(changedListener:
+                                      (charts.SelectionModel model) {
+                                    if (model.hasDatumSelection) {
+                                      if ((model.selectedSeries[0].measureFn(
+                                              model.selectedDatum[0].index)) ==
+                                          numberOfEmpty) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BinsListAllDistricts(
+                                                    binsStatus: "Empty",
+                                                    binsInfo: binsInfo,
+                                                  )),
+                                        ).then((value) => setState(() {}));
+                                      } else if ((model.selectedSeries[0]
+                                              .measureFn(model
+                                                  .selectedDatum[0].index)) ==
+                                          numberOfFull) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BinsListAllDistricts(
+                                                      binsStatus: "Full",
+                                                      binsInfo: binsInfo)),
+                                        ).then((value) => setState(() {}));
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BinsListAllDistricts(
+                                                      binsStatus: "Half-full",
+                                                      binsInfo: binsInfo)),
+                                        ).then((value) => setState(() {}));
+                                      }
+                                    }
+                                  })
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: 8.0, bottom: 40.0, right: 8.0, left: 8.0),
+              child: loading
+                  ? Transform.scale(
+                      scale: 0.2,
+                      child: CircularProgressIndicator(),
+                    )
+                  : Container(
+                      child: Center(
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(top: 70.0),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 1),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Color(0xff28CC9E),
+                                  width: 1,
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  iconSize: 36,
+                                  icon: Icon(
+                                    Icons.arrow_drop_down_outlined,
+                                    color: Color(0xff28CC9E),
+                                  ),
+                                  value: value,
+                                  items: driverDistricts.map((item) {
+                                    try {
+                                      return DropdownMenuItem(
+                                          value: item.name,
+                                          child: Text(item.name));
+                                    } catch (error) {}
+                                  }).toList(),
+                                  onChanged: (value) => setState(() {
+                                    this.value = value;
+                                    _generateDataForPieChart(value);
+                                  }),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Expanded(
+                              child: _seriesPieDataForDistrict != null &&
+                                      _seriesPieDataForDistrict.isNotEmpty
+                                  ? charts.PieChart(_seriesPieDataForDistrict,
+                                      animate: true,
+                                      animationDuration: Duration(seconds: 1),
+                                      behaviors: [
+                                        new charts.DatumLegend(
+                                          outsideJustification: charts
+                                              .OutsideJustification.endDrawArea,
+                                          horizontalFirst: false,
+                                          desiredMaxRows: 1,
+                                          cellPadding: new EdgeInsets.only(
+                                              top: 30.0,
+                                              right: 35.0,
+                                              bottom: 0.0),
+                                          entryTextStyle: charts.TextStyleSpec(
+                                              color: charts
+                                                  .MaterialPalette.black.darker,
+                                              fontFamily: 'Arial',
+                                              fontSize: 15),
+                                        )
+                                      ],
+                                      selectionModels: [
+                                        charts.SelectionModelConfig(
+                                            changedListener:
+                                                (charts.SelectionModel model) {
+                                          if (model.hasDatumSelection) {
+                                            if ((model.selectedSeries[0]
+                                                    .measureFn(model
+                                                        .selectedDatum[0]
+                                                        .index)) ==
+                                                numberOfEmpty) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BinsListAllDistricts(
+                                                          binsStatus: "Empty",
+                                                          binsInfo: binsInfo,
+                                                        )),
+                                              ).then(
+                                                  (value) => setState(() {}));
+                                            } else if ((model.selectedSeries[0]
+                                                    .measureFn(model
+                                                        .selectedDatum[0]
+                                                        .index)) ==
+                                                numberOfFull) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BinsListAllDistricts(
+                                                            binsStatus: "Full",
+                                                            binsInfo:
+                                                                binsInfo)),
+                                              ).then(
+                                                  (value) => setState(() {}));
+                                            } else {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BinsListAllDistricts(
+                                                            binsStatus:
+                                                                "Half-full",
+                                                            binsInfo:
+                                                                binsInfo)),
+                                              ).then(
+                                                  (value) => setState(() {}));
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      defaultRenderer:
+                                          new charts.ArcRendererConfig(
+                                              arcWidth: 90,
+                                              arcRendererDecorators: [
+                                            new charts.ArcLabelDecorator(
+                                                labelPosition: charts
+                                                    .ArcLabelPosition.inside)
+                                          ]))
+                                  : SizedBox(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+            ),
+          ],
         ),
       ),
     );
