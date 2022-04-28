@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/AdminDashboard.dart';
+import 'package:flutter_application_1/Screens/AdminDriverStatus.dart';
 import 'package:flutter_application_1/Screens/DistrictListTab.dart';
 import 'package:flutter_application_1/Screens/EditComplaints.dart';
 import 'package:flutter_application_1/Screens/Login.dart';
@@ -19,9 +20,9 @@ class ViewDrivers extends StatefulWidget {
   _ViewDrivers createState() => _ViewDrivers();
 }
 
-class _ViewDrivers extends State<ViewDrivers>{
+class _ViewDrivers extends State<ViewDrivers> {
   @override
- 
+
   //Define variables
   final dbHelper = DatabaseHelper.instance;
   List<Driver> drivers = [];
@@ -69,7 +70,8 @@ class _ViewDrivers extends State<ViewDrivers>{
     print("drivers length ${driversDB.length}");
     return driv;
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +87,7 @@ class _ViewDrivers extends State<ViewDrivers>{
             height: 70,
             child: Stack(
               children: <Widget>[
-               /* Container(
+                /* Container(
                   height: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -133,40 +135,39 @@ child: Text('total work hours: '),
                 ),//paddinf
             ),//container*/
 
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10),
-                            height: 42,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: TextFormField(
-                              textAlign: TextAlign.start,
-                              onChanged: (value) {
-                                filterList(value);
-                                print(value);
-                              },
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.search),
-                                hintText: "Search by name",
-                                contentPadding: EdgeInsets.only(top: 10),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                   ),
-
+                    child: TextFormField(
+                      textAlign: TextAlign.start,
+                      onChanged: (value) {
+                        filterList(value);
+                        print(value);
+                      },
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: "Search by name",
+                        contentPadding: EdgeInsets.only(top: 10),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -202,8 +203,7 @@ child: Text('total work hours: '),
                               child: Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(338, 30, 0, 0),
-                                child: Text("delete"
-                                ),
+                                child: Text("delete"),
                               ),
                             ),
                             onDismissed: (direction) {
@@ -212,39 +212,39 @@ child: Text('total work hours: '),
                                     drivers.driverID, tableDriver);
                               });
                             },
-
-                          child:
-                          Card(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),             
-                  side: BorderSide(color: Color(0xff28CC9E), width: 1),),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                child: Text("${drivers.driverID}"),
-                                backgroundColor: Color(0xff28CC9E),
-                                foregroundColor: Colors.white,
+                            child: Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                                side: BorderSide(
+                                    color: Color(0xff28CC9E), width: 1),
                               ),
-                              title: Text(
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  child: Text("${drivers.driverID}"),
+                                  backgroundColor: Color(0xff28CC9E),
+                                  foregroundColor: Colors.white,
+                                ),
+                                title: Text(
                                   drivers.firstName + " " + drivers.lastName,
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                              subtitle: Text("${drivers.phone}"),
-                              trailing: Text("status"),
-                           
-                      onTap: (){
-                        
-                      },
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text("${drivers.phone}"),
+                                trailing: Text("status"),
+                                onTap: () => Navigator.push(context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                  return AdminDriverStatus(
+                                      driver:
+                                          drivers); //PieChartDashboard(driver: drivers[i]);
+                                })),
+                              ),
                             ),
-                          ),
                           );
                         },
                       );
-                      
                     }
                     return Center(child: CircularProgressIndicator());
-                    
                   }),
             ),
           ),
@@ -252,7 +252,7 @@ child: Text('total work hours: '),
       ),
     );
   }
-  
+
   Widget buildDriver(Driver driver) =>
       ListTile(title: Text("Name"), subtitle: Text(""));
   //read objects

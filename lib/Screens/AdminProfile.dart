@@ -22,10 +22,21 @@ class AdminProfileState extends State<AdminProfile> {
   //To take input from
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  List<MunicipalityAdmin> mun;
+  List<MunicipalityAdmin> muns = [];
   bool checkInfo = false;
+  MunicipalityAdmin admin;
 
-  Widget build(BuildContext context) {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getMun().whenComplete(() {
+      setState(() {
+        _retriveMun(muns);
+      });
+    });
+  }
+  /*Widget build(BuildContext context) {
     return MaterialApp(
       home: FutureBuilder<List<MunicipalityAdmin>>(
         future: getMun(),
@@ -44,14 +55,14 @@ class AdminProfileState extends State<AdminProfile> {
         },
       ),
     );
-  }
+  }*/
 
   //MunicipalityAdmin mun;
   @override
-  Widget buildProfile(List<MunicipalityAdmin> mun) {
+  Widget build(BuildContext context) {
     // drivers = await getDrivers();
-    phoneController = TextEditingController(text: "${mun[0].phone}");
-    emailController = TextEditingController(text: "${mun[0].email}");
+    phoneController = TextEditingController(text: "${admin.phone}");
+    emailController = TextEditingController(text: "${admin.email}");
     return Scaffold(
       body: DefaultTabController(
         length: 2,
@@ -64,9 +75,6 @@ class AdminProfileState extends State<AdminProfile> {
                 indicatorColor: Colors.white,
                 tabs: [
                   Tab(text: "INFO"),
-                  Tab(
-                    text: "STATUS",
-                  ),
                 ],
               )),
           body: TabBarView(
@@ -179,7 +187,7 @@ class AdminProfileState extends State<AdminProfile> {
                                         child: new Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: <Widget>[
-                                            Text("$getId()"),
+                                            Text("${admin.municpalityID}"),
                                           ],
                                         )),
                                     Padding(
@@ -211,7 +219,7 @@ class AdminProfileState extends State<AdminProfile> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: <Widget>[
                                             Text(
-                                                "${mun[0].firstName} ${mun[0].lastName}"),
+                                                "${admin.firstName} ${admin.lastName}"),
                                           ],
                                         )),
                                     Padding(
@@ -246,13 +254,6 @@ class AdminProfileState extends State<AdminProfile> {
                                               width: 100,
                                               child: TextFormField(
                                                 controller: emailController,
-                                                validator: (value) {
-                                                  if (!RegExp(r'\S+@\S+\.\S+')
-                                                      .hasMatch(value)) {
-                                                    return "Please enter a valid email address";
-                                                  }
-                                                  return null;
-                                                },
                                                 enabled: _Enabled,
                                               )),
                                         ],
@@ -290,12 +291,6 @@ class AdminProfileState extends State<AdminProfile> {
                                             width: 100,
                                             child: TextFormField(
                                               controller: phoneController,
-                                              validator: (value) {
-                                                if (value.length != 10)
-                                                  return 'Mobile Number must be of 10 digit';
-                                                else
-                                                  return null;
-                                              },
                                               enabled: _Enabled,
                                             ),
                                           ),
@@ -346,38 +341,74 @@ class AdminProfileState extends State<AdminProfile> {
                 textColor: Colors.white,
                 color: Colors.green,
                 onPressed: () async {
-                  String email = emailController.text;
-                  String phone = phoneController.text;
-                  var phonenumber = int.parse(phone);
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  int municipalityId = prefs.getInt('id');
+                  String email = "";
+                  String phone = "";
+                  var phonenumber;
+                  if (_isEmail(emailController.text) == true) {
+                    email = emailController.text;
+                  } else {
+                    void showDialog() {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: Text("Warning"),
+                            content: Text("please enter a valid email"),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                  if (_isPhone(phoneController.text) == true) {
+                    phone = phoneController.text;
+                    phonenumber = int.parse(phone);
+                  } else {
+                    void showDialog() {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: Text("Warning"),
+                            content: Text("please enter a valid phone number"),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                  int municipalityId = admin.municpalityID;
                   String firstName;
                   String lastName;
                   String password;
-                  String workTime;
-                  List<dynamic> munListd =
-                      await readAll(tableMunicipalityAdmin);
-                  mun = munListd.cast();
-                  for (int i = 0; i < mun.length; i++) {
-                    if (mun[i].municpalityID == municipalityId) {
-                      checkInfo = true;
-                      firstName = mun[i].firstName;
-                      lastName = mun[i].lastName;
-                      password = mun[i].password;
-                    }
-                  }
                   //Check email and phone if its correct create new object
-                  if (checkInfo == true) {
-                    MunicipalityAdmin updateddriver = new MunicipalityAdmin(
-                      municpalityID: municipalityId,
-                      firstName: firstName,
-                      lastName: lastName,
-                      password: password,
-                      email: email,
-                      phone: phonenumber,
-                    );
-                  }
+                  if (_isPhone(phoneController.text) == true &&
+                      _isEmail(emailController.text) == true) {
+                    MunicipalityAdmin updatedadmin = new MunicipalityAdmin(
+                        municpalityID: municipalityId,
+                        firstName: firstName,
+                        lastName: lastName,
+                        password: password,
+                        email: email,
+                        phone: phonenumber);
+
+                    updateObj(admin.municpalityID, updatedadmin,
+                        tableMunicipalityAdmin);
+                  } else {}
                   setState(() {
                     _status = true;
                     FocusScope.of(context).requestFocus(new FocusNode());
@@ -414,13 +445,36 @@ class AdminProfileState extends State<AdminProfile> {
     );
   }
 
-  bool isEmail(String em) {
-    String p =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  _isEmail(String email) {
+    if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email)) {
+      return false;
+    } else
+      return true;
+  }
 
-    RegExp regExp = new RegExp(p);
+  _isPhone(String phone) {
+    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(patttern);
+    if (phone.length == 0) {
+      return false;
+    } else if (!regExp.hasMatch(phone)) {
+      return false;
+    } else
+      return true;
+  }
 
-    return regExp.hasMatch(em);
+  Future<void> _retriveMun(List<MunicipalityAdmin> mun) async {
+    //to retrieve the phone from the login interface
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("driver id: ${prefs.getInt('id')}");
+    var munId = prefs.getInt('id');
+    for (var i = 0; i < mun.length; i++) {
+      print("drivers[i].driverID ${mun[i].municpalityID}");
+      if (munId == mun[i].municpalityID) {
+        admin = mun[i];
+        break;
+      }
+    }
   }
 
   Widget _getEditIcon() {
