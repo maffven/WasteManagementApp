@@ -24,6 +24,49 @@ class ViewNotification extends StatefulWidget {
 
 class _ViewNotification extends State<ViewNotification>
     with AutomaticKeepAliveClientMixin<ViewNotification> {
+       @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAssignedDistricts().whenComplete(() => setState(() {}));
+  }
+
+  List<District> assignedDistricts = [];
+  int driverId;
+  Driver driver;
+  Future<void> getAssignedDistricts() async {
+    List<Driver> driv;
+    List<dynamic> driversDB = await readAll(tableDriver);
+    driv = driversDB.cast();
+    await _retriveDriver(driv);
+    List<District> district;
+    List<dynamic> districtDB = await readAll(tableDistrict);
+    district = districtDB.cast();
+    print("in get distric method");
+    print("district length ${districtDB.length}");
+    setState(() {
+      for (int i = 0; i < district.length; i++) {
+        if (district[i].driverID == driverId) {
+          assignedDistricts.add(district[i]);
+        }
+      }
+    });
+  }
+
+  Future<void> _retriveDriver(List<Driver> drivers) async {
+    //to retrieve the phone from the login interface
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("driver id: ${prefs.getInt('id')}");
+    driverId = prefs.getInt('id');
+    for (var i = 0; i < drivers.length; i++) {
+      print("drivers[i].driverID ${drivers[i].driverID}");
+      if (driverId == drivers[i].driverID) {
+        driver = drivers[i];
+        break;
+      }
+    }
+  }
+
   @override
   bool get wantKeepAlive => true;
   //Define variables
@@ -84,14 +127,13 @@ class _ViewNotification extends State<ViewNotification>
   }
 
   //get all complaints from database
-  Future<List<Bin>> getBinLevels() async {
+  Future<List<BinLevel>> getBinLevels() async {
     //Get complaints from DB
     List<BinLevel> binLevel = [];
-    List<Bin> bin = [];
-    List<dynamic> binDB = await readAll(tableBin);
+  
     List<dynamic> compDB = await readAll(tableBinLevel);
     binLevel = compDB.cast();
-    bin = binDB.cast();
+   
     for (int i = 0; i < binLevel.length; i++) {
       //deleteObj(i, tableBinLevel);
       if (binLevel[i].empty == true) {
@@ -103,12 +145,8 @@ class _ViewNotification extends State<ViewNotification>
         color = Color(0xfff05e5e);
         level = "Full";
       }
-      //-------------------------------------------
-      for (int j = 0; j < bin.length; j++) {
-        if (binLevel[i].binID == bin[j].binID) {
-          binDist.add(bin[i]);
-        }
-      }
+     
+      
 
       //-------------------------------------------
       /*if (binLevel[i].binID == 144) {
@@ -126,33 +164,15 @@ class _ViewNotification extends State<ViewNotification>
       //----------------------------------------------
       print("complaints length ${compDB.length}");
     }
-    for (int i = 0; i < districts.length; i++) {
-      for (int b = 0; b < binDist.length; b++) {
-        if (districts[i].districtID == binDist[i].districtId) {
-          binDist.add(binDist[i]);
-        }
-      }
-    }
-    return binDist;
+ 
+    return binLevel;
   }
 
-  Future<List<District>> getDistricts(List<Bin> binDist) async {
-    List<District> districts = [];
-    List<dynamic> distDB = await readAll(tableDistrict);
-    districts = distDB.cast();
-    for (int i = 0; i < districts.length; i++) {
-      for (int b = 0; b < binDist.length; b++) {
-        if (districts[i].districtID == binDist[i].districtId) {
-          disBin.add(districts[i]);
-        }
-      }
-    }
-  }
 
   //get box widgets
   Future<List<Widget>> getWidgets() async {
-    List<Bin> theBins = await getBinLevels();
-
+    List<BinLevel> theBins = await getBinLevels();
+  //    await getAssignedDistricts();
     for (int i = 0; i < theBins.length; i++) {
       if (level == "Half-Full") {
         // binLevels = await getBinLevels();
@@ -277,3 +297,4 @@ class _ViewNotification extends State<ViewNotification>
     return await DatabaseHelper.instance.generalReadAll(tableName);
   }
 }
+

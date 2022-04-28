@@ -65,14 +65,14 @@ class _MyAppDemoState extends State<MyAppDemo> {
       final distanceFirebase =
           new Map<String, dynamic>.from(event.snapshot.value);
       print(distanceFirebase['Distance']); //json data
-      distance =
-          distanceFirebase['Distance']; //get teh distance from the firebase
-      if (distance <= 0.0) {
+      distance = distanceFirebase['Distance'].toDouble(); 
+      print(distance);//get teh distance from the firebase
+      if (distance <= 15.0) {
         //full
 
         level =
             BinLevel(binID: 144, full: true, half_full: false, empty: false);
-      } else if (distance > 0.0 && distance < 900.0) {
+      } else if (distance > 15.0 && distance < 900.0) {
         //half-full
 
         level =
@@ -84,8 +84,8 @@ class _MyAppDemoState extends State<MyAppDemo> {
             BinLevel(binID: 144, full: false, half_full: false, empty: true);
         ;
       }
-   
-    //  updateObj(level.level, level, tableBinLevel);
+  // addObj(level, tableBinLevel);
+    updateObj(level.level, level, tableBinLevel);
     });
   }
  Future addObj(dynamic obj, String tableName) async {

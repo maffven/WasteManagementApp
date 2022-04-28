@@ -101,8 +101,9 @@ void readDistance() {
     final distanceFirebase =
         new Map<String, dynamic>.from(event.snapshot.value);
     print(distanceFirebase['Distance']); //json data
-    distance = distanceFirebase['Distance']; //get teh distance from the firebase
-    if (distance <= 0.0) {
+     distance = distanceFirebase['Distance'].toDouble(); 
+      print(distance);//get teh distance from the firebase //get the distance from the firebase
+    if (distance <= 15.0) {
       //full
       print('manar');
       color = 'Red';
@@ -110,7 +111,7 @@ void readDistance() {
       level = BinLevel(binID: 144, full: true, half_full: false, empty: false);
       colorBin = BitmapDescriptor.hueRed;
       displayMarker(colorBin);
-    } else if (distance > 0.0 && distance < 900.0) {
+    } else if (distance > 15.0 && distance < 900.0) {
       //half-full
       color = 'Orange';
       print('rawan');

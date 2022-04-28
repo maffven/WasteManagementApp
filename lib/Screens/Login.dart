@@ -334,7 +334,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     } else {
                       print("admin");
                       //admin
-                             List<dynamic> drListd = await readAll(tableComplaints);
+                      List<dynamic> drListd = await readAll(tableComplaints);
                       complaints = drListd.cast();
                       for (int i = 0; i < complaints.length; i++) {
                         print(complaints[i].status);
