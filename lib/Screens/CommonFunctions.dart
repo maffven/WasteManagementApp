@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/Bin.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CommonFunctions {
   //To get all drivers
+  @visibleForTesting
   Future<List<Driver>> getDrivers() async {
     //Get drivers from DB
     List<Driver> driv;
