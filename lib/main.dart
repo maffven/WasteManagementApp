@@ -87,43 +87,43 @@ class _MyAppDemoState extends State<MyAppDemo> {
         ;
       }
 
-      /* DriverStatus d1 = new DriverStatus(
+       DriverStatus d1 = new DriverStatus(
           driverID: 1,
           statusID: 1,
           completed: false,
           incomplete: false,
-          lateStatus: false);*/
-      // addObj(d1, tableDriverStatus);
-      /*DriverStatus d2 = new DriverStatus(
+          lateStatus: false);
+   //   addObj(d1, tableDriverStatus);
+      DriverStatus d2 = new DriverStatus(
           driverID: 2,
           statusID: 2,
           completed: false,
           incomplete: false,
-          lateStatus: false);*/
-      // addObj(d2, tableDriverStatus);
-      /*DriverStatus d3 = new DriverStatus(
+          lateStatus: false);
+   //  addObj(d2, tableDriverStatus);
+      DriverStatus d3 = new DriverStatus(
           driverID: 3,
           statusID: 3,
           completed: false,
           incomplete: false,
-          lateStatus: false);*/
-      // addObj(d3, tableDriverStatus);
-      /*DriverStatus d4 = new DriverStatus(
+          lateStatus: false);
+    // addObj(d3, tableDriverStatus);
+      DriverStatus d4 = new DriverStatus(
           driverID: 4,
           statusID: 4,
           completed: false,
           incomplete: false,
-          lateStatus: false);*/
-      // addObj(d4, tableDriverStatus);
-      /*DriverStatus d5 = new DriverStatus(
+          lateStatus: false);
+    //   addObj(d4, tableDriverStatus);
+      DriverStatus d5 = new DriverStatus(
           driverID: 5,
           statusID: 5,
           completed: false,
           incomplete: false,
-          lateStatus: false);*/
+          lateStatus: false);
       // addObj(d5, tableDriverStatus);
 // addObj(level, tableBinLevel);
-      updateObj(level.level, level, tableBinLevel);
+     // updateObj(level.level, level, tableBinLevel);
     });
   }
 

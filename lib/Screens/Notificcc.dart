@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Screens/AdminDashboard.dart';
-import 'package:flutter_application_1/Screens/DistrictListTab.dart';
-import 'package:flutter_application_1/Screens/EditComplaints.dart';
+
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
 import 'package:flutter_application_1/model/Bin.dart';
@@ -38,6 +36,7 @@ class _ViewNotificationn extends State<ViewNotificationn>
   int driverId;
   List<BinLevel> theLevels = [];
   Driver driver;
+
   Future<void> getAssignedDistricts() async {
     List<Driver> driv;
     List<dynamic> driversDB = await readAll(tableDriver);
@@ -177,11 +176,11 @@ class _ViewNotificationn extends State<ViewNotificationn>
     return binLevel;
   }
 
-  Future<List<Driver>> getDrivers() async {
+  Future<List<DriverStatus>> getDriversStatus() async {
     //Get complaints from DB
-    List<Driver> driver = [];
+    List<DriverStatus> driver = [];
 
-    List<dynamic> compDB = await readAll(tableDriver);
+    List<dynamic> compDB = await readAll(tableDriverStatus);
     driver = compDB.cast();
 
     return driver;
@@ -191,20 +190,25 @@ class _ViewNotificationn extends State<ViewNotificationn>
   Future<List<Widget>> getWidgets() async {
     theLevels = [];
     theLevels = await getBinLevels();
-    theDrivers == await getDrivers();
-    Driver driver;
+    List<DriverStatus> theDriversStatus=[];
+    theDriversStatus = await getDriversStatus();
+
+    DriverStatus driverStatus;
     //retrieve the loggedin id 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     loggedInId = prefs.getInt('id');
     /*get the driver status and check if its equivalent to the loggedIn Id
     and store the drier status*/
-    for (int i = 0; i < theDrivers.length; i++) {
-      driver = theDrivers[i];
+    for (int i = 0; i < theDriversStatus.length; i++) {
+     if(theDriversStatus[i].driverID==loggedInId){
+       status = theDriversStatus[i].lateStatus;
+     }
     }
+    
     boxWidgets = [];
 
     for (int i = 0; i < theLevels.length; i++) {
-      if (level == "Full") {
+      if (level == "Full" && status == true ) {
         boxWidgets.add(SizedBox(
             width: 370.0,
             height: 200.0,
