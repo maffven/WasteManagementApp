@@ -84,10 +84,20 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                             await SharedPreferences
                                                 .getInstance();
                                         await prefs.setBool("stats", true);*/
+                                        List<dynamic> drListd =
+                                            await readAll(tableDriverStatus);
+                                        List<DriverStatus> dd = drListd.cast();
                                         int statusID;
                                         bool completed;
                                         bool incomplete;
-
+                                        for (int i = 0; i < dd.length; i++) {
+                                          if(dd[i].driverID==driver.driverID){
+                                          driverId = dd[i].driverID;
+                                          statusID = dd[i].statusID;
+                                          incomplete = dd[i].incomplete;
+                                          completed = dd[i].completed;
+                                        }
+                                      }
                                         DriverStatus alert = new DriverStatus(
                                             driverID: driver.driverID,
                                             statusID: statusID,
@@ -95,7 +105,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                             incomplete: incomplete,
                                             lateStatus: true);
 
-                                        updateObj(driver.driverID, alert,
+                                        updateObj(statusID, alert,
                                             tableDriverStatus);
                                       },
                                       alignment: Alignment.center,
