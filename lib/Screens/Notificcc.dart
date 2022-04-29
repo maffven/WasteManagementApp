@@ -25,16 +25,18 @@ class ViewNotificationn extends StatefulWidget {
 
 class _ViewNotificationn extends State<ViewNotificationn>
     with AutomaticKeepAliveClientMixin<ViewNotificationn> {
-       @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getAssignedDistricts().whenComplete(() => setState(() {}));
   }
-
+  //define all needed variables
+   var loggedInId;
+   var driverStatus;
   List<District> assignedDistricts = [];
   int driverId;
-  List<BinLevel> theLevels=[];
+  List<BinLevel> theLevels = [];
   Driver driver;
   Future<void> getAssignedDistricts() async {
     List<Driver> driv;
@@ -75,7 +77,7 @@ class _ViewNotificationn extends State<ViewNotificationn>
   List<Complaints> complaints;
   List<BinLevel> binLevels = [];
   List<District> disBin = [];
-  List<Driver> theDrivers=[];
+  List<Driver> theDrivers = [];
   List<Widget> boxWidgets = [];
   List<Bin> binDist = [];
   List<District> districts;
@@ -105,7 +107,7 @@ class _ViewNotificationn extends State<ViewNotificationn>
       );
 
   Widget buildNotifications(List<Widget> BinLevel) {
-  return MaterialApp(
+    return MaterialApp(
         home: Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
@@ -136,14 +138,14 @@ class _ViewNotificationn extends State<ViewNotificationn>
     return districts;
   }
 
-  //get all complaints from database
+  //get all bin levels from database
   Future<List<BinLevel>> getBinLevels() async {
-    //Get complaints from DB
+    //Get bin levels from DB
     List<BinLevel> binLevel = [];
-  
+
     List<dynamic> compDB = await readAll(tableBinLevel);
     binLevel = compDB.cast();
-   
+
     for (int i = 0; i < binLevel.length; i++) {
       if (binLevel[i].empty == true) {
         level = "Empty";
@@ -154,7 +156,7 @@ class _ViewNotificationn extends State<ViewNotificationn>
         color = Color(0xfff05e5e);
         level = "Full";
       }
-     
+
       //-------------------------------------------
       if (binLevel[i].binID == 144) {
         distName = "Aljamea";
@@ -171,106 +173,106 @@ class _ViewNotificationn extends State<ViewNotificationn>
       //----------------------------------------------
       print("complaints length ${compDB.length}");
     }
- 
+
     return binLevel;
   }
 
   Future<List<Driver>> getDrivers() async {
     //Get complaints from DB
     List<Driver> driver = [];
-  
+
     List<dynamic> compDB = await readAll(tableDriver);
     driver = compDB.cast();
-   
-    return driver;
 
+    return driver;
   }
+
   //get box widgets
   Future<List<Widget>> getWidgets() async {
     theLevels = [];
     theLevels = await getBinLevels();
     theDrivers == await getDrivers();
     Driver driver;
-    for (int i=0;i<theDrivers.length;i++){
-      driver=theDrivers[i];
+    //retrieve the loggedin id 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    loggedInId = prefs.getInt('id');
+    /*get the driver status and check if its equivalent to the loggedIn Id
+    and store the drier status*/
+    for (int i = 0; i < theDrivers.length; i++) {
+      driver = theDrivers[i];
     }
     boxWidgets = [];
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     for (int i = 0; i < theLevels.length; i++) {
-         if (level == "Full") {
-      boxWidgets.add(SizedBox(
-         width: 370.0,
+      if (level == "Full") {
+        boxWidgets.add(SizedBox(
+            width: 370.0,
             height: 200.0,
-          child: InkWell(
-           
-            child: Card(
-              borderOnForeground: true,
-              color: Colors.white,
-              elevation: 2.0,
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Color(0xff28CC9E), width: 1),
-                  borderRadius: BorderRadius.circular(8.0)),
-              child: Center(
-                  child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: <Widget>[
-                  SizedBox(
-                      height: 1.0,
-                    ),
-                 
-                    Text("\t \t"),
-                    Icon(
-                      Icons.add_alert_rounded,
-                      color: Colors.red,
-                    ),
-                    Text(
-                      "Performance alerts",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0),
-                    ),
-                    Text(
-                            "\t",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0),
-                          ),
-                          Text("\t \t"),
-                          Icon(
-                            Icons.circle_sharp,
-                            color: color,
-                          ),
-                          Text(
-                            "\t" + level + " in bin " + '${theLevels[i].binID}',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0),
-                          ),
-                    SizedBox(
-                      height: 2.0,
-                    ),
+            child: InkWell(
+              child: Card(
+                borderOnForeground: true,
+                color: Colors.white,
+                elevation: 2.0,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Color(0xff28CC9E), width: 1),
+                    borderRadius: BorderRadius.circular(8.0)),
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 1.0,
+                      ),
+                      Text("\t \t"),
+                      Icon(
+                        Icons.add_alert_rounded,
+                        color: Colors.red,
+                      ),
+                      Text(
+                        "Performance alerts",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0),
+                      ),
+                      Text(
+                        "\t",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0),
+                      ),
+                      Text("\t \t"),
+                      Icon(
+                        Icons.circle_sharp,
+                        color: color,
+                      ),
+                      Text(
+                        "\t" + level + " in bin " + '${theLevels[i].binID}',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0),
+                      ),
+                      SizedBox(
+                        height: 2.0,
+                      ),
 
-
-                    /*  Text(
+                      /*  Text(
                   "2 Items",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w100),
                 )*/
-                  ],
-                ),
-              )),
-            ),
-         
-          )));
-    }
+                    ],
+                  ),
+                )),
+              ),
+            )));
+      }
     }
     return boxWidgets;
   }
-    
 
 //Database method
   Future addObj(dynamic obj, String tableName) async {

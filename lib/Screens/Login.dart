@@ -23,11 +23,9 @@ void main() async {
   await Firebase.initializeApp()
       .then((value) => print("connected " + value.options.asMap.toString()))
       .catchError((e) => print(e.toString()));
-  //  readDistance();
+
   runApp(Login()); //function written by flutter
 }
-
-//if login is successfull go to Menu.dart
 
 class Login extends StatelessWidget {
   @override
@@ -44,13 +42,10 @@ class LoginDemo extends StatefulWidget {
   _LoginDemoState createState() => _LoginDemoState();
 }
 
-//Rawan work
-
 class _LoginDemoState extends State<LoginDemo> {
   @override
   void initState() {
     super.initState();
-    // readD();
   }
 
 //list of needed variables
@@ -146,7 +141,7 @@ class _LoginDemoState extends State<LoginDemo> {
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-                key: ValueKey("addPhone"),
+                  key: ValueKey("addPhone"),
                   controller: phoneController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -157,7 +152,6 @@ class _LoginDemoState extends State<LoginDemo> {
             Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, top: 15, bottom: 0),
-              //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 key: Key("addPassword"),
                 controller: passwordController,
@@ -213,7 +207,7 @@ class _LoginDemoState extends State<LoginDemo> {
               child: FlatButton(
                 key: Key("loginButton"),
                 onPressed: () async {
-                //  deleteObj(19, tableComplaints);
+                  //  deleteObj(19, tableComplaints);
                   List<BinLevel> binLevel = [];
                   List<dynamic> compDB = await readAll(tableBinLevel);
                   binLevel = compDB.cast();
@@ -222,55 +216,6 @@ class _LoginDemoState extends State<LoginDemo> {
                     print('hi');
                     print('the id : ' + '${binLevel[i].level}');
                   }
-
-                  /*  deleteObj(23, tableBinLevel);
-                  deleteObj(24, tableBinLevel);
-                  deleteObj(25, tableBinLevel);
-                  deleteObj(26, tableBinLevel);
-                  deleteObj(27, tableBinLevel);
-                  deleteObj(28, tableBinLevel);
-                  deleteObj(29, tableBinLevel);*/
-              
-
-                /*  List<BinLocation> loc = [];
-                  List<dynamic> binLoc = await readAll(tableBinLocation);
-                  loc = binLoc.cast();
-                   for(int i=0;i<loc.length;i++){
-                //  cx = loc[i].coordinateX;
-                  }*/
-                  //create object
-                  /* District di =
-                      District(name: "Alnaseem", numberOfBins: 15, driverID: 5);
-                  District di2 =
-                      District(name: "AlJamea", numberOfBins: 12, driverID: 1);
-                  District di3 = District(
-                      name: "Alfaisaliah", numberOfBins: 13, driverID: 2);
-                  District di4 =
-                      District(name: "Alwaha", numberOfBins: 11, driverID: 3);
-                  District di5 = District(
-                      name: "Alsulaimania", numberOfBins: 15, driverID: 4);*/
-
-                  Bin bin = Bin(binID: 123, capacity: 10, districtId: 1);
-                  Bin bin1 = Bin(binID: 144, capacity: 25, districtId: 2);
-                  Bin bin2 = Bin(binID: 166, capacity: 40, districtId: 3);
-
-                  /* addObj(mun, tableMunicipalityAdmin);
-                  addObj(mn, tableMunicipalityAdmin);
-                  addObj(mu, tableMunicipalityAdmin);
-                  addObj(dr, tableDriver);
-                  addObj(dr2, tableDriver);
-                  addObj(dr3, tableDriver);
-                  addObj(dr4, tableDriver);
-                  addObj(dr5, tableDriver);*/
-                  /*addObj(di, tableDistrict);
-                  addObj(di2, tableDistrict);
-                  addObj(di3, tableDistrict);
-                  addObj(di4, tableDistrict);
-                  addObj(di5, tableDistrict);*/
-                  /*addObj(bin, "bin_table");
-                  addObj(bin1, "bin_table");
-                  addObj(bin2, "bin_table");*/
-
                   //frist, check if text fields are not empty
                   if (phoneController.text == "" &&
                       passwordController.text == "") {
@@ -290,23 +235,27 @@ class _LoginDemoState extends State<LoginDemo> {
                         print(dd[i].phone);
                         print(dd[i].password);
                         if (dd[i].phone == phone) {
-                      
                           loggedInId = dd[i].driverID;
                         }
-                       
-                        bool bb = await LoginField.checkPhone(phone);
-                        print("hhi hi " + '${ bb}');
-                        bool bb1 = await LoginField.checkPassword(password);
-                        if (bb!=false) {
-                     
+
+                        bool checkPhone = await LoginField.checkPhone(phone);
+
+                        bool checkPassword =
+                            await LoginField.checkPassword(password);
+                        if (checkPhone != false) {
                           phoneCheck = true;
                         }
-                        if (bb1!=false) {
-                         
+                        if (checkPassword != false) {
                           passCheck = true;
                         }
-                    
                       }
+
+/*.........................CHECK ALL CONDITIONS.......................
+1. phone and password both aren't correct 
+2. phone is correct but password isn't
+3. phone isn't correct but password is
+4. both are correct so store the loggedIn Id and navigate to the menu
+.....................................................................*/
 
                       if (phoneCheck != true && passCheck != true) {
                         showDialogError();
@@ -318,13 +267,13 @@ class _LoginDemoState extends State<LoginDemo> {
                         showDialogError();
                       }
                       if (phoneCheck == true && passCheck == true) {
-                        //store the loggedin id and phone
+                        //store the loggedin Id and phone
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         await prefs.setInt('id', loggedInId);
                         await prefs.setInt('phone', phone);
                         print(prefs.getInt('phone'));
-                       // print(loggedInId);
+                        // print(loggedInId);
                         //naviagte to the driver's menu screen
                         Navigator.push(
                             context,
@@ -334,15 +283,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     } else {
                       print("admin");
                       //admin
-                      List<dynamic> drListd = await readAll(tableComplaints);
-                      complaints = drListd.cast();
-                      for (int i = 0; i < complaints.length; i++) {
-                        print(complaints[i].status);
-                        print(complaints[i].subject);
-           
-                       
-                      }
-                     // deleteObj(19, tableComplaints);
+                     
                       List<dynamic> muniList =
                           await readAll(tableMunicipalityAdmin);
                       munList = muniList.cast();
@@ -365,7 +306,7 @@ class _LoginDemoState extends State<LoginDemo> {
                         await prefs.setInt('id', loggedInId);
                         await prefs.setInt('phone', phone);
                         print(prefs.getInt('phone'));
-                       // print(loggedInId);
+                        // print(loggedInId);
                         //naviagte to the admin's menu screen
                         Navigator.push(
                             context,
@@ -375,143 +316,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     }
                   }
 
-              /*    BinLocation loc = BinLocation(
-                      binID: 1,
-                      coordinateX: 21.4893852,
-                      coordinateY: 39.2462446);*/
-
-                  //addObj(loc, tableBinLocation);
-                  /*   List<dynamic> loca = await readAll(tableBinLocation);
-                  locList = loca.cast();
-                  for (int i = 0; i < locList.length; i++) {
-                    print("${locList[i].coordinateX}");
-                    //deleteObj(disList[i].districtID, tableDistrict);
-                  }*/
-                  /*  BinLevel binL = BinLevel(
-                    level: int.parse(milesController.text),
-                    , "", "", "", "");
-
-                  validate(BuildContext ctx) async {
-                    if (phone != "" && password != "") {
-                      DatabaseHelper dh = DatabaseHelper();
-
-                      Driver test = await verifyLogin(password, phone);
-                      if (test == null) {
-                        print("null");
-                      } else {
-                        print(test);
-                      }
-                    }
-                  }
-                  //call the query to check if the user exists
-                  // var res= verifyLogin(password, phone);
-
-                  //create a login
-                  Driver driver = Driver(
-                      driverID: 3,
-                      municpalityID: 123,
-                      firstName: "manar",
-                      lastName: "hennawi",
-                      password: "11224456",
-                      email: " manarhennawi00@gmail.com",
-                      phone: 0508672505,
-                      workTime: "5");
-
-                  District di =
-                      District(name: "Alnaseem", numberOfBins: 15, driverID: 5);
-                  District di2 =
-                      District(name: "AlJamea", numberOfBins: 12, driverID: 1);
-                  District di3 = District(
-                      name: "Alfaisaliah", numberOfBins: 13, driverID: 2);
-                  District di4 =
-                      District(name: "Alwaha", numberOfBins: 11, driverID: 3);
-                  District di5 = District(
-                      name: "Alsulaimania", numberOfBins: 15, driverID: 4);
-//print(tableDriver);
-//addObj(driver, tableDriver);
-//Driver driver1 = await readObj(3, tableDriver);
-//print(driver1.firstName);
-//await db.execute("DROP TABLE IF EXISTS tableName");
-
-                  //Bin bin = Bin(binID: 123, capacity: 15, districtId: 49);
-                  //  addObj(bin, tableBin);
-
-                  Bin bin = Bin(binID: 123, capacity: 10, districtId: 1);
-                  Bin bin1 = Bin(binID: 144, capacity: 25, districtId: 2);
-                  Bin bin2 = Bin(binID: 166, capacity: 40, districtId: 3);
-
-                  //     addObj(bin, tableBin);
-
-                  // Bin bin = Bin(binID: 123, capacity: 15, districtId: 49);
-                  //addObj(bin, "bin_table");
-
-                  //  Bin bintry = await readObj(bin.binID, "bin_table");
-                  //  print("bin object: ${bintry.capacity}");
-                  //implement database helper
-                  //   Bin(name,miles,7);
-                  // _insert(name, miles);
-                  // _queryAll();
-*/
-                  /*  List<dynamic> d = await readAll(tableDistrict);
-                  disList = d.cast();
-                  for (int i = 0; i < disList.length; i++) {
-                    print("${disList[i].districtID}");
-                    //deleteObj(disList[i].districtID, tableDistrict);
-                  }*/
-                  //addObj(mun, tableMunicipalityAdmin);
-
-                  //deleteObj(1243, tableMunicipalityAdmin);
-                  //MunicipalityAdmin obj = await readAll( tableMunicipalityAdmin);
-                  //print("${obj.firstName} HIII");
-
-                  /*District di =
-                      District(name: "Alnaseem", numberOfBins: 15, driverID: 5);
-                  District di2 =
-                      District(name: "AlJamea", numberOfBins: 12, driverID: 1);
-                  District di3 = District(
-                      name: "Alfaisaliah", numberOfBins: 13, driverID: 2);
-                  District di4 =
-                      District(name: "Alwaha", numberOfBins: 11, driverID: 3);
-                  District di5 = District(
-                      name: "Alsulaimania", numberOfBins: 15, driverID: 4);
-                  addObj(di, tableDistrict);
-                  addObj(di2, tableDistrict);
-                  addObj(di3, tableDistrict);
-                  addObj(di4, tableDistrict);
-                  addObj(di5, tableDistrict);*/
-
-                  //ensure the object exists
-                  /*  munObj =
-                      await readObj(mun.municpalityID, tableMunicipalityAdmin);
-                  print("mun object: ${munObj.lastName}");
-                  updateObj(mun.municpalityID, mun, tableMunicipalityAdmin);*/
-                  /* List<dynamic> drListd = await readAll(tableDriver);
-                  dd = drListd.cast();
-                  for (int i = 0; i < dd.length; i++) {
-                    print("${dd[i].driverID}");
-                  }
-    List<dynamic> distList = await readAll(tableDistrict);
-                  disList = distList.cast();
-                  for (int i = 0; i < disList.length; i++) {
-                    print("${disList[i].districtID}");
-                  }*/
-
-                  // print("mun object list: ${munList[0].firatName}");
-                  //  deleteObj(mun.municpalityID, tableMunicipalityAdmin);*/
-
-                  // List<dynamic> b = await readAll("bin_table");
-                  // List<dynamic> b = await readAll("bin_table");
-
-                  /* List<dynamic> b = await readAll("bin_table");
-
-                  bb = b.cast();
-                  for (int i = 0; i < bb.length; i++) {
-                    print("from list:  ${bb[i].capacity}");
-                  }
-                 */
-                  //close();
-                  // addObj(mun, tableMunicipalityAdmin);
-                  //initDatabase();*/
+                
                 },
                 child: Text(
                   'Login',
