@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/Screens/Logo.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
+import 'package:flutter_application_1/model/DriverStatus.dart';
 import 'Screens/DriverMenu.dart';
 import 'model/BinLevel.dart';
 import 'model/BinLocation.dart';
@@ -30,6 +31,7 @@ void main() async {
   
   
 }*/
+//addObj(DriverStatus,)
 
 class MyAppDemo extends StatefulWidget {
   @override
@@ -65,8 +67,8 @@ class _MyAppDemoState extends State<MyAppDemo> {
       final distanceFirebase =
           new Map<String, dynamic>.from(event.snapshot.value);
       print(distanceFirebase['Distance']); //json data
-      distance = distanceFirebase['Distance'].toDouble(); 
-      print(distance);//get teh distance from the firebase
+      distance = distanceFirebase['Distance'].toDouble();
+      print(distance); //get teh distance from the firebase
       if (distance <= 15.0) {
         //full
 
@@ -84,14 +86,52 @@ class _MyAppDemoState extends State<MyAppDemo> {
             BinLevel(binID: 144, full: false, half_full: false, empty: true);
         ;
       }
+
+      /* DriverStatus d1 = new DriverStatus(
+          driverID: 1,
+          statusID: 1,
+          completed: false,
+          incomplete: false,
+          lateStatus: false);*/
+      // addObj(d1, tableDriverStatus);
+      /*DriverStatus d2 = new DriverStatus(
+          driverID: 2,
+          statusID: 2,
+          completed: false,
+          incomplete: false,
+          lateStatus: false);*/
+      // addObj(d2, tableDriverStatus);
+      /*DriverStatus d3 = new DriverStatus(
+          driverID: 3,
+          statusID: 3,
+          completed: false,
+          incomplete: false,
+          lateStatus: false);*/
+      // addObj(d3, tableDriverStatus);
+      /*DriverStatus d4 = new DriverStatus(
+          driverID: 4,
+          statusID: 4,
+          completed: false,
+          incomplete: false,
+          lateStatus: false);*/
+      // addObj(d4, tableDriverStatus);
+      /*DriverStatus d5 = new DriverStatus(
+          driverID: 5,
+          statusID: 5,
+          completed: false,
+          incomplete: false,
+          lateStatus: false);*/
+      // addObj(d5, tableDriverStatus);
 // addObj(level, tableBinLevel);
-    updateObj(level.level, level, tableBinLevel);
+      updateObj(level.level, level, tableBinLevel);
     });
   }
- Future addObj(dynamic obj, String tableName) async {
+
+  Future addObj(dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalCreate(obj, tableName);
     print("object inserted");
   }
+
   Future updateObj(int id, dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalUpdate(tableName, id, obj);
   }

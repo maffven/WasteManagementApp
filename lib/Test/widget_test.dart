@@ -75,12 +75,14 @@ void main() {
       //var phone = find.byType(TextField);
       var phone = find.byKey(ValueKey("addPhone"));
       var email = find.byKey(ValueKey("addEmail"));
+      var save = find.byKey(ValueKey("save"));
       //execute the actual test
-      await tester.enterText(phone, "05543620821");
+      await tester.enterText(phone, "0554362082");
       await tester.enterText(email, "lina@gmail.com");
+      await tester.tap(save);
       await tester.pump();
       //check output
-      expect(find.text("05543620821"), findsOneWidget);
+      expect(find.text("0554362082"), findsOneWidget);
       expect(find.text("lina@gmail.com"), findsOneWidget);
     });
   });

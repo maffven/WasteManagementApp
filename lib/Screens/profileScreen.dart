@@ -386,6 +386,7 @@ class ProfileState extends State<Profile> {
                 textColor: Colors.white,
                 color: Colors.green,
                 //here u have to check phone and email if it is wrong show dialog else make the update
+                key: Key("save"),
                 onPressed: () async {
                   String email = '';
                   String phone = "";
@@ -507,10 +508,18 @@ class ProfileState extends State<Profile> {
     RegExp regExp = new RegExp(patttern);
     if (phone.length == 0) {
       return false;
-    } else if (!regExp.hasMatch(phone)) {
+    } else if (phone.length >= 10) {
+      return true;
+      /* } else if (!regExp.hasMatch(phone)) {
       return false;
     } else
-      return true;
+      return true;*/
+    }
+  }
+
+  //generalUpdate(String tablename, int id, dynamic obj)
+  Future updateObj(int id, dynamic obj, String tableName) async {
+    await DatabaseHelper.instance.generalUpdate(tableName, id, obj);
   }
 
   Widget _getEditIcon() {
@@ -549,11 +558,6 @@ class ProfileState extends State<Profile> {
     // print("in get drivers method");
     // print("drivers length ${driversDB.length}");
     drivers = driv;
-  }
-
-  //generalUpdate(String tablename, int id, dynamic obj)
-  Future updateObj(int id, dynamic obj, String tableName) async {
-    await DatabaseHelper.instance.generalUpdate(tableName, id, obj);
   }
 
   Future<void> _retriveDriver(List<Driver> drivers) async {

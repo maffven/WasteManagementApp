@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Screens/DriverSatus.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/Bin.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
 import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Driver.dart';
+import 'package:flutter_application_1/model/DriverStatus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminDriverStatus extends StatefulWidget {
@@ -78,10 +80,23 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                         ),
                                     IconButton(
                                       onPressed: () async {
-                                        SharedPreferences prefs =
+                                        /* SharedPreferences prefs =
                                             await SharedPreferences
                                                 .getInstance();
-                                        await prefs.setBool("stats", true);
+                                        await prefs.setBool("stats", true);*/
+                                        int statusID;
+                                        bool completed;
+                                        bool incomplete;
+
+                                        DriverStatus alert = new DriverStatus(
+                                            driverID: driver.driverID,
+                                            statusID: statusID,
+                                            completed: completed,
+                                            incomplete: incomplete,
+                                            lateStatus: false);
+
+                                        updateObj(driver.driverID, alert,
+                                            tableDriverStatus);
                                       },
                                       alignment: Alignment.center,
                                       padding: new EdgeInsets.all(0.0),
@@ -429,6 +444,10 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
     //print("mun object: ${munObj.firatName}");
+  }
+
+  Future updateObj(int id, dynamic obj, String tableName) async {
+    await DatabaseHelper.instance.generalUpdate(tableName, id, obj);
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
