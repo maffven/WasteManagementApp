@@ -4,53 +4,55 @@ import 'package:flutter_application_1/model/Bin.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
 import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Driver.dart';
+import 'package:flutter_application_1/model/FieldValidator.dart';
 import 'package:test/test.dart';
 import 'package:flutter_application_1/model/LoginField.dart';
 import 'package:flutter_application_1/model/ComplaintFields.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   group('CommonFunctions', () {
     //test if the entered password is valid and matches the pattern
-  //-------------------------------------------------------------
-  test('Valid password check', () {
-    try{
-    var result = LoginField.validatePassword('Rania45');
-    expect(result, 'Enter a valid password');
-    }catch(error){
-      print(error.toString());
-    }
-  });
-  //test if the two passwords match in forgot password interface
-  //-------------------------------------------------------------
-  test('match two passwords', () {
-    try{
-    var result = LoginField.matchTwoPasswords('1233', '1233');
-    expect(result, true);
-    }catch(error){
-      print(error.toString());
-    }
-  });
-  //test if the phone exists in the database
-  //-------------------------------------------------------------
-  test('phone in database check', () async {
-    try {
-      bool result = await LoginField.checkPhone(06795437890);
-      expect(result, true);
-    } catch (error, stackTrace) {
-      return Future.error(error, stackTrace);
-    }
-  });
-  //test if the password exists in the database
-  //-------------------------------------------------------------
-  test('password in database check', () async {
-    try {
-      bool result = await LoginField.checkPassword("7890");
-      expect(result, true);
-    } catch (error, stackTrace) {
-      return Future.error(error, stackTrace);
-    }
-  });
-  //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    test('Valid password check', () {
+      try {
+        var result = LoginField.validatePassword('Rania45');
+        expect(result, 'Enter a valid password');
+      } catch (error) {
+        print(error.toString());
+      }
+    });
+    //test if the two passwords match in forgot password interface
+    //-------------------------------------------------------------
+    test('match two passwords', () {
+      try {
+        var result = LoginField.matchTwoPasswords('1233', '1233');
+        expect(result, true);
+      } catch (error) {
+        print(error.toString());
+      }
+    });
+    //test if the phone exists in the database
+    //-------------------------------------------------------------
+    test('phone in database check', () async {
+      try {
+        bool result = await LoginField.checkPhone(06795437890);
+        expect(result, true);
+      } catch (error, stackTrace) {
+        return Future.error(error, stackTrace);
+      }
+    });
+    //test if the password exists in the database
+    //-------------------------------------------------------------
+    test('password in database check', () async {
+      try {
+        bool result = await LoginField.checkPassword("7890");
+        expect(result, true);
+      } catch (error, stackTrace) {
+        return Future.error(error, stackTrace);
+      }
+    });
+    //-------------------------------------------------------------
     //the purpose of this test is to ensure drivers info
     // is retrieved from the DB correctly
     test('Get drivers info from DB Test', () async {
@@ -62,16 +64,16 @@ void main() {
         print(error);
       }
     });
-  //test if the fields are empty or not  
-  //-------------------------------------------------------------
-  test('Empty Complaint fields Test', () {
-    try {
-      var result = ComplaintFields.validateFields("", "", "", "");
-      expect(result, true);
-    } catch (error) {
-      print(error);
-    }
-  });
+    //test if the fields are empty or not
+    //-------------------------------------------------------------
+    test('Empty Complaint fields Test', () {
+      try {
+        var result = ComplaintFields.validateFields("", "", "", "");
+        expect(result, true);
+      } catch (error) {
+        print(error);
+      }
+    });
     //-------------------------------------------------------------
     //the purpose of this test is to ensure districts info
     //is retrieved from the DB correctly
@@ -107,6 +109,24 @@ void main() {
       } catch (error) {
         print(error);
       }
+    });
+    //the purpose of this test is to ensure
+    //the validity of the entered email
+    test('Empty Email Test', () {
+      var result = FieldValidator.validateEmail('');
+      expect(result, 'Enter a valid email');
+    });
+    //the purpose of this test is to ensure
+    //the validity of the entered email
+    test('Valid Email Test', () {
+      var result = FieldValidator.validateEmail('ajay.kumar@nonstopio.com');
+      expect(result, null);
+    });
+    //the purpose of this test is to ensure
+    //the validity of the entered phone number
+    test('Valid phone number Test', () {
+      var result = FieldValidator.validatePhone(0554362082);
+      expect(result, null);
     });
     //the purpose of this test is to ensure
     //the ability of retrieve assigned district for a specific driver

@@ -93,7 +93,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                             statusID: statusID,
                                             completed: completed,
                                             incomplete: incomplete,
-                                            lateStatus: false);
+                                            lateStatus: true);
 
                                         updateObj(driver.driverID, alert,
                                             tableDriverStatus);
