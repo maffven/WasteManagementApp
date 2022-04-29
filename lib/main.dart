@@ -84,7 +84,7 @@ class _MyAppDemoState extends State<MyAppDemo> {
             BinLevel(binID: 144, full: false, half_full: false, empty: true);
         ;
       }
-  // addObj(level, tableBinLevel);
+// addObj(level, tableBinLevel);
     updateObj(level.level, level, tableBinLevel);
     });
   }
