@@ -9,7 +9,8 @@ import 'package:test/test.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   group('CommonFunctions', () {
-    //the purpose of this test is to ensure drivers info is retrieved from the DB correctly
+    //the purpose of this test is to ensure drivers info
+    // is retrieved from the DB correctly
     test('Get drivers info from DB Test', () async {
       try {
         CommonFunctions com = new CommonFunctions();
@@ -20,7 +21,8 @@ void main() {
       }
     });
 
-    //the purpose of this test is to ensure districts info is retrieved from the DB correctly
+    //the purpose of this test is to ensure districts info
+    //is retrieved from the DB correctly
     test('Get districts info from DB Test', () async {
       try {
         CommonFunctions com = new CommonFunctions();
@@ -31,7 +33,8 @@ void main() {
       }
     });
 
-    //the purpose of this test is to ensure bins info is retrieved from the DB correctly
+    //the purpose of this test is to ensure bins info
+    //is retrieved from the DB correctly
     test('Get bins info from DB Test', () async {
       try {
         CommonFunctions com = new CommonFunctions();
@@ -42,7 +45,8 @@ void main() {
       }
     });
 
-    //the purpose of this test is to ensure bins level info is retrieved from the DB correctly
+    //the purpose of this test is to ensure bins level info
+    //is retrieved from the DB correctly
     test('Get bins level info from DB Test', () async {
       try {
         CommonFunctions com = new CommonFunctions();

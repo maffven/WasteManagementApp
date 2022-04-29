@@ -288,18 +288,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     // print("mun object: ${munList[0].firatName}");
   }
 
-  Future<void> _retriveDriver(List<Driver> drivers) async {
-    //to retrieve the phone from the login interface
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    driverId = prefs.getInt('id');
-    for (var i = 0; i < drivers.length; i++) {
-      if (driverId == drivers[i].driverID) {
-        driver = drivers[i];
-        break;
-      }
-    }
-  }
-
   void _fillDistrictInfo() {
     for (var i = 0; i < driverDistricts.length; i++) {
       barBinsLevelForDistrict = [];
@@ -488,6 +476,7 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
         body: TabBarView(
           children: [
             Padding(
+              key: Key("DriverDashboard"),
               padding:
                   EdgeInsets.only(bottom: 85.0, top: 10, left: 20, right: 20),
               child: loading

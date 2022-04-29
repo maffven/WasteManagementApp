@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Screens/ForgotPass.dart';
+import 'package:flutter_application_1/Screens/DriverDashboard.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_1/Screens/Login.dart';
 import 'package:flutter_application_1/Screens/SendComplaint.dart';
@@ -52,6 +52,19 @@ void main() {
           find.text(
               "i came to collect the bin at afternoon it was fully broken"),
           findsOneWidget);
+    });
+  });
+
+  testWidgets("Driver Dashboard widget test", (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      await tester.pumpWidget(
+          MaterialApp(home: Scaffold(body: BarAndPieChartDashboard())));
+
+      //Ensure dashboard visualization
+      var tab = find.byKey(ValueKey("DriverDashboard"));
+
+      //check output
+      expect(tab, findsOneWidget);
     });
   });
 
