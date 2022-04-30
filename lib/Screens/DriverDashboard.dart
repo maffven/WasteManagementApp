@@ -306,7 +306,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
             //         print("inside second if");
             //check = true;
             barBinsLevelForDistrict.add(binsLevel[l]);
-            print("Rawann am here${binsLevel[l].full}");
             //       }
           }
         }

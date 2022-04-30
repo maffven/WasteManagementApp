@@ -1,11 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/Screens/Logo.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/DriverStatus.dart';
-import 'Screens/DriverMenu.dart';
 import 'model/BinLevel.dart';
-import 'model/BinLocation.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 void main() async {
@@ -41,8 +40,11 @@ class MyAppDemo extends StatefulWidget {
 //Rawan work
 
 class _MyAppDemoState extends State<MyAppDemo> {
-  BinLevel level = BinLevel();
+  BinLevel level;
   var distance = 0.0;
+  int binId = 0;
+  bool loadData = false;
+
   @override
   void initState() {
     super.initState();
@@ -67,74 +69,113 @@ class _MyAppDemoState extends State<MyAppDemo> {
       final distanceFirebase =
           new Map<String, dynamic>.from(event.snapshot.value);
       print(distanceFirebase['Distance']); //json data
-      print(distanceFirebase['BinId']);
       distance = distanceFirebase['Distance'].toDouble();
-      print(distance); //get teh distance from the firebase
-      if (distance <= 15.0) {
-        //full
+      binId = distanceFirebase['BinId'];
+      print(distance);
+      print(binId); //get teh distance from the firebase
+      //
+      _getList();
 
-        level =
-            BinLevel(binID: 144, full: true, half_full: false, empty: false);
-      } else if (distance > 15.0 && distance < 900.0) {
-        //half-full
-
-        level =
-            BinLevel(binID: 144, full: false, half_full: true, empty: false);
-      } else {
-        //empty
-
-        level =
-            BinLevel(binID: 144, full: false, half_full: false, empty: true);
-        ;
-      }
-
-       DriverStatus d1 = new DriverStatus(
-          driverID: 1,
-          statusID: 1,
-          completed: false,
-          incomplete: false,
-          lateStatus: false);
-   //   addObj(d1, tableDriverStatus);
-      DriverStatus d2 = new DriverStatus(
-          driverID: 2,
-          statusID: 2,
-          completed: false,
-          incomplete: false,
-          lateStatus: false);
-   //  addObj(d2, tableDriverStatus);
-      DriverStatus d3 = new DriverStatus(
-          driverID: 3,
-          statusID: 3,
-          completed: false,
-          incomplete: false,
-          lateStatus: false);
-    // addObj(d3, tableDriverStatus);
-      DriverStatus d4 = new DriverStatus(
-          driverID: 4,
-          statusID: 4,
-          completed: false,
-          incomplete: false,
-          lateStatus: false);
-    //   addObj(d4, tableDriverStatus);
-      DriverStatus d5 = new DriverStatus(
-          driverID: 5,
-          statusID: 5,
-          completed: false,
-          incomplete: false,
-          lateStatus: false);
-      // addObj(d5, tableDriverStatus);
+      // DriverStatus d1 = new DriverStatus(
+      //     driverID: 1,
+      //     statusID: 1,
+      //     completed: false,
+      //     incomplete: false,
+      //     lateStatus: false);
+      // //addObj(d1, tableDriverStatus);
+      // DriverStatus d2 = new DriverStatus(
+      //     driverID: 2,
+      //     statusID: 2,
+      //     completed: false,
+      //     incomplete: false,
+      //     lateStatus: false);
+      // //addObj(d2, tableDriverStatus);
+      // DriverStatus d3 = new DriverStatus(
+      //     driverID: 3,
+      //     statusID: 3,
+      //     completed: false,
+      //     incomplete: false,
+      //     lateStatus: false);
+      // //addObj(d3, tableDriverStatus);
+      // DriverStatus d4 = new DriverStatus(
+      //     driverID: 4,
+      //     statusID: 4,
+      //     completed: false,
+      //     incomplete: false,
+      //     lateStatus: false);
+      // //addObj(d4, tableDriverStatus);
+      // DriverStatus d5 = new DriverStatus(
+      //     driverID: 5,
+      //     statusID: 5,
+      //     completed: false,
+      //     incomplete: false,
+      //     lateStatus: false);
+      //addObj(d5, tableDriverStatus);
 // addObj(level, tableBinLevel);
-      updateObj(level.level, level, tableBinLevel);
-     
     });
   }
 
   Future addObj(dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalCreate(obj, tableName);
-    print("object inserted");
   }
 
   Future updateObj(int id, dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalUpdate(tableName, id, obj);
+  }
+
+  void _getList() async {
+    //for every bin one binlevel
+    CommonFunctions com = new CommonFunctions();
+    List<BinLevel> binslevel = await com.getBinsLevel();
+    for (var i = 0; i < binslevel.length; i++) {
+      if (binslevel[i].binID == binId) {
+        level = binslevel[i];
+        loadData = true;
+        if (loadData) {
+          if (distance <= 15.0) {
+            //full
+            level = BinLevel(
+                level: level.level,
+                binID: binId,
+                full: true,
+                half_full: false,
+                empty: false);
+            await updateObj(level.level, level, tableBinLevel);
+          } else if (distance > 15.0 && distance < 900.0) {
+            //half-full
+            level = BinLevel(
+                level: level.level,
+                binID: binId,
+                full: false,
+                half_full: true,
+                empty: false);
+            updateObj(level.level, level, tableBinLevel);
+          } else {
+            //empty
+            level = BinLevel(
+                level: level.level,
+                binID: binId,
+                full: false,
+                half_full: false,
+                empty: true);
+
+            updateObj(level.level, level, tableBinLevel);
+          }
+        }
+
+        break;
+      } else {
+        setState(() {
+          loadData = false;
+        });
+      }
+    }
+    if (loadData == false) {
+      setState(() {
+        level =
+            BinLevel(binID: binId, full: false, half_full: false, empty: true);
+        addObj(level, tableBinLevel);
+      });
+    }
   }
 }

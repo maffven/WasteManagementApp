@@ -83,13 +83,13 @@ class BinLevel {
     final db = await instance.database;
     //we have to convert from object to json
     return db.update(tableBinLevel, municipalityAdmin.toJson(),
-        where: '${BinLevelFields.binID} = ?', whereArgs: [id]);
+        where: '${BinLevelFields.id} = ?', whereArgs: [id]);
   }
 
   //delete a row
   Future<int> delete(int id, dynamic instance) async {
     final db = await instance.database;
     return db.delete(tableBinLevel,
-        where: '${BinLevelFields.binID} = ?', whereArgs: [id]);
+        where: '${BinLevelFields.id} = ?', whereArgs: [id]);
   }
 }
