@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/AdminDashboard.dart';
 import 'package:flutter_application_1/Screens/AdminDriverStatus.dart';
+import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/Screens/DistrictListTab.dart';
 import 'package:flutter_application_1/Screens/EditComplaints.dart';
 import 'package:flutter_application_1/Screens/Login.dart';
@@ -29,6 +30,7 @@ class _ViewDrivers extends State<ViewDrivers> {
   List<Driver> filteredList = [];
   List<District> district;
   List<Widget> boxWidgets = [];
+  CommonFunctions com = new CommonFunctions();
   var status;
   bool doItJustOnce = false;
 
@@ -59,17 +61,6 @@ class _ViewDrivers extends State<ViewDrivers> {
           },
         ),
       );*/
-
-  //get all drivers from database
-  Future<List<Driver>> getDrivers() async {
-    //Get drivers from DB
-    List<Driver> driv;
-    List<dynamic> driversDB = await readAll(tableDriver);
-    driv = driversDB.cast();
-    print("in get drivers method");
-    print("drivers length ${driversDB.length}");
-    return driv;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +169,7 @@ child: Text('total work hours: '),
                 ),
               ),
               child: FutureBuilder<List<Driver>>(
-                  future: getDrivers(),
+                  future: com.getDrivers(),
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Driver>> snapshot) {
                     if (snapshot.hasData) {

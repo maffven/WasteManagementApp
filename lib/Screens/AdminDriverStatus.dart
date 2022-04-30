@@ -86,18 +86,26 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                         await prefs.setBool("stats", true);*/
                                         List<dynamic> drListd =
                                             await readAll(tableDriverStatus);
-                                        List<DriverStatus> dd = drListd.cast();
-                                        int statusID;
+                                        List<DriverStatus> driverStatusList =
+                                            drListd.cast();
                                         bool completed;
                                         bool incomplete;
-                                        for (int i = 0; i < dd.length; i++) {
-                                          if(dd[i].driverID==driver.driverID){
-                                          driverId = dd[i].driverID;
-                                          statusID = dd[i].statusID;
-                                          incomplete = dd[i].incomplete;
-                                          completed = dd[i].completed;
+                                        int statusID;
+                                        for (int i = 0;
+                                            i < driverStatusList.length;
+                                            i++) {
+                                          if (driverStatusList[i].driverID ==
+                                              driver.driverID) {
+                                            statusID =
+                                                driverStatusList[i].statusID;
+                                            driverId =
+                                                driverStatusList[i].driverID;
+                                            incomplete =
+                                                driverStatusList[i].incomplete;
+                                            completed =
+                                                driverStatusList[i].completed;
+                                          }
                                         }
-                                      }
                                         DriverStatus alert = new DriverStatus(
                                             driverID: driver.driverID,
                                             statusID: statusID,
@@ -105,8 +113,8 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                             incomplete: incomplete,
                                             lateStatus: true);
 
-                                        updateObj(statusID, alert,
-                                            tableDriverStatus);
+                                        updateObj(
+                                            statusID, alert, tableDriverStatus);
                                       },
                                       alignment: Alignment.center,
                                       padding: new EdgeInsets.all(0.0),
