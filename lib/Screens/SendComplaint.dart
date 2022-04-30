@@ -232,7 +232,7 @@ class _SendComplaintState extends State<SendComplaintDemo> {
                       // print(date);
                       print(district.text);
                       Complaints c = Complaints(
-                          binID: int.parse(selectedBinId),
+                          binID: int.parse(binId.text),
                           complaintMessage: description.text,
                           subject: summary.text,
                           status: false,
