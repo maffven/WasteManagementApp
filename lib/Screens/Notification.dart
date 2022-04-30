@@ -193,79 +193,103 @@ class _ViewNotification extends State<ViewNotification>
       }
     }
 
-
+//check if the driver has an alert from the admin of late status som show the alert
     for (int i = 0; i < theLevels.length; i++) {
       if (level == "Full" && status == true) {
-        boxWidgets.add(SizedBox(
+            boxWidgets.add(SizedBox(
             width: 370.0,
-            height: 200.0,
-            child: InkWell(
-              child: Card(
-                borderOnForeground: true,
-                color: Colors.white,
-                elevation: 2.0,
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Color(0xff28CC9E), width: 1),
-                    borderRadius: BorderRadius.circular(8.0)),
-                child: Center(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 1.0,
+            height: 100.0,
+            child: Card(
+              borderOnForeground: true,
+              color: Colors.white,
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Color(0xff28CC9E), width: 1),
+                  borderRadius: BorderRadius.circular(8.0)),
+              child: Center(
+                  child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                  
+                    Text("\t \t"),
+                    Icon(
+                      Icons.add_alert_rounded,
+                      color: Colors.red,
+                    ),
+                    Text(
+                      "Performance alerts",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                    SizedBox(
+                      height: 2.0,
+                    ),
+                  ],
+                ),
+              )),
+            ),
+          ));
+        } 
+          if (level == "Full") {
+            //don't show the empty and half-full ones
+            boxWidgets.add(SizedBox(
+                width: 370.0,
+                height: 100.0,
+                child: InkWell(
+                 
+                  child: Card(
+                    borderOnForeground: true,
+                    color: Colors.white,
+                    elevation: 2.0,
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Color(0xff28CC9E), width: 1),
+                        borderRadius: BorderRadius.circular(8.0)),
+                    child: Center(
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            "\t",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0),
+                          ),
+                          Text("\t \t"),
+                          Icon(
+                            Icons.circle_sharp,
+                            color: color,
+                          ),
+                          Text(
+                            "\t" + level + " in bin " + '${theLevels[i].binID}',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0),
+                          ),
+                          SizedBox(
+                            height: 2.0,
+                          ),
+                        ],
                       ),
-                      Text("\t \t"),
-                      Icon(
-                        Icons.add_alert_rounded,
-                        color: Colors.red,
-                      ),
-                      Text(
-                        "Performance alerts",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0),
-                      ),
-                      Text(
-                        "\t",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0),
-                      ),
-                
-                      Text("\t \t"),
-                      Icon(
-                        Icons.circle_sharp,
-                        color: color,
-                      ),
-                      Text(
-                        "\t" + level + " in bin " + '${theLevels[i].binID}',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0),
-                      ),
-                      SizedBox(
-                        height: 2.0,
-                      ),
-
-                      /*  Text(
-                  "2 Items",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w100),
-                )*/
-                    ],
+                    )),
                   ),
-                )),
-              ),
-            )));
-      }
-    }
+                )));
+          }
+        
     return boxWidgets;
   }
-
+  }
 //Database method
   Future addObj(dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalCreate(obj, tableName);
