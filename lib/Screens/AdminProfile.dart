@@ -15,26 +15,23 @@ class AdminProfile extends StatefulWidget {
 class AdminProfileState extends State<AdminProfile> {
   @override
   bool _status = true;
-  bool _Enabled = false;
+  bool _enabled = false;
+  bool loading = true;
 
   final FocusNode myFocusNode = FocusNode();
 
   //To take input from
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  List<MunicipalityAdmin> muns = [];
+  List<MunicipalityAdmin> admins = [];
   bool checkInfo = false;
   MunicipalityAdmin admin;
 
   @override
   void initState() {
     // TODO: implement initState
+    getAdmin();
     super.initState();
-    getMun().whenComplete(() {
-      setState(() {
-        _retriveMun(muns);
-      });
-    });
   }
   /*Widget build(BuildContext context) {
     return MaterialApp(
@@ -61,11 +58,9 @@ class AdminProfileState extends State<AdminProfile> {
   @override
   Widget build(BuildContext context) {
     // drivers = await getDrivers();
-    phoneController = TextEditingController(text: "${admin.phone}");
-    emailController = TextEditingController(text: "${admin.email}");
     return Scaffold(
       body: DefaultTabController(
-        length: 2,
+        length: 1,
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -80,236 +75,291 @@ class AdminProfileState extends State<AdminProfile> {
           body: TabBarView(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 50.0),
-                child: Center(
-                    child: Expanded(
-                        child: Container(
-                  height: 600.0,
-                  child: ListView(padding: const EdgeInsets.all(8), children: <
-                      Widget>[
-                    Container(
-                      color: Color(0xffFFFFFF),
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 25.0),
-                        child: new Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(top: 20.0),
-                              child: new Stack(
-                                fit: StackFit.loose,
-                                children: <Widget>[
-                                  new Row(
+                child: loading
+                    ? Transform.scale(
+                        scale: 0.2,
+                        child: CircularProgressIndicator(),
+                      )
+                    : Center(
+                        child: Expanded(
+                            child: Container(
+                        height: 600.0,
+                        child: ListView(
+                            padding: const EdgeInsets.all(8),
+                            children: <Widget>[
+                              Container(
+                                color: Color(0xffFFFFFF),
+                                child: Padding(
+                                  padding: EdgeInsets.only(bottom: 25.0),
+                                  child: new Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      new Container(
-                                          width: 140.0,
-                                          height: 140.0,
-                                          child: new Icon(
-                                            Icons.person_rounded,
-                                            size: 150.0,
-                                          )),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            new Container(
-                              color: Color(0xffFFFFFF),
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 25.0),
-                                child: new Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 25.0, right: 25.0, top: 25.0),
-                                        child: new Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          mainAxisSize: MainAxisSize.max,
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 20.0),
+                                        child: new Stack(
+                                          fit: StackFit.loose,
                                           children: <Widget>[
-                                            new Column(
+                                            new Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
+                                                  MainAxisAlignment.center,
                                               children: <Widget>[
-                                                new Text(
-                                                  'INFO',
-                                                  style: TextStyle(
-                                                      fontSize: 18.0,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                            new Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                _status
-                                                    ? _getEditIcon()
-                                                    : new Container(),
-                                              ],
-                                            )
-                                          ],
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 25.0, right: 25.0, top: 25.0),
-                                        child: new Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            new Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                new Text(
-                                                  'ID',
-                                                  style: TextStyle(
-                                                      fontSize: 16.0,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
+                                                new Container(
+                                                    width: 140.0,
+                                                    height: 140.0,
+                                                    child: new Icon(
+                                                      Icons.person_rounded,
+                                                      size: 150.0,
+                                                    )),
                                               ],
                                             ),
                                           ],
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 25.0, right: 25.0, top: 2.0),
-                                        child: new Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            Text("${admin.municpalityID}"),
-                                          ],
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 25.0, right: 25.0, top: 25.0),
-                                        child: new Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            new Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                new Text(
-                                                  'Full name',
-                                                  style: TextStyle(
-                                                      fontSize: 16.0,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 25.0, right: 25.0, top: 2.0),
-                                        child: new Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            Text(
-                                                "${admin.firstName} ${admin.lastName}"),
-                                          ],
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 25.0, right: 25.0, top: 25.0),
-                                        child: new Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            new Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                new Text(
-                                                  'Email',
-                                                  style: TextStyle(
-                                                      fontSize: 16.0,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )),
-                                    //Email information
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 25.0, right: 25.0, top: 2.0),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Container(
-                                              width: 100,
-                                              child: TextFormField(
-                                                controller: emailController,
-                                                enabled: _Enabled,
-                                              )),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 25.0, right: 25.0, top: 25.0),
-                                        child: new Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: Container(
-                                                child: new Text(
-                                                  'Phone number',
-                                                  style: TextStyle(
-                                                      fontSize: 16.0,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                      new Container(
+                                        color: Color(0xffFFFFFF),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsets.only(bottom: 25.0),
+                                          child: new Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 25.0,
+                                                      right: 25.0,
+                                                      top: 25.0),
+                                                  child: new Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: <Widget>[
+                                                      new Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          new Text(
+                                                            'INFO',
+                                                            style: TextStyle(
+                                                                fontSize: 18.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      new Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          _status
+                                                              ? _getEditIcon()
+                                                              : new Container(),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  )),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 25.0,
+                                                      right: 25.0,
+                                                      top: 25.0),
+                                                  child: new Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: <Widget>[
+                                                      new Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          new Text(
+                                                            'ID',
+                                                            style: TextStyle(
+                                                                fontSize: 16.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  )),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 25.0,
+                                                      right: 25.0,
+                                                      top: 2.0),
+                                                  child: new Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: <Widget>[
+                                                      Text(
+                                                          "${admin.municpalityID}"),
+                                                    ],
+                                                  )),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 25.0,
+                                                      right: 25.0,
+                                                      top: 25.0),
+                                                  child: new Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: <Widget>[
+                                                      new Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          new Text(
+                                                            'Full name',
+                                                            style: TextStyle(
+                                                                fontSize: 16.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  )),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 25.0,
+                                                      right: 25.0,
+                                                      top: 2.0),
+                                                  child: new Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: <Widget>[
+                                                      Text(
+                                                          "${admin.firstName} ${admin.lastName}"),
+                                                    ],
+                                                  )),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 25.0,
+                                                      right: 25.0,
+                                                      top: 25.0),
+                                                  child: new Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: <Widget>[
+                                                      new Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          new Text(
+                                                            'Email',
+                                                            style: TextStyle(
+                                                                fontSize: 16.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  )),
+                                              //Email information
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 25.0,
+                                                    right: 25.0,
+                                                    top: 2.0),
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Container(
+                                                        width: 100,
+                                                        child: TextFormField(
+                                                          controller:
+                                                              emailController,
+                                                          enabled: _enabled,
+                                                        )),
+                                                  ],
                                                 ),
                                               ),
-                                              flex: 2,
-                                            ),
-                                          ],
-                                        )),
-                                    //Email information
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 25.0, right: 25.0, top: 2.0),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            child: TextFormField(
-                                              controller: phoneController,
-                                              enabled: _Enabled,
-                                            ),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 25.0,
+                                                      right: 25.0,
+                                                      top: 25.0),
+                                                  child: new Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Expanded(
+                                                        child: Container(
+                                                          child: new Text(
+                                                            'Phone number',
+                                                            style: TextStyle(
+                                                                fontSize: 16.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ),
+                                                        flex: 2,
+                                                      ),
+                                                    ],
+                                                  )),
+                                              //Email information
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 25.0,
+                                                    right: 25.0,
+                                                    top: 2.0),
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 100,
+                                                      child: TextFormField(
+                                                        controller:
+                                                            phoneController,
+                                                        enabled: _enabled,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              !_status
+                                                  ? _getActionButtons()
+                                                  : new Container(),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    !_status
-                                        ? _getActionButtons()
-                                        : new Container(),
-                                  ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]),
-                ))),
+                            ]),
+                      ))),
+                padding: const EdgeInsets.only(top: 50.0),
               ),
             ],
           ),
@@ -463,18 +513,21 @@ class AdminProfileState extends State<AdminProfile> {
       return true;
   }
 
-  Future<void> _retriveMun(List<MunicipalityAdmin> mun) async {
+  Future<MunicipalityAdmin> _retriveAdmin(
+      List<MunicipalityAdmin> adminList) async {
     //to retrieve the phone from the login interface
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("driver id: ${prefs.getInt('id')}");
-    var munId = prefs.getInt('id');
-    for (var i = 0; i < mun.length; i++) {
-      print("drivers[i].driverID ${mun[i].municpalityID}");
-      if (munId == mun[i].municpalityID) {
-        admin = mun[i];
+    int munId = prefs.getInt('id');
+    MunicipalityAdmin munAdmin;
+    for (var i = 0; i < adminList.length; i++) {
+      print("drivers[i].driverID ${adminList[i].municpalityID}");
+      if (munId == adminList[i].municpalityID) {
+        munAdmin = adminList[i];
         break;
       }
     }
+    return munAdmin;
   }
 
   Widget _getEditIcon() {
@@ -491,7 +544,7 @@ class AdminProfileState extends State<AdminProfile> {
       onTap: () {
         setState(() {
           _status = false;
-          _Enabled = true;
+          _enabled = true;
         });
       },
     );
@@ -544,13 +597,19 @@ class AdminProfileState extends State<AdminProfile> {
     return prefs.getInt('id');
   }
 
-  Future<List<MunicipalityAdmin>> getMun() async {
+  void getAdmin() async {
     //Get drivers from DB
-    List<MunicipalityAdmin> Mun;
-    List<dynamic> MunDB = await readAll(tableMunicipalityAdmin);
-    Mun = MunDB.cast();
-    //print("in get drivers method");
-    // print("Admin length ${MunDB.length}");
-    return Mun;
+    List<MunicipalityAdmin> mun;
+    List<dynamic> munDB = await readAll(tableMunicipalityAdmin);
+    mun = munDB.cast();
+    MunicipalityAdmin munAdmin = await _retriveAdmin(mun);
+    setState(() {
+      admins = mun;
+      admin = munAdmin;
+      String ph = (admin.phone).toString();
+      phoneController = TextEditingController(text: ph);
+      emailController = TextEditingController(text: "${admin.email}");
+      loading = false;
+    });
   }
 }

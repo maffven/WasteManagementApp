@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/Screens/DriverDistrictList.dart';
 import 'package:flutter_application_1/Screens/profileScreen.dart';
+import 'package:flutter_application_1/screens/AdminProfile.dart';
 import 'package:flutter_application_1/screens/SendComplaint.dart';
 import 'package:flutter_application_1/screens/Login.dart';
 import 'package:flutter_application_1/screens/NotiTry.dart';
@@ -53,9 +54,9 @@ class DriverMenu extends StatelessWidget {
             return SendComplaint();
             break;
           case 4:
-            return Profile();
+            //return Profile();
             // return Notification();
-            //return AdminProfile();
+            return AdminProfile();
             // return DriverSatus();
             break;
           default:
