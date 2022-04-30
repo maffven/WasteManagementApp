@@ -296,14 +296,35 @@ class _LoginDemoState extends State<LoginDemo> {
                           phoneCheck = true;
                           loggedInId = munList[i].municpalityID;
                         }
+  bool checkPhone = await LoginField.checkPhone(phone);
 
-                        if (munList[i].password == password) {
+                        bool checkPassword =
+                            await LoginField.checkPassword(password);
+                        if (checkPhone != false) {
+                          phoneCheck = true;
+                        }
+                        if (checkPassword != false) {
                           passCheck = true;
                         }
                       }
+
+/*.........................CHECK ALL CONDITIONS.......................
+1. phone and password both aren't correct 
+2. phone is correct but password isn't
+3. phone isn't correct but password is
+4. both are correct so store the loggedIn Id and navigate to the menu
+.....................................................................*/
+
                       if (phoneCheck != true && passCheck != true) {
                         showDialogError();
-                      } else {
+                      }
+                      if (phoneCheck == true && passCheck != true) {
+                        showDialogError();
+                      }
+                      if (phoneCheck != true && passCheck == true) {
+                        showDialogError();
+                      }
+                      if (phoneCheck == true && passCheck == true) {
                         //store the loggedin id and phone
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
