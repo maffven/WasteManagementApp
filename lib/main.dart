@@ -67,6 +67,7 @@ class _MyAppDemoState extends State<MyAppDemo> {
       final distanceFirebase =
           new Map<String, dynamic>.from(event.snapshot.value);
       print(distanceFirebase['Distance']); //json data
+      print(distanceFirebase['BinId']);
       distance = distanceFirebase['Distance'].toDouble();
       print(distance); //get teh distance from the firebase
       if (distance <= 15.0) {
@@ -123,7 +124,7 @@ class _MyAppDemoState extends State<MyAppDemo> {
           lateStatus: false);
       // addObj(d5, tableDriverStatus);
 // addObj(level, tableBinLevel);
-     // updateObj(level.level, level, tableBinLevel);
+      updateObj(level.level, level, tableBinLevel);
      
     });
   }
