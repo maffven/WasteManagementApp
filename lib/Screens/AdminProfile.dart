@@ -496,21 +496,26 @@ class AdminProfileState extends State<AdminProfile> {
   }
 
   _isEmail(String email) {
-    if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email)) {
-      return false;
-    } else
+    if (RegExp(r'\S+@\S+\.\S+').hasMatch(email)) {
       return true;
+    } else
+      return false;
   }
 
   _isPhone(String phone) {
-    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(patttern);
+    // String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    // RegExp regExp = new RegExp(patttern);
     if (phone.length == 0) {
       return false;
-    } else if (!regExp.hasMatch(phone)) {
+    } else if (phone.length == 11 || phone.length == 10 || phone.length == 9) {
+      return true;
+      /* } else if (!regExp.hasMatch(phone)) {
       return false;
     } else
-      return true;
+      return true;*/
+    } else {
+      return false;
+    }
   }
 
   Future<MunicipalityAdmin> _retriveAdmin(

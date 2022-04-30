@@ -72,8 +72,8 @@ void main() {
     await tester.runAsync(() async {
       //find all widgets
       await tester.pumpWidget(MaterialApp(home: Scaffold(body: Profile())));
-      var phone = find.byKey(ValueKey("addPhone"));
       var email = find.byKey(ValueKey("addEmail"));
+      var phone = find.byKey(ValueKey("addPhone"));
       var save = find.byKey(ValueKey("save"));
       //execute the actual test
       await tester.enterText(phone, "0554362082");
@@ -81,8 +81,8 @@ void main() {
       await tester.press(save);
       await tester.pumpAndSettle();
       //check output
-      // expect(find.text("0554362082"), findsOneWidget);
       expect(find.text("lina@gmail.com"), findsOneWidget);
+      expect(find.text("0554362082"), findsOneWidget);
     });
   });
 }
