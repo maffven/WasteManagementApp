@@ -72,7 +72,6 @@ void main() {
     await tester.runAsync(() async {
       //find all widgets
       await tester.pumpWidget(Profile());
-      //var phone = find.byType(TextField);
       var phone = find.byKey(ValueKey("addPhone"));
       var email = find.byKey(ValueKey("addEmail"));
       var save = find.byKey(ValueKey("save"));
