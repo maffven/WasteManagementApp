@@ -14,7 +14,6 @@ import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 class BarAndPieChartDashboard extends StatefulWidget {
   final Widget child;
 
@@ -307,6 +306,7 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
             //         print("inside second if");
             //check = true;
             barBinsLevelForDistrict.add(binsLevel[l]);
+            print("Rawann am here${binsLevel[l].full}");
             //       }
           }
         }
@@ -449,9 +449,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    //_generateDataForBarChart();
-
-    // _fillBinsInfoList();
     return DefaultTabController(
       length: 2,
       child: Scaffold(
