@@ -1,3 +1,4 @@
+import 'package:flutter_application_1/screens/DriverDashboard.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -52,5 +53,18 @@ void main() {
     });
     //-------------------------------------------------------------
     //add test 3 here
+
+    testWidgets("Driver Dashboard widget test", (WidgetTester tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpWidget(
+            MaterialApp(home: Scaffold(body: BarAndPieChartDashboard())));
+
+        //Ensure dashboard visualization
+        var tab = find.byKey(ValueKey("DriverDashboard"));
+
+        //check output
+        expect(tab, findsOneWidget);
+      });
+    });
   });
 }
