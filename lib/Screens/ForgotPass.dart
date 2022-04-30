@@ -209,9 +209,7 @@ class _ForgotPasswordState extends State<ForgotPasswordDemo> {
                   child: FlatButton(
                     key: Key("submit"),
                     onPressed: () async {
-                      //to retrieve the phone from the login interface
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                
                       //frist, check if text fields are not empty
                       if (newPass.text == "" && confPass.text == "") {
                         showDialog();

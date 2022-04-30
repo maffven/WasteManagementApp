@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Screens/ForgotPass.dart';
 import 'package:flutter_application_1/Screens/DriverMenu.dart';
-import 'package:flutter_application_1/Screens/AdminMenu.dart';
-import 'package:flutter_application_1/Screens/mapSc.dart';
+import 'package:flutter_application_1/Screens/ForgotPass.dart';
 import 'package:flutter_application_1/model/Complaints.dart';
 import 'package:flutter_application_1/model/BinLocation.dart';
 import 'package:flutter_application_1/model/District.dart';
+import 'package:flutter_application_1/Screens/AdminMenu.dart';
 import 'package:flutter_application_1/model/MunicipalityAdmin.dart';
 import 'package:flutter_application_1/model/Bin.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
-import 'package:flutter_application_1/model/BinLocation.dart';
+import 'package:flutter_application_1/model/DriverStatus.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -207,12 +206,18 @@ class _LoginDemoState extends State<LoginDemo> {
               child: FlatButton(
                 key: Key("loginButton"),
                 onPressed: () async {
+                  List<dynamic> muniList = await readAll(tableDriverStatus);
+                  List<DriverStatus> drSt = muniList.cast();
+                  for (int i = 0; i < drSt.length; i++) {
+                    print(drSt[i].lateStatus);
+                    print(drSt[i].driverID);
+                  }
                   //  deleteObj(19, tableComplaints);
                   List<BinLevel> binLevel = [];
                   List<dynamic> compDB = await readAll(tableBinLevel);
                   binLevel = compDB.cast();
                   print(binLevel.length);
-                  for (int i = 0; i < binlevel.length; i++) {
+                  for (int i = 0; i < binLevel.length; i++) {
                     print('hi');
                     print('the id : ' + '${binLevel[i].level}');
                   }
@@ -232,8 +237,7 @@ class _LoginDemoState extends State<LoginDemo> {
                       List<dynamic> drListd = await readAll(tableDriver);
                       dd = drListd.cast();
                       for (int i = 0; i < dd.length; i++) {
-                        print(dd[i].phone);
-                        print(dd[i].password);
+                     
                         if (dd[i].phone == phone) {
                           loggedInId = dd[i].driverID;
                         }
@@ -283,7 +287,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     } else {
                       print("admin");
                       //admin
-                     
+
                       List<dynamic> muniList =
                           await readAll(tableMunicipalityAdmin);
                       munList = muniList.cast();
@@ -315,8 +319,6 @@ class _LoginDemoState extends State<LoginDemo> {
                       }
                     }
                   }
-
-                
                 },
                 child: Text(
                   'Login',

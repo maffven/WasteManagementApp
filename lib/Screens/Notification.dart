@@ -157,18 +157,6 @@ class _ViewNotification extends State<ViewNotification>
         level = "Full";
       }
 
-      //-------------------------------------------
-      if (binLevel[i].binID == 144) {
-        distName = "Aljamea";
-      } else if (binLevel[i].binID == 1) {
-        distName = "Alnaseem";
-      } else if (binLevel[i].binID == 2) {
-        distName = "Alfaisaliyah";
-      } else if (binLevel[i].binID == 3) {
-        distName = "Alwaha";
-      } else {
-        distName = "Alsulaimaniyah";
-      }
 
       //----------------------------------------------
       print("complaints length ${compDB.length}");
@@ -191,10 +179,9 @@ class _ViewNotification extends State<ViewNotification>
   Future<List<Widget>> getWidgets() async {
     theLevels = [];
     theLevels = await getBinLevels();
+     boxWidgets = [];
     List<DriverStatus> theDriversStatus = [];
     theDriversStatus = await getDriversStatus();
-
-    DriverStatus driverStatus;
     //retrieve the loggedin id
     SharedPreferences prefs = await SharedPreferences.getInstance();
     loggedInId = prefs.getInt('id');
@@ -206,7 +193,6 @@ class _ViewNotification extends State<ViewNotification>
       }
     }
 
-    boxWidgets = [];
 
     for (int i = 0; i < theLevels.length; i++) {
       if (level == "Full" && status == true) {
@@ -248,6 +234,7 @@ class _ViewNotification extends State<ViewNotification>
                             fontWeight: FontWeight.bold,
                             fontSize: 18.0),
                       ),
+                
                       Text("\t \t"),
                       Icon(
                         Icons.circle_sharp,

@@ -4,7 +4,7 @@ import 'package:flutter_application_1/Screens/profileScreen.dart';
 import 'package:flutter_application_1/screens/AdminProfile.dart';
 import 'package:flutter_application_1/screens/SendComplaint.dart';
 import 'package:flutter_application_1/screens/Login.dart';
-import 'package:flutter_application_1/screens/NotiTry.dart';
+import 'package:flutter_application_1/screens/Notification.dart';
 import 'mapSc.dart';
 
 class DriverMenu extends StatelessWidget {

@@ -7,6 +7,7 @@ import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:flutter_application_1/model/DriverStatus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/cupertino.dart';
 
 class AdminDriverStatus extends StatefulWidget {
   final Driver driver;
@@ -38,7 +39,29 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("the id ");
+    print(driver.driverID);
     getLists().whenComplete(() => setState(() {}));
+  }
+
+  void showDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text("Success"),
+          content: Text("Driver is alerted"),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -48,6 +71,13 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
         length: 1,
         child: Scaffold(
           backgroundColor: Colors.white,
+          appBar: AppBar(
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => Navigator.pop(context)),
+            backgroundColor: Color(0xffffDD83),
+            title: Text("Alert Driver"),
+          ),
           body: TabBarView(
             children: [
               Padding(
@@ -74,16 +104,9 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
-                                        children: textList()
-                                        //new Text("Districts:")
-
-                                        ),
+                                        children: textList()),
                                     IconButton(
                                       onPressed: () async {
-                                        /* SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
-                                        await prefs.setBool("stats", true);*/
                                         List<dynamic> drListd =
                                             await readAll(tableDriverStatus);
                                         List<DriverStatus> driverStatusList =
@@ -91,15 +114,18 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                         bool completed;
                                         bool incomplete;
                                         int statusID;
+                                        print("length: ");
+                                        print(driverStatusList.length);
                                         for (int i = 0;
                                             i < driverStatusList.length;
                                             i++) {
                                           if (driverStatusList[i].driverID ==
                                               driver.driverID) {
+                                                print("yes");
+                                                print(driver.driverID);
                                             statusID =
                                                 driverStatusList[i].statusID;
-                                            driverId =
-                                                driverStatusList[i].driverID;
+                                            driverId = driver.driverID;
                                             incomplete =
                                                 driverStatusList[i].incomplete;
                                             completed =
@@ -115,6 +141,15 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
 
                                         updateObj(
                                             statusID, alert, tableDriverStatus);
+                                        showDialog();
+                                        List<dynamic> muniList =
+                                            await readAll(tableDriverStatus);
+                                        List<DriverStatus> drSt =
+                                            muniList.cast();
+                                        for (int i = 0; i < drSt.length; i++) {
+                                          print(drSt[i].lateStatus);
+                                          print(drSt[i].driverID);
+                                        }
                                       },
                                       alignment: Alignment.center,
                                       padding: new EdgeInsets.all(0.0),
@@ -322,10 +357,10 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
   Future<void> _retriveDriver(List<Driver> drivers) async {
     //to retrieve the phone from the login interface
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("driver id: ${prefs.getInt('id')}");
+    //print("driver id: ${prefs.getInt('id')}");
     driverId = prefs.getInt('id');
     for (var i = 0; i < drivers.length; i++) {
-      print("drivers[i].driverID ${drivers[i].driverID}");
+     // print("drivers[i].driverID ${drivers[i].driverID}");
       if (driverId == drivers[i].driverID) {
         driver = drivers[i];
         break;
@@ -336,20 +371,20 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
 //to get district lists, bins list, and bins level list
   Future<void> getLists() async {
     //retrieve all deivers
-    List<Driver> driv;
+    /*List<Driver> driv;
     List<dynamic> driversDB = await readAll(tableDriver);
-    driv = driversDB.cast();
-    print("in get drivers method");
-    print("drivers length ${driversDB.length}");
-    await _retriveDriver(driv);
+    driv = driversDB.cast();*/
+   // print("in get drivers method");
+   // print("drivers length ${driversDB.length}");
+    //await _retriveDriver(driv);
     List<District> district;
     List<dynamic> districtDB = await readAll(tableDistrict);
     district = districtDB.cast();
-    print("in get distric method");
-    print("district length ${districtDB.length}");
+    //print("in get distric method");
+    //print("district length ${districtDB.length}");
     setState(() {
       for (int i = 0; i < district.length; i++) {
-        if (district[i].driverID == driverId) {
+        if (district[i].driverID == driver.driverID) {
           assignedDistricts.add(district[i]);
         }
       }
@@ -360,16 +395,16 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     List<BinLevel> bin;
     List<dynamic> binStatus = await readAll(tableBinLevel);
     bin = binStatus.cast();
-    print("in get binsLevel method");
-    print("binsLevel length ${binStatus.length}");
+   // print("in get binsLevel method");
+   // print("binsLevel length ${binStatus.length}");
     binsLevel = bin;
 
-    print("here inside getBins");
+   // print("here inside getBins");
     List<Bin> binsInfo;
     List<dynamic> binDB = await readAll("bin_table");
     binsInfo = binDB.cast();
-    print("in get bins method");
-    print("bins length ${binDB.length}");
+  //  print("in get bins method");
+  //  print("bins length ${binDB.length}");
     setState(() {
       bins = binsInfo;
       List<Bin> binsInsideDistricts = [];
@@ -391,12 +426,12 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     for (int j = 0; j < bins.length; j++) {
       for (int k = 0; k < assignedDistricts.length; k++) {
         if (bins[j].districtId == assignedDistricts[k].districtID) {
-          print("inside fill binsInsideDistricts $k");
+       //   print("inside fill binsInsideDistricts $k");
           binsInsideDistricts.add(bins[j]);
         }
       }
     }
-    print("binsInsideDistricts length: ${binsInsideDistricts.length}");
+   // print("binsInsideDistricts length: ${binsInsideDistricts.length}");
 
     double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
     // List of all bins leve that inside assigned district
@@ -404,13 +439,13 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     for (int i = 0; i < binsLevel.length; i++) {
       for (int j = 0; j < binsInsideDistricts.length; j++) {
         if (binsInsideDistricts[j].binID == binsLevel[i].binID) {
-          print("inside fill binsLevelForDistrict $j");
+       //   print("inside fill binsLevelForDistrict $j");
           binsLevelForDistricts.add(binsLevel[i]);
         }
       }
     }
 
-    print("binsLevelForDistricts length: ${binsLevelForDistricts.length}");
+    //print("binsLevelForDistricts length: ${binsLevelForDistricts.length}");
 
     for (int i = 0; i < binsLevelForDistricts.length; i++) {
       if (binsLevelForDistricts[i].full == true)
@@ -421,7 +456,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
         numberOfEmpty++;
     }
 
-    print("numberOfEmpty: $numberOfEmpty");
+   // print("numberOfEmpty: $numberOfEmpty");
     int totalBin = (binsInsideDistricts.length);
     double notCollected = (numberOfHalfFull + numberOfFull);
     double performance = ((totalBin - notCollected) / totalBin);

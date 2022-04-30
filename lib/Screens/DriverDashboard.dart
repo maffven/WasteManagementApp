@@ -13,8 +13,7 @@ import 'package:flutter_application_1/model/BinLevel.dart';
 import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class BarAndPieChartDashboard extends StatefulWidget {
   final Widget child;

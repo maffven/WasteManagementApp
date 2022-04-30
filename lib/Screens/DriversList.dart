@@ -5,7 +5,7 @@ import 'package:flutter_application_1/Screens/AdminDriverStatus.dart';
 import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/Screens/DistrictListTab.dart';
 import 'package:flutter_application_1/Screens/EditComplaints.dart';
-import 'package:flutter_application_1/Screens/Login.dart';
+import 'package:flutter_application_1/Screens/AdminDriverStatus.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Complaints.dart';
@@ -42,25 +42,7 @@ class _ViewDrivers extends State<ViewDrivers> {
           .toList();
     });
   }
-  /*@override
-  Widget build(BuildContext context) => Scaffold(
-        body: FutureBuilder<List<Widget>>(
-          future: getWidgets(),
-          builder: (context, snapshot) {
-            final comps = snapshot.data;
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Center(child: CircularProgressIndicator());
-              default:
-                if (snapshot.hasError) {
-                  return Center(child: Text("${snapshot.error}"));
-                } else {
-                  return buildDrivers(comps);
-                }
-            }
-          },
-        ),
-      );*/
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -78,61 +60,13 @@ class _ViewDrivers extends State<ViewDrivers> {
             height: 70,
             child: Stack(
               children: <Widget>[
-                /* Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(50),
-                    ),
-                  ),
-                  child: Padding(
-                padding: EdgeInsets.only(top:40),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(children: [Padding(padding: const EdgeInsets.only(left:12, bottom: 10),
-                child: CircleAvatar(backgroundColor: Colors.black, radius: 30.0,
-                child: GestureDetector(onTap:(){
-                  Navigator.pop(context);
-                },
-                child:Icon(Icons.arrow_back_ios,size:20,color: Colors.white,
-                ),
-                 ),
-                 ),
-                 ),
-                 ],
-                 ),
-          Padding(padding: const EdgeInsets.only(top:5, left: 12),
-          child: Row(
-            children: [
-              Text("Drivers"),
-          ],
-          ),
-          ),
-     
-          Row(
-            children:[
-              Padding(padding: EdgeInsets.only(left:12),
-          child:Text('All drivers'),
-          ),
-SizedBox(width: 5,
-),
-Padding(padding: EdgeInsets.only(left:8),
-child: Text('total work hours: '),
-),//padding
-          ],//
-              ),//row
-              ],//widget
-              ),//column
-                ),//paddinf
-            ),//container*/
-
                 Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
-                    height: 42,
+                    height: 55,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
@@ -203,6 +137,13 @@ child: Text('total work hours: '),
                                     drivers.driverID, tableDriver);
                               });
                             },
+                            child: InkWell(
+                             
+         onTap: () => Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+            return AdminDriverStatus(
+                driver: drivers); //PieChartDashboard(driver: drivers[i]);
+          })),
                             child: Card(
                               color: Colors.white,
                               shape: RoundedRectangleBorder(
@@ -222,14 +163,15 @@ child: Text('total work hours: '),
                                 ),
                                 subtitle: Text("${drivers.phone}"),
                                 trailing: Text("status"),
-                                onTap: () => Navigator.push(context,
+                               /* onTap: () => Navigator.push(context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) {
                                   return AdminDriverStatus(
                                       driver:
                                           drivers); //PieChartDashboard(driver: drivers[i]);
-                                })),
+                                })),*/
                               ),
+                            ),
                             ),
                           );
                         },
