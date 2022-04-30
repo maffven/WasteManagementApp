@@ -120,13 +120,13 @@ void main() {
     //the validity of the entered email
     test('Valid Email Test', () {
       var result = FieldValidator.validateEmail('ajay.kumar@nonstopio.com');
-      expect(result, null);
+      expect(result, "Valid Email");
     });
     //the purpose of this test is to ensure
     //the validity of the entered phone number
     test('Valid phone number Test', () {
       var result = FieldValidator.validatePhone(0554362082);
-      expect(result, null);
+      expect(result, "Valid phone number");
     });
     //the purpose of this test is to ensure
     //the ability of retrieve assigned district for a specific driver

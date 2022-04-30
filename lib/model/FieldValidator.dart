@@ -8,7 +8,7 @@ class FieldValidator {
     if (!regExp.hasMatch(val)) {
       return "Enter a valid email";
     }
-    return null;
+    return "Valid Email";
   }
 
   static String validatePhone(int val) {
@@ -17,6 +17,6 @@ class FieldValidator {
     } else if (val <= 10) {
       return "Enter a valid phone number";
     }
-    return null;
+    return "Valid phone number";
   }
 }
