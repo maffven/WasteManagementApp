@@ -9,21 +9,34 @@ class LoginField {
   }
 
 //validate login info
-  static Future<bool> checkPhone(int phone) async {
+  static Future<bool> checkPhone(int phone, bool userType) async {
     Future<bool> phoneCheck;
     List<Driver> dd = [];
+    List<MunicipalityAdmin> munList = [];
     List<dynamic> drListd = await readAll(tableDriver);
     dd = drListd.cast();
 
 //check login info from the database driver's list
     try {
-      for (int i = 0; i < dd.length; i++) {
-        print("jj " + '${dd[i].phone}');
-        if (dd[i].phone != phone) {
-          phoneCheck = Future<bool>.value(false);
-        } else {
-          phoneCheck = Future<bool>.value(true);
-          break;
+      if (userType != true) {
+        for (int i = 0; i < dd.length; i++) {
+          if (dd[i].phone != phone) {
+            phoneCheck = Future<bool>.value(false);
+          } else {
+            phoneCheck = Future<bool>.value(true);
+            break;
+          }
+        }
+      } else {
+        List<dynamic> muniList = await readAll(tableMunicipalityAdmin);
+        munList = muniList.cast();
+        for (int i = 0; i < munList.length; i++) {
+           if (munList[i].phone != phone) {
+            phoneCheck = Future<bool>.value(false);
+          } else {
+            phoneCheck = Future<bool>.value(true);
+            break;
+          }
         }
       }
     } catch (error, stackTrace) {
@@ -32,14 +45,16 @@ class LoginField {
     return phoneCheck;
   }
 
-  static Future<bool> checkPassword(String password) async {
+  static Future<bool> checkPassword(String password, bool userType) async {
     Future<bool> passwordCheck;
-
+ List<MunicipalityAdmin> munList = [];
     List<Driver> dd = [];
 
     List<dynamic> drListd = await readAll(tableDriver);
     dd = drListd.cast();
     try {
+      if (userType != true) {
+        print("driver");
       for (int i = 0; i < dd.length; i++) {
         if (dd[i].password != password) {
           passwordCheck = Future<bool>.value(false);
@@ -48,7 +63,19 @@ class LoginField {
           break;
         }
       }
-    } catch (error, stackTrace) {
+    }else {
+      print("admin");
+        List<dynamic> muniList = await readAll(tableMunicipalityAdmin);
+        munList = muniList.cast();
+        for (int i = 0; i < munList.length; i++) {
+           if (munList[i].password != password) {
+            passwordCheck = Future<bool>.value(false);
+          } else {
+            passwordCheck = Future<bool>.value(true);
+            break;
+          }
+        }
+      }} catch (error, stackTrace) {
       return Future.error(error, stackTrace);
     }
 

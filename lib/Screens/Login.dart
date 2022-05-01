@@ -218,9 +218,18 @@ class _LoginDemoState extends State<LoginDemo> {
                   binLevel = compDB.cast();
                   print(binLevel.length);
                   for (int i = 0; i < binLevel.length; i++) {
-                    print('hi');
+                    print('the id : ' + '${binLevel[i].full}');
+                    print('the bin id : ' + '${binLevel[i].binID}');
                     print('the id : ' + '${binLevel[i].level}');
                   }
+                  /* deleteObj(23,tableBinLevel);
+                   deleteObj(24,tableBinLevel);
+                    deleteObj(25,tableBinLevel);
+                     deleteObj(26,tableBinLevel);
+                      deleteObj(27,tableBinLevel);
+                       deleteObj(28,tableBinLevel);
+                        deleteObj(29,tableBinLevel);
+                         deleteObj(30,tableBinLevel);*/
                   //frist, check if text fields are not empty
                   if (phoneController.text == "" &&
                       passwordController.text == "") {
@@ -237,15 +246,14 @@ class _LoginDemoState extends State<LoginDemo> {
                       List<dynamic> drListd = await readAll(tableDriver);
                       dd = drListd.cast();
                       for (int i = 0; i < dd.length; i++) {
-                     
                         if (dd[i].phone == phone) {
                           loggedInId = dd[i].driverID;
                         }
 
-                        bool checkPhone = await LoginField.checkPhone(phone);
+                        bool checkPhone = await LoginField.checkPhone(phone, userType);
 
                         bool checkPassword =
-                            await LoginField.checkPassword(password);
+                            await LoginField.checkPassword(password, userType);
                         if (checkPhone != false) {
                           phoneCheck = true;
                         }
@@ -296,10 +304,10 @@ class _LoginDemoState extends State<LoginDemo> {
                           phoneCheck = true;
                           loggedInId = munList[i].municpalityID;
                         }
-  bool checkPhone = await LoginField.checkPhone(phone);
+                        bool checkPhone = await LoginField.checkPhone(phone, userType);
 
                         bool checkPassword =
-                            await LoginField.checkPassword(password);
+                            await LoginField.checkPassword(password, userType);
                         if (checkPhone != false) {
                           phoneCheck = true;
                         }

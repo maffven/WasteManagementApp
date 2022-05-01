@@ -36,7 +36,7 @@ void main() {
     //-------------------------------------------------------------
     test('phone in database check', () async {
       try {
-        bool result = await LoginField.checkPhone(06795437890);
+        bool result = await LoginField.checkPhone(06795437890,true);
         expect(result, true);
       } catch (error, stackTrace) {
         return Future.error(error, stackTrace);
@@ -46,7 +46,7 @@ void main() {
     //-------------------------------------------------------------
     test('password in database check', () async {
       try {
-        bool result = await LoginField.checkPassword("7890");
+        bool result = await LoginField.checkPassword("7890",true);
         expect(result, true);
       } catch (error, stackTrace) {
         return Future.error(error, stackTrace);
