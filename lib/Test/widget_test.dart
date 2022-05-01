@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Screens/AdminDriverStatus.dart';
 import 'package:flutter_application_1/Screens/DriverDashboard.dart';
+import 'package:flutter_application_1/model/Driver.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_1/Screens/Login.dart';
 import 'package:flutter_application_1/Screens/SendComplaint.dart';
@@ -71,10 +73,9 @@ void main() {
   testWidgets("Profile widget test", (WidgetTester tester) async {
     await tester.runAsync(() async {
       //find all widgets
-   Widget testWidget = new MediaQuery(
-      data: new MediaQueryData(),
-      child: new MaterialApp(home: new Profile())
-);
+      Widget testWidget = new MediaQuery(
+          data: new MediaQueryData(),
+          child: new MaterialApp(home: new Profile()));
 
       await tester.pumpWidget(testWidget);
       var email = find.byKey(ValueKey("addEmail"));
@@ -83,13 +84,42 @@ void main() {
       //execute the actual test
       await tester.enterText(phone, "0554362082");
       await tester.enterText(email, "lina@gmail.com");
-      Future.delayed(Duration.zero, () {tester.tap(save);});
+      Future.delayed(Duration.zero, () {
+        tester.tap(save);
+      });
       //await tester.pump();
       await tester.pumpAndSettle();
       //check output
       expect(phone, findsOneWidget);
       expect(find.text("lina@gmail.com"), findsOneWidget);
       expect(find.text("0554362082"), findsOneWidget);
+    });
+  });
+
+  testWidgets("Admin alert widget test", (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      Driver driver = new Driver();
+      Key key;
+      final alert = find.byKey(ValueKey("addAlert"));
+
+      await tester.pumpWidget(AdminDriverStatus(driver: driver));
+      await tester.tap(alert);
+      await tester.pump();
+
+      expect(alert, findsOneWidget);
+      //   final alert = find.byIcon(Icons.add_alert_rounded);
+      //final Finder buttonToTap = find.byKey(const Key('addAlert'));
+      //  await tester.pumpWidget(AdminDriverStatus(driver: driver));
+      // await tester.tap(alert);
+      //await tester.pump();
+      /*await tester.dragUntilVisible(
+      buttonToTap, // what you want to find
+      find.byType(DefaultTabController), // widget you want to scroll
+      const Offset(0, 50), // delta to move
+    );*/
+      //await tester.tap(buttonToTap);
+      //await tester.pump();
+      // expect(alert, findsOneWidget);
     });
   });
 }
