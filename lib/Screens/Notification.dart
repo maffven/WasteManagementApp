@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
 import 'package:flutter_application_1/model/Bin.dart';
@@ -37,10 +37,8 @@ class _ViewNotification extends State<ViewNotification>
   int driverId;
   List<BinLevel> theLevels = [];
   Driver driver;
-  List<Bin> barBinsInsideDistrict = [];
-  List<Bin> pieBinsInsideSelectedDistrict = [];
-  List<BinLevel> barBinsLevelForDistrict = [];
-  List<BinLevel> pieBinsLevelForSelectedDistrict = [];
+  List<Bin> binDistrict = [];
+  List<BinLevel> binsLevelForDistrict = [];
   List<Bin> bins;
   List<BinLevel> binsLevel;
   District selectedDistrict;
@@ -177,26 +175,37 @@ class _ViewNotification extends State<ViewNotification>
     return binLevel;
   }
 
-  void _fillDistrictInfo() {
+ void _fillDistrictInfo() async {
+   //only display full bins of assigned district to a specific driver
+     CommonFunctions com = new CommonFunctions();
+     Driver driverObject = await com.retriveDriver();
+    List<District> districts = await com.getAssignedDistricts(driverObject);
+      List<Bin> binsList = await com.getBins();
+    List<BinLevel> binsLevelList = await com.getBinsLevel();
+  
+      driver = driverObject;
+      driverDistricts = districts;
+      bins = binsList;
+      binsLevel = binsLevelList;
+
     for (var i = 0; i < driverDistricts.length; i++) {
-      barBinsLevelForDistrict = [];
-      barBinsInsideDistrict = [];
+      binDistrict=[];
+
       //execlude the bins for specific districts
       for (int j = 0; j < bins.length; j++) {
         if (bins[j].districtId == driverDistricts[i].districtID) {
-          barBinsInsideDistrict.add(bins[j]);
+          binDistrict.add(bins[j]);
         }
       }
 
       //execlude bins level for specific districts
-      for (int k = 0; k < barBinsInsideDistrict.length; k++) {
+      for (int k = 0; k < binDistrict.length; k++) {
         for (int l = 0; l < binsLevel.length; l++) {
           //       print("inside binsLevel $j");
-          if (barBinsInsideDistrict[k].binID == binsLevel[l].binID) {
-            
+          if (binDistrict[k].binID == binsLevel[l].binID) {
             //         print("inside second if");
             //check = true;
-            barBinsLevelForDistrict.add(binsLevel[l]);
+            binsLevelForDistrict.add(binsLevel[l]);
             //       }
           }
         }
@@ -204,18 +213,17 @@ class _ViewNotification extends State<ViewNotification>
       //binsLevelForDistrict  and binIsideDistrict are done
 
       //classify bins based on full, half-full, empty
-      for (int m = 0; m < barBinsLevelForDistrict.length; m++) {
-        if (barBinsLevelForDistrict[m].full == true)
+      for (int m = 0; m < binsLevelForDistrict.length; m++) {
+        if (binsLevelForDistrict[m].full == true)
           numberOfFull++;
-        else if (barBinsLevelForDistrict[m].half_full == true)
+        else if (binsLevelForDistrict[m].half_full == true)
           numberOfHalfFull++;
-        else if (barBinsLevelForDistrict[m].empty == true) {
+        else if (binsLevelForDistrict[m].empty == true) {
           numberOfEmpty++;
         }
       }
     }
-  }
-
+ }
   Future<List<DriverStatus>> getDriversStatus() async {
     //Get complaints from DB
     List<DriverStatus> driver = [];
@@ -231,7 +239,7 @@ class _ViewNotification extends State<ViewNotification>
     theLevels = [];
     theLevels = await getBinLevels();
     boxWidgets = [];
-    _fillDistrictInfo();
+    
     List<DriverStatus> theDriversStatus = [];
     theDriversStatus = await getDriversStatus();
     //retrieve the loggedin id
@@ -245,6 +253,7 @@ class _ViewNotification extends State<ViewNotification>
       }
     }
 
+  _fillDistrictInfo(); //to display full bins from assigned districts
 //check if the driver has an alert from the admin of late status som show the alert
     for (int i = 0; i < theLevels.length; i++) {
       if (level == "Full" && status == true) {
@@ -287,8 +296,8 @@ class _ViewNotification extends State<ViewNotification>
           ),
         ));
       }
-      if (level == "Full" ) {
-        //don't show the empty and half-full ones
+      if (level == "Full" && numberOfFull>0) {
+        //don't show the empty and half-full ones and of assigned districts
         boxWidgets.add(SizedBox(
             width: 370.0,
             height: 100.0,
