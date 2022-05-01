@@ -178,11 +178,9 @@ class _ViewNotification extends State<ViewNotification>
   }
 
   void _fillDistrictInfo() {
-
     for (var i = 0; i < driverDistricts.length; i++) {
       barBinsLevelForDistrict = [];
       barBinsInsideDistrict = [];
-
       //execlude the bins for specific districts
       for (int j = 0; j < bins.length; j++) {
         if (bins[j].districtId == driverDistricts[i].districtID) {
@@ -195,6 +193,7 @@ class _ViewNotification extends State<ViewNotification>
         for (int l = 0; l < binsLevel.length; l++) {
           //       print("inside binsLevel $j");
           if (barBinsInsideDistrict[k].binID == binsLevel[l].binID) {
+            
             //         print("inside second if");
             //check = true;
             barBinsLevelForDistrict.add(binsLevel[l]);
@@ -235,7 +234,6 @@ class _ViewNotification extends State<ViewNotification>
     _fillDistrictInfo();
     List<DriverStatus> theDriversStatus = [];
     theDriversStatus = await getDriversStatus();
-    List<District> districts = await getDistricts();
     //retrieve the loggedin id
     SharedPreferences prefs = await SharedPreferences.getInstance();
     loggedInId = prefs.getInt('id');
@@ -244,13 +242,6 @@ class _ViewNotification extends State<ViewNotification>
     for (int i = 0; i < theDriversStatus.length; i++) {
       if (theDriversStatus[i].driverID == loggedInId) {
         status = theDriversStatus[i].lateStatus;
-      }
-    }
-    //only display full bins in assigned districts of drivers
-    for (int t = 0; t < assignedDistricts.length; t++) {
-      if (districts[t].districtID == assignedDistricts[t].districtID) {
-        assignedDist = true;
-        break;
       }
     }
 
@@ -296,7 +287,7 @@ class _ViewNotification extends State<ViewNotification>
           ),
         ));
       }
-      if (level == "Full" && numberOfFull>0) {
+      if (level == "Full" ) {
         //don't show the empty and half-full ones
         boxWidgets.add(SizedBox(
             width: 370.0,

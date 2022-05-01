@@ -210,6 +210,7 @@ class ProfileState extends State<Profile> {
                                               ],
                                             )),
                                         //Id information
+                                        
                                         Padding(
                                             padding: EdgeInsets.only(
                                                 left: 25.0,
