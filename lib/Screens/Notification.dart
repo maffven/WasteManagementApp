@@ -48,7 +48,7 @@ class _ViewNotification extends State<ViewNotification>
   List<District> driverDistricts = [];
 
   //methods
-  
+
   Future<void> getAssignedDistricts() async {
     List<Driver> driv;
     List<dynamic> driversDB = await readAll(tableDriver);
@@ -175,21 +175,21 @@ class _ViewNotification extends State<ViewNotification>
     return binLevel;
   }
 
- void _fillDistrictInfo() async {
-   //only display full bins of assigned district to a specific driver
-     CommonFunctions com = new CommonFunctions();
-     Driver driverObject = await com.retriveDriver();
+  void _fillDistrictInfo() async {
+    //only display full bins of assigned district to a specific driver
+    CommonFunctions com = new CommonFunctions();
+    Driver driverObject = await com.retriveDriver();
     List<District> districts = await com.getAssignedDistricts(driverObject);
-      List<Bin> binsList = await com.getBins();
+    List<Bin> binsList = await com.getBins();
     List<BinLevel> binsLevelList = await com.getBinsLevel();
-  
-      driver = driverObject;
-      driverDistricts = districts;
-      bins = binsList;
-      binsLevel = binsLevelList;
+
+    driver = driverObject;
+    driverDistricts = districts;
+    bins = binsList;
+    binsLevel = binsLevelList;
 
     for (var i = 0; i < driverDistricts.length; i++) {
-      binDistrict=[];
+      binDistrict = [];
 
       //execlude the bins for specific districts
       for (int j = 0; j < bins.length; j++) {
@@ -223,7 +223,8 @@ class _ViewNotification extends State<ViewNotification>
         }
       }
     }
- }
+  }
+
   Future<List<DriverStatus>> getDriversStatus() async {
     //Get complaints from DB
     List<DriverStatus> driver = [];
@@ -239,7 +240,7 @@ class _ViewNotification extends State<ViewNotification>
     theLevels = [];
     theLevels = await getBinLevels();
     boxWidgets = [];
-    
+
     List<DriverStatus> theDriversStatus = [];
     theDriversStatus = await getDriversStatus();
     //retrieve the loggedin id
@@ -253,20 +254,20 @@ class _ViewNotification extends State<ViewNotification>
       }
     }
 
-  _fillDistrictInfo(); //to display full bins from assigned districts
+    _fillDistrictInfo(); //to display full bins from assigned districts
 //check if the driver has an alert from the admin of late status som show the alert
     for (int i = 0; i < theLevels.length; i++) {
       if (level == "Full" && status == true) {
         boxWidgets.add(SizedBox(
           width: 370.0,
-          height: 100.0,
+          height: 70.0,
           child: Card(
             borderOnForeground: true,
             color: Colors.white,
             elevation: 2.0,
             shape: RoundedRectangleBorder(
                 side: BorderSide(color: Color(0xff28CC9E), width: 1),
-                borderRadius: BorderRadius.circular(8.0)),
+                borderRadius: BorderRadius.circular(20)),
             child: Center(
                 child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -296,11 +297,11 @@ class _ViewNotification extends State<ViewNotification>
           ),
         ));
       }
-      if (level == "Full" && numberOfFull>0) {
+      if (level == "Full" && numberOfFull > 0) {
         //don't show the empty and half-full ones and of assigned districts
         boxWidgets.add(SizedBox(
             width: 370.0,
-            height: 100.0,
+            height: 70.0,
             child: InkWell(
               child: Card(
                 borderOnForeground: true,
@@ -308,7 +309,7 @@ class _ViewNotification extends State<ViewNotification>
                 elevation: 2.0,
                 shape: RoundedRectangleBorder(
                     side: BorderSide(color: Color(0xff28CC9E), width: 1),
-                    borderRadius: BorderRadius.circular(8.0)),
+                    borderRadius: BorderRadius.circular(20)),
                 child: Center(
                     child: Padding(
                   padding: const EdgeInsets.all(8.0),
