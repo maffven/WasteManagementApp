@@ -163,13 +163,7 @@ class _ViewDrivers extends State<ViewDrivers> {
                                 ),
                                 subtitle: Text("${drivers.phone}"),
                                 trailing: Text("status"),
-                               /* onTap: () => Navigator.push(context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                  return AdminDriverStatus(
-                                      driver:
-                                          drivers); //PieChartDashboard(driver: drivers[i]);
-                                })),*/
+                             
                               ),
                             ),
                             ),

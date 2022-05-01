@@ -37,7 +37,20 @@ class _ViewNotification extends State<ViewNotification>
   int driverId;
   List<BinLevel> theLevels = [];
   Driver driver;
+  List<Bin> barBinsInsideDistrict = [];
+  List<Bin> pieBinsInsideSelectedDistrict = [];
+  List<BinLevel> barBinsLevelForDistrict = [];
+  List<BinLevel> pieBinsLevelForSelectedDistrict = [];
+  List<Bin> bins;
+  List<BinLevel> binsLevel;
+  District selectedDistrict;
+  double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
+  bool fullBin;
+  bool assignedDist;
+  List<District> driverDistricts = [];
 
+  //methods
+  
   Future<void> getAssignedDistricts() async {
     List<Driver> driv;
     List<dynamic> driversDB = await readAll(tableDriver);
@@ -157,12 +170,51 @@ class _ViewNotification extends State<ViewNotification>
         level = "Full";
       }
 
-
       //----------------------------------------------
-      print("complaints length ${compDB.length}");
+      print("Bin levels length ${compDB.length}");
     }
 
     return binLevel;
+  }
+
+  void _fillDistrictInfo() {
+
+    for (var i = 0; i < driverDistricts.length; i++) {
+      barBinsLevelForDistrict = [];
+      barBinsInsideDistrict = [];
+
+      //execlude the bins for specific districts
+      for (int j = 0; j < bins.length; j++) {
+        if (bins[j].districtId == driverDistricts[i].districtID) {
+          barBinsInsideDistrict.add(bins[j]);
+        }
+      }
+
+      //execlude bins level for specific districts
+      for (int k = 0; k < barBinsInsideDistrict.length; k++) {
+        for (int l = 0; l < binsLevel.length; l++) {
+          //       print("inside binsLevel $j");
+          if (barBinsInsideDistrict[k].binID == binsLevel[l].binID) {
+            //         print("inside second if");
+            //check = true;
+            barBinsLevelForDistrict.add(binsLevel[l]);
+            //       }
+          }
+        }
+      }
+      //binsLevelForDistrict  and binIsideDistrict are done
+
+      //classify bins based on full, half-full, empty
+      for (int m = 0; m < barBinsLevelForDistrict.length; m++) {
+        if (barBinsLevelForDistrict[m].full == true)
+          numberOfFull++;
+        else if (barBinsLevelForDistrict[m].half_full == true)
+          numberOfHalfFull++;
+        else if (barBinsLevelForDistrict[m].empty == true) {
+          numberOfEmpty++;
+        }
+      }
+    }
   }
 
   Future<List<DriverStatus>> getDriversStatus() async {
@@ -179,9 +231,11 @@ class _ViewNotification extends State<ViewNotification>
   Future<List<Widget>> getWidgets() async {
     theLevels = [];
     theLevels = await getBinLevels();
-     boxWidgets = [];
+    boxWidgets = [];
+    _fillDistrictInfo();
     List<DriverStatus> theDriversStatus = [];
     theDriversStatus = await getDriversStatus();
+    List<District> districts = await getDistricts();
     //retrieve the loggedin id
     SharedPreferences prefs = await SharedPreferences.getInstance();
     loggedInId = prefs.getInt('id');
@@ -192,104 +246,110 @@ class _ViewNotification extends State<ViewNotification>
         status = theDriversStatus[i].lateStatus;
       }
     }
+    //only display full bins in assigned districts of drivers
+    for (int t = 0; t < assignedDistricts.length; t++) {
+      if (districts[t].districtID == assignedDistricts[t].districtID) {
+        assignedDist = true;
+        break;
+      }
+    }
 
 //check if the driver has an alert from the admin of late status som show the alert
     for (int i = 0; i < theLevels.length; i++) {
       if (level == "Full" && status == true) {
-            boxWidgets.add(SizedBox(
+        boxWidgets.add(SizedBox(
+          width: 370.0,
+          height: 100.0,
+          child: Card(
+            borderOnForeground: true,
+            color: Colors.white,
+            elevation: 2.0,
+            shape: RoundedRectangleBorder(
+                side: BorderSide(color: Color(0xff28CC9E), width: 1),
+                borderRadius: BorderRadius.circular(8.0)),
+            child: Center(
+                child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Text("\t \t"),
+                  Icon(
+                    Icons.add_alert_rounded,
+                    color: Colors.red,
+                  ),
+                  Text(
+                    "Performance alerts",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0),
+                  ),
+                  SizedBox(
+                    height: 2.0,
+                  ),
+                ],
+              ),
+            )),
+          ),
+        ));
+      }
+      if (level == "Full" && numberOfFull>0) {
+        //don't show the empty and half-full ones
+        boxWidgets.add(SizedBox(
             width: 370.0,
             height: 100.0,
-            child: Card(
-              borderOnForeground: true,
-              color: Colors.white,
-              elevation: 2.0,
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Color(0xff28CC9E), width: 1),
-                  borderRadius: BorderRadius.circular(8.0)),
-              child: Center(
-                  child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                  
-                    Text("\t \t"),
-                    Icon(
-                      Icons.add_alert_rounded,
-                      color: Colors.red,
-                    ),
-                    Text(
-                      "Performance alerts",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0),
-                    ),
-                    SizedBox(
-                      height: 2.0,
-                    ),
-                  ],
-                ),
-              )),
-            ),
-          ));
-        } 
-          if (level == "Full") {
-            //don't show the empty and half-full ones
-            boxWidgets.add(SizedBox(
-                width: 370.0,
-                height: 100.0,
-                child: InkWell(
-                 
-                  child: Card(
-                    borderOnForeground: true,
-                    color: Colors.white,
-                    elevation: 2.0,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Color(0xff28CC9E), width: 1),
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Center(
-                        child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: <Widget>[
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          Text(
-                            "\t",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0),
-                          ),
-                          Text("\t \t"),
-                          Icon(
-                            Icons.circle_sharp,
-                            color: color,
-                          ),
-                          Text(
-                            "\t" + level + " in bin " + '${theLevels[i].binID}',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0),
-                          ),
-                          SizedBox(
-                            height: 2.0,
-                          ),
-                        ],
+            child: InkWell(
+              child: Card(
+                borderOnForeground: true,
+                color: Colors.white,
+                elevation: 2.0,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Color(0xff28CC9E), width: 1),
+                    borderRadius: BorderRadius.circular(8.0)),
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 5.0,
                       ),
-                    )),
+                      Text(
+                        "\t",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0),
+                      ),
+                      Text("\t \t"),
+                      Icon(
+                        Icons.circle_sharp,
+                        color: color,
+                      ),
+                      Text(
+                        "\t" + level + " in bin " + '${theLevels[i].binID}',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0),
+                      ),
+                      SizedBox(
+                        height: 2.0,
+                      ),
+                    ],
                   ),
-                )));
-          }
-        
-    return boxWidgets;
+                )),
+              ),
+            )));
+      }
+
+      return boxWidgets;
+    }
   }
-  }
+
 //Database method
   Future addObj(dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalCreate(obj, tableName);

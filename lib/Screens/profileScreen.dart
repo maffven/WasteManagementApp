@@ -4,7 +4,13 @@ import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/Screens/DriverSatus.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
-
+     void main() {
+      runApp(
+        MaterialApp(
+          home: Profile(),
+        ),
+      );
+    }
 class Profile extends StatefulWidget {
   @override
   final Widget child;
@@ -406,11 +412,12 @@ class ProfileState extends State<Profile> {
               padding: EdgeInsets.only(right: 10.0, top: 0.0, bottom: 0.0),
               child: Container(
                   child: new RaisedButton(
+                 key: Key("save"),
                 child: new Text("Save"),
                 textColor: Colors.white,
                 color: Colors.green,
                 //here u have to check phone and email if it is wrong show dialog else make the update
-                key: Key("save"),
+             
                 onPressed: () async {
                   String email = '';
                   String phone = "";

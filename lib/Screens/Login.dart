@@ -222,14 +222,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     print('the bin id : ' + '${binLevel[i].binID}');
                     print('the id : ' + '${binLevel[i].level}');
                   }
-                  /* deleteObj(23,tableBinLevel);
-                   deleteObj(24,tableBinLevel);
-                    deleteObj(25,tableBinLevel);
-                     deleteObj(26,tableBinLevel);
-                      deleteObj(27,tableBinLevel);
-                       deleteObj(28,tableBinLevel);
-                        deleteObj(29,tableBinLevel);
-                         deleteObj(30,tableBinLevel);*/
+                  
                   //frist, check if text fields are not empty
                   if (phoneController.text == "" &&
                       passwordController.text == "") {

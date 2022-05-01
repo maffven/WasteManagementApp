@@ -71,21 +71,23 @@ void main() {
   testWidgets("Profile widget test", (WidgetTester tester) async {
     await tester.runAsync(() async {
       //find all widgets
+   Widget testWidget = new MediaQuery(
+      data: new MediaQueryData(),
+      child: new MaterialApp(home: new Profile())
+);
 
-      await tester.pumpWidget(MaterialApp(home: Scaffold(body: Profile())));
-
-      await tester.pumpWidget(Profile());
-  
-
+      await tester.pumpWidget(testWidget);
       var email = find.byKey(ValueKey("addEmail"));
       var phone = find.byKey(ValueKey("addPhone"));
       var save = find.byKey(ValueKey("save"));
       //execute the actual test
       await tester.enterText(phone, "0554362082");
       await tester.enterText(email, "lina@gmail.com");
-      await tester.tap(save);
-      await tester.pump();
+      Future.delayed(Duration.zero, () {tester.tap(save);});
+      //await tester.pump();
+      await tester.pumpAndSettle();
       //check output
+      expect(phone, findsOneWidget);
       expect(find.text("lina@gmail.com"), findsOneWidget);
       expect(find.text("0554362082"), findsOneWidget);
     });

@@ -145,53 +145,11 @@ void readDistance() {
                 21.4893852, 39.2462446); //to open google map app/direct
           })
     ];
-//list of markers on the map
-    /* markers = [
-      Marker(
-          infoWindow: InfoWindow(title: title),
-          markerId: MarkerId(color),
-          position: LatLng(21.584873, 39.205959),
-          icon: BitmapDescriptor.defaultMarkerWithHue(colorBin),
-          onTap: () {
-            MapUtils.openMap(
-                21.584873, 39.205959); //to open google map app/direct
-          }),
-      Marker(
-          infoWindow: InfoWindow(title: title),
-          markerId: MarkerId(color),
-          position: LatLng(21.543333, 39.172779),
-          icon: BitmapDescriptor.defaultMarkerWithHue(colorBin),
-          onTap: () {
-            MapUtils.openMap(
-                21.543333, 39.172779); //to open google map app/direct
-          }),
-      Marker(
-          infoWindow: InfoWindow(title: title),
-          markerId: MarkerId(color),
-          position: LatLng(21.285407, 39.237551),
-          icon: BitmapDescriptor.defaultMarkerWithHue(colorBin),
-          onTap: () {
-            MapUtils.openMap(
-                21.285407, 39.237551); //to open google map app/direct
-          }),
-    ];*/
+
   });
 }
 
-/*void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp()
-      .then((value) => print("connected " + value.options.asMap.toString()))
-      .catchError((e) => print(e.toString()));
-             List<dynamic> d = await readAll(tableBinLevel);
-                  binlevel = d.cast();
-                  for (int i = 0; i < binlevel.length; i++) {
-                    print("${binlevel[i].binID}");
-                    //deleteObj(disList[i].districtID, tableDistrict);
-                  }
-  readDistance();
-  runApp(MaterialApp(home: map()));
-}*/
+
 
 Future addObj(dynamic obj, String tableName) async {
   await DatabaseHelper.instance.generalCreate(obj, tableName);
