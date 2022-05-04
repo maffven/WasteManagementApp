@@ -33,31 +33,10 @@ class AdminProfileState extends State<AdminProfile> {
     getAdmin();
     super.initState();
   }
-  /*Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FutureBuilder<List<MunicipalityAdmin>>(
-        future: getMun(),
-        builder: (context, snapshot) {
-          final municipality = snapshot.data;
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            default:
-              if (snapshot.hasError) {
-                return Center(child: Text("${snapshot.error}"));
-              } else {
-                return buildProfile(municipality);
-              }
-          }
-        },
-      ),
-    );
-  }*/
 
   //MunicipalityAdmin mun;
   @override
   Widget build(BuildContext context) {
-    // drivers = await getDrivers();
     return Scaffold(
       body: DefaultTabController(
         length: 1,
@@ -69,7 +48,7 @@ class AdminProfileState extends State<AdminProfile> {
               bottom: TabBar(
                 indicatorColor: Colors.white,
                 tabs: [
-                  Tab(text: "INFO"),
+                  Tab(text: "Info"),
                 ],
               )),
           body: TabBarView(
@@ -150,7 +129,7 @@ class AdminProfileState extends State<AdminProfile> {
                                                             MainAxisSize.min,
                                                         children: <Widget>[
                                                           new Text(
-                                                            'INFO',
+                                                            'Info',
                                                             style: TextStyle(
                                                                 fontSize: 18.0,
                                                                 fontWeight:
@@ -503,16 +482,10 @@ class AdminProfileState extends State<AdminProfile> {
   }
 
   _isPhone(String phone) {
-    // String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    // RegExp regExp = new RegExp(patttern);
     if (phone.length == 0) {
       return false;
     } else if (phone.length == 11 || phone.length == 10 || phone.length == 9) {
       return true;
-      /* } else if (!regExp.hasMatch(phone)) {
-      return false;
-    } else
-      return true;*/
     } else {
       return false;
     }
@@ -520,9 +493,8 @@ class AdminProfileState extends State<AdminProfile> {
 
   Future<MunicipalityAdmin> _retriveAdmin(
       List<MunicipalityAdmin> adminList) async {
-    //to retrieve the phone from the login interface
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("driver id: ${prefs.getInt('id')}");
+    print("Admin id: ${prefs.getInt('id')}");
     int munId = prefs.getInt('id');
     MunicipalityAdmin munAdmin;
     for (var i = 0; i < adminList.length; i++) {
@@ -569,18 +541,15 @@ class AdminProfileState extends State<AdminProfile> {
   //int id, String tableName, dynamic classFields, dynamic className
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
-    //print("mun object: ${munObj.firatName}");
   }
 
   Future<dynamic> verifyLogin(String password, int phone) async {
     return await DatabaseHelper.instance.checkLogin(password, phone);
-    //print("mun object: ${munObj.firatName}");
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
     //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 
   //Delete a row

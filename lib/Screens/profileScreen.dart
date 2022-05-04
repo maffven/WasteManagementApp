@@ -4,13 +4,15 @@ import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/Screens/DriverSatus.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
-     void main() {
-      runApp(
-        MaterialApp(
-          home: Profile(),
-        ),
-      );
-    }
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: Profile(),
+    ),
+  );
+}
+
 class Profile extends StatefulWidget {
   @override
   final Widget child;
@@ -210,7 +212,7 @@ class ProfileState extends State<Profile> {
                                               ],
                                             )),
                                         //Id information
-                                        
+
                                         Padding(
                                             padding: EdgeInsets.only(
                                                 left: 25.0,
@@ -316,15 +318,18 @@ class ProfileState extends State<Profile> {
                                             )),
                                         //Email information
                                         Padding(
+                                          key: Key("addEmail"),
                                           padding: EdgeInsets.only(
                                               left: 25.0,
                                               right: 25.0,
                                               top: 2.0),
                                           child: Row(
+                                            key: Key("addEmail"),
                                             children: <Widget>[
                                               Container(
+                                                key: Key("addEmail"),
                                                 width: 100,
-                                                child: TextField(
+                                                child: TextFormField(
                                                   key: Key("addEmail"),
                                                   controller: emailController,
                                                   enabled: _enabled,
@@ -361,6 +366,7 @@ class ProfileState extends State<Profile> {
                                             )),
                                         //phone information
                                         Padding(
+                                          key: Key("addPhone"),
                                           padding: EdgeInsets.only(
                                               left: 25.0,
                                               right: 25.0,
@@ -370,7 +376,6 @@ class ProfileState extends State<Profile> {
                                               Container(
                                                 width: 100,
                                                 child: TextField(
-                                                  key: Key("addPhone"),
                                                   controller: phoneController,
                                                   enabled: _enabled,
                                                 ),
@@ -378,6 +383,7 @@ class ProfileState extends State<Profile> {
                                             ],
                                           ),
                                         ),
+
                                         !_status
                                             ? _getActionButtons()
                                             : new Container(),
@@ -413,12 +419,12 @@ class ProfileState extends State<Profile> {
               padding: EdgeInsets.only(right: 10.0, top: 0.0, bottom: 0.0),
               child: Container(
                   child: new RaisedButton(
-                 key: Key("save"),
+                key: Key("save"),
                 child: new Text("Save"),
                 textColor: Colors.white,
                 color: Colors.green,
                 //here u have to check phone and email if it is wrong show dialog else make the update
-             
+
                 onPressed: () async {
                   String email = '';
                   String phone = "";

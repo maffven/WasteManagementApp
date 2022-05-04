@@ -36,7 +36,7 @@ void main() {
     //-------------------------------------------------------------
     test('phone in database check', () async {
       try {
-        bool result = await LoginField.checkPhone(06795437890,true);
+        bool result = await LoginField.checkPhone(06795437890, true);
         expect(result, true);
       } catch (error, stackTrace) {
         return Future.error(error, stackTrace);
@@ -46,7 +46,7 @@ void main() {
     //-------------------------------------------------------------
     test('password in database check', () async {
       try {
-        bool result = await LoginField.checkPassword("7890",true);
+        bool result = await LoginField.checkPassword("7890", true);
         expect(result, true);
       } catch (error, stackTrace) {
         return Future.error(error, stackTrace);
@@ -125,8 +125,14 @@ void main() {
     //the purpose of this test is to ensure
     //the validity of the entered phone number
     test('Valid phone number Test', () {
-      var result = FieldValidator.validatePhone(0554362082);
+      var result = FieldValidator.validatePhone(05543620821);
       expect(result, "Valid phone number");
+    });
+    //the purpose of this test is to ensure
+    //the validity of the entered phone number
+    test('Valid phone number Test', () {
+      var result = FieldValidator.validatePhone(0);
+      expect(result, "Enter a valid phone number");
     });
     //the purpose of this test is to ensure
     //the ability of retrieve assigned district for a specific driver
