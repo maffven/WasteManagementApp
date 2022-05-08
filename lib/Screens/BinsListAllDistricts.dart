@@ -25,7 +25,6 @@ class _BinsListAllDistricts extends State<BinsListAllDistricts> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -72,11 +71,3 @@ class _BinsListAllDistricts extends State<BinsListAllDistricts> {
     );
   }
 }
-
-//get binlevel list
-// binlevel.full == true 
-// fulbinlevel 
-// get bins 
-// fullbins.districtID = district
-// get district 
-// display 

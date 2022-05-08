@@ -105,11 +105,6 @@ class _DistrictList extends State<DistrictList>
                   SizedBox(
                     height: 5.0,
                   ),
-                  /*  Text(
-                    "2 Items",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w100),
-                  )*/
                 ],
               ),
             )),
@@ -135,17 +130,13 @@ class _DistrictList extends State<DistrictList>
   //int id, String tableName, dynamic classFields, dynamic className
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
-    //print("mun object: ${munObj.firatName}");
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 
   Future deleteObj(int id, String tableName) async {
-    print("$id rawan");
     await DatabaseHelper.instance.gneralDelete(id, tableName);
     print("Object is deleted");
   }

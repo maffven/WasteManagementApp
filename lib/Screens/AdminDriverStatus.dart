@@ -17,9 +17,6 @@ class AdminDriverStatus extends StatefulWidget {
       AdminDriverStatusScreen(driver: driver);
 }
 
-//  final String BinsStatus = null;
-//  final Driver driver = null;
-
 class AdminDriverStatusScreen extends State<AdminDriverStatus> {
   double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
   District selectedDistrict;
@@ -66,6 +63,9 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
 
   @override
   Widget build(BuildContext context) {
+    bool completed;
+    bool incomplete;
+    int statusID;
     return MaterialApp(
       home: DefaultTabController(
         length: 1,
@@ -105,24 +105,18 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                             MainAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: textList()),
+                                    //Create the alert button
                                     IconButton(
                                       onPressed: () async {
                                         List<dynamic> drListd =
                                             await readAll(tableDriverStatus);
                                         List<DriverStatus> driverStatusList =
                                             drListd.cast();
-                                        bool completed;
-                                        bool incomplete;
-                                        int statusID;
-                                        print("length: ");
-                                        print(driverStatusList.length);
                                         for (int i = 0;
                                             i < driverStatusList.length;
                                             i++) {
                                           if (driverStatusList[i].driverID ==
                                               driver.driverID) {
-                                                print("yes");
-                                                print(driver.driverID);
                                             statusID =
                                                 driverStatusList[i].statusID;
                                             driverId = driver.driverID;
@@ -138,7 +132,6 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                             completed: completed,
                                             incomplete: incomplete,
                                             lateStatus: true);
-
                                         updateObj(
                                             statusID, alert, tableDriverStatus);
                                         showDialog();
@@ -360,7 +353,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     //print("driver id: ${prefs.getInt('id')}");
     driverId = prefs.getInt('id');
     for (var i = 0; i < drivers.length; i++) {
-     // print("drivers[i].driverID ${drivers[i].driverID}");
+      // print("drivers[i].driverID ${drivers[i].driverID}");
       if (driverId == drivers[i].driverID) {
         driver = drivers[i];
         break;
@@ -374,8 +367,8 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     /*List<Driver> driv;
     List<dynamic> driversDB = await readAll(tableDriver);
     driv = driversDB.cast();*/
-   // print("in get drivers method");
-   // print("drivers length ${driversDB.length}");
+    // print("in get drivers method");
+    // print("drivers length ${driversDB.length}");
     //await _retriveDriver(driv);
     List<District> district;
     List<dynamic> districtDB = await readAll(tableDistrict);
@@ -395,16 +388,16 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     List<BinLevel> bin;
     List<dynamic> binStatus = await readAll(tableBinLevel);
     bin = binStatus.cast();
-   // print("in get binsLevel method");
-   // print("binsLevel length ${binStatus.length}");
+    // print("in get binsLevel method");
+    // print("binsLevel length ${binStatus.length}");
     binsLevel = bin;
 
-   // print("here inside getBins");
+    // print("here inside getBins");
     List<Bin> binsInfo;
     List<dynamic> binDB = await readAll("bin_table");
     binsInfo = binDB.cast();
-  //  print("in get bins method");
-  //  print("bins length ${binDB.length}");
+    //  print("in get bins method");
+    //  print("bins length ${binDB.length}");
     setState(() {
       bins = binsInfo;
       List<Bin> binsInsideDistricts = [];
@@ -426,12 +419,12 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     for (int j = 0; j < bins.length; j++) {
       for (int k = 0; k < assignedDistricts.length; k++) {
         if (bins[j].districtId == assignedDistricts[k].districtID) {
-       //   print("inside fill binsInsideDistricts $k");
+          //   print("inside fill binsInsideDistricts $k");
           binsInsideDistricts.add(bins[j]);
         }
       }
     }
-   // print("binsInsideDistricts length: ${binsInsideDistricts.length}");
+    // print("binsInsideDistricts length: ${binsInsideDistricts.length}");
 
     double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
     // List of all bins leve that inside assigned district
@@ -439,7 +432,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     for (int i = 0; i < binsLevel.length; i++) {
       for (int j = 0; j < binsInsideDistricts.length; j++) {
         if (binsInsideDistricts[j].binID == binsLevel[i].binID) {
-       //   print("inside fill binsLevelForDistrict $j");
+          //   print("inside fill binsLevelForDistrict $j");
           binsLevelForDistricts.add(binsLevel[i]);
         }
       }
@@ -456,7 +449,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
         numberOfEmpty++;
     }
 
-   // print("numberOfEmpty: $numberOfEmpty");
+    // print("numberOfEmpty: $numberOfEmpty");
     int totalBin = (binsInsideDistricts.length);
     double notCollected = (numberOfHalfFull + numberOfFull);
     double performance = ((totalBin - notCollected) / totalBin);

@@ -31,46 +31,15 @@ class ProfileState extends State<Profile> {
   //To take input from
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  bool checkInfo = false;
-  //Driver driver;
-  // DriverStatus status;
-  //District district;
-  //List<District> districts;
-  //List<DriverStatus> status;
 
   @override
   void initState() {
-    // TODO: implement initState
     _getLoginedDriver();
     super.initState();
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     home: FutureBuilder<List<Driver>>(
-  //       future: getDrivers(),
-  //       builder: (context, snapshot) {
-  //         final drivers = snapshot.data;
-  //         switch (snapshot.connectionState) {
-  //           case ConnectionState.waiting:
-  //             return Center(child: CircularProgressIndicator());
-  //           default:
-  //             if (snapshot.hasError) {
-  //               return Center(child: Text("${snapshot.error}"));
-  //             } else {
-  //               return buildProfile(drivers);
-  //             }R
-  //         }
-  //       },
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // drivers = await getDrivers();
-
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -212,7 +181,6 @@ class ProfileState extends State<Profile> {
                                               ],
                                             )),
                                         //Id information
-
                                         Padding(
                                             padding: EdgeInsets.only(
                                                 left: 25.0,
@@ -222,18 +190,6 @@ class ProfileState extends State<Profile> {
                                               mainAxisSize: MainAxisSize.max,
                                               children: <Widget>[
                                                 Text("${driver.driverID}")
-                                                // Text("${drivers[0].driverID}"),
-                                                //new Flexible(
-                                                //  child: new TextField(controller: IDController),
-                                                //    decoration: const InputDecoration(
-                                                //     hintText: "Enter Your ID",
-                                                //mun = await readObj(mun.municpalityID, "municipality_admin");
-                                                // driver= await readObj(driver.driverID, Driver)
-                                                //   ),
-                                                //   enabled: !_status,
-                                                //    autofocus: !_status,
-                                                //  ),
-                                                // ),
                                               ],
                                             )),
                                         //Name padding
@@ -273,21 +229,6 @@ class ProfileState extends State<Profile> {
                                               children: <Widget>[
                                                 Text(
                                                     "${driver.firstName} ${driver.lastName}"),
-                                                // new Flexible(
-                                                //   child: new Text(
-                                                //       "${drivers[0].firstName} ${drivers[0].lastName}"),
-
-                                                //   //controller: nameController,
-                                                //   //child: new TextField(
-                                                //   //  decoration: const InputDecoration(
-                                                //   //      hintText:
-                                                //   //          "Enter your full name"),
-                                                //   // "${drivers[i].firstName} ${drivers[i].lastName}"
-                                                //   //  mun = await readObj(mun, "municipality_admin");
-                                                //   // driver= await readObj(driver.firstName, Driver)
-                                                //   // enabled: !_status,
-                                                //   // ),
-                                                // ),
                                               ],
                                             )),
                                         //Email padding
@@ -424,7 +365,6 @@ class ProfileState extends State<Profile> {
                 textColor: Colors.white,
                 color: Colors.green,
                 //here u have to check phone and email if it is wrong show dialog else make the update
-
                 onPressed: () async {
                   String email = '';
                   String phone = "";
@@ -541,16 +481,10 @@ class ProfileState extends State<Profile> {
   }
 
   _isPhone(String phone) {
-    // String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    // RegExp regExp = new RegExp(patttern);
     if (phone.length == 0) {
       return false;
     } else if (phone.length == 11 || phone.length == 10 || phone.length == 9) {
       return true;
-      /* } else if (!regExp.hasMatch(phone)) {
-      return false;
-    } else
-      return true;*/
     } else {
       return false;
     }
@@ -583,15 +517,12 @@ class ProfileState extends State<Profile> {
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 
   void _getLoginedDriver() async {
     CommonFunctions com = new CommonFunctions();
     Driver loginedDriver = await com.retriveDriver();
-
     setState(() {
       driver = loginedDriver;
       String ph = driver.phone.toString();

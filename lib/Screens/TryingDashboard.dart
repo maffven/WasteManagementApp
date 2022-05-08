@@ -107,8 +107,6 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
                                     updatedListener:
                                         _infoSelectionModelUpdated);
                               }
-                              // print(model.selectedSeries[0]
-                              //     .measureFn(model.selectedDatum[0].index));
                               print("clicked");
                             })
                           ],

@@ -49,36 +49,6 @@ List<Marker> displayMarker(double colorBin) {
   ];
 
   return marker;
-//list of markers on the map
-  /*markers = [
-    Marker(
-        infoWindow: InfoWindow(title: titlee),
-        markerId: MarkerId(color),
-        position: LatLng(21.584873, 39.205959),
-        icon: BitmapDescriptor.defaultMarkerWithHue(colorPin),
-        onTap: () {
-          MapUtils.openMap(
-              21.584873, 39.205959); //to open google map app/direct
-        }),
-    Marker(
-        infoWindow: InfoWindow(title: titlee),
-        markerId: MarkerId(color),
-        position: LatLng(21.543333, 39.172779),
-        icon: BitmapDescriptor.defaultMarkerWithHue(colorPin),
-        onTap: () {
-          MapUtils.openMap(
-              21.543333, 39.172779); //to open google map app/direct
-        }),
-    Marker(
-        infoWindow: InfoWindow(title: titlee),
-        markerId: MarkerId(color),
-        position: LatLng(21.285407, 39.237551),
-        icon: BitmapDescriptor.defaultMarkerWithHue(colorPin),
-        onTap: () {
-          MapUtils.openMap(
-              21.285407, 39.237551); //to open google map app/direct
-        }),
-  ];*/
 }
 
 Future deleteObj(int id, String tableName) async {
@@ -101,8 +71,8 @@ void readDistance() {
     final distanceFirebase =
         new Map<String, dynamic>.from(event.snapshot.value);
     print(distanceFirebase['Distance']); //json data
-     distance = distanceFirebase['Distance'].toDouble(); 
-      print(distance);//get teh distance from the firebase //get the distance from the firebase
+    distance = distanceFirebase['Distance'].toDouble();
+    print(distance); //get the distance from the firebase
     if (distance <= 15.0) {
       //full
       print('manar');
@@ -129,9 +99,7 @@ void readDistance() {
       displayMarker(colorBin);
     }
     //coordinateX must be double not iNTEGER
-    // location = BinLocation(binID: 1, coordinateX: 21.4893852, )
     print("before adding bin level");
-    //addObj(level, tableBinLevel);
 
     //list of markers on the map
     markerss = [
@@ -145,11 +113,8 @@ void readDistance() {
                 21.4893852, 39.2462446); //to open google map app/direct
           })
     ];
-
   });
 }
-
-
 
 Future addObj(dynamic obj, String tableName) async {
   await DatabaseHelper.instance.generalCreate(obj, tableName);
@@ -166,7 +131,7 @@ class map extends StatelessWidget {
   }
 }
 
-void main() async {          
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp()
       .then((value) => print("connected " + value.options.asMap.toString()))
@@ -192,7 +157,6 @@ class _MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         backgroundColor: Color(0xffffDD83),
         title: Text("Map"),
-        
       ),
       body: GoogleMap(
         markers: Set<Marker>.of(markerss),

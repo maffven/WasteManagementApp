@@ -44,7 +44,6 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getLists();
     super.initState();
     _seriesPieDataForDistrict = List<charts.Series<PieChartData, String>>(1);
@@ -218,10 +217,6 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
     _fillSelectedDistrict(val);
     print(
         "selected district name ${selectedDistrict.name} and id ${selectedDistrict.districtID}");
-    //print("district name: ${district.name}");
-    //To show piechart based on specific district
-    // bool check = false;
-
     if (selectedDistrict != null) {
       binsInsideSelectedDistrict = [];
       for (int i = 0; i < bins.length; i++) {
@@ -237,9 +232,7 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
       print(
           "binsInsideSelectedDistrict.length: ${binsInsideSelectedDistrict.length}");
       for (int k = 0; k < binsInsideSelectedDistrict.length; k++) {
-        //       print("inside binsLevel $j");
         if (binsInsideSelectedDistrict[k].binID == binsLevel[j].binID) {
-          //         print("inside second if");
           print(
               "${binsInsideSelectedDistrict[k].districtId} and ${binsLevel[j].binID}");
           check = true;
@@ -248,18 +241,6 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
         }
       }
     }
-
-    // //print("binsLevelForDistrict length ${binsLevelForDistrict.length}");
-    // double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
-    // for (int i = 0; i < binsLevelForDistrict.length; i++) {
-    //   if (binsLevelForDistrict[i].full == true) {
-    //     numberOfFull++;
-    //   } else if (binsLevelForDistrict[i].half_full == true) {
-    //     numberOfHalfFull++;
-    //   } else {
-    //     numberOfEmpty++;
-    //   }
-    // }
     numberOfFull = 0;
     numberOfHalfFull = 0;
     numberOfEmpty = 0;
@@ -319,53 +300,15 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
     _generateDataForDistrict(value);
     _fillBinsInfoList();
     loading = false;
-    // districts = [];
-    // List<District> district;
-    // List<dynamic> districtDB = await readAll(tableDistrict);
-    // district = districtDB.cast();
-    // print("in get distric method");
-    // print("district length ${districtDB.length}");
-    // setState(() {
-    //   for (int i = 0; i < district.length; i++) {
-    //     if (district[i].driverID == driver.driverID) {
-    //       districts.add(district[i]);
-    //     }
-    //   }
-    // });
-
-    // print(districts);
-
-    // List<BinLevel> bin;
-    // binsLevel = [];
-    // List<dynamic> binStatus = await readAll(tableBinLevel);
-    // bin = binStatus.cast();
-    // print("in get binsLevel method");
-    // print("binsLevel length ${binStatus.length}");
-    // binsLevel = bin;
-
-    // print("here inside getBins");
-    // List<Bin> binsInfo;
-    // bins = [];
-    // List<dynamic> binDB = await readAll("bin_table");
-    // binsInfo = binDB.cast();
-    // print("in get bins method");
-    // print("bins length ${binDB.length}");
-    // setState(() {
-    //   bins = binsInfo;
-    // });
-    // print(bins);
   }
 
   //read objects
   //int id, String tableName, dynamic classFields, dynamic className
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
-    //print("mun object: ${munObj.firatName}");
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 }

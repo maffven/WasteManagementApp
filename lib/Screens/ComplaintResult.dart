@@ -6,8 +6,8 @@ import 'DriverMenu.dart';
 
 void main() {
   runApp(CompResult());
-  
- }
+}
+
 class CompResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,6 @@ class _CompResultDemo extends State<CompResultDemo> {
         title: Text("Send a complaint"),
       ),
       body: SingleChildScrollView(
-        
         child: Column(
           children: <Widget>[
             Padding(
@@ -42,18 +41,17 @@ class _CompResultDemo extends State<CompResultDemo> {
                 child: Container(
                   decoration: new BoxDecoration(
                     image: new DecorationImage(
-                      image: AssetImage("/Applications/XAMPP/xamppfiles/htdocs/Untitled/SeniorProject498/assets/images/confirm1.png"),
+                      image: AssetImage(
+                          "/Applications/XAMPP/xamppfiles/htdocs/Untitled/SeniorProject498/assets/images/confirm1.png"),
                       fit: BoxFit.cover,
                     ),
                   ),
                   width: 250,
                   height: 250,
-                  // child: Image.asset('/Users/mac/Desktop/flutter_application_1/assets/images/first.png')),
                 ),
               ),
             ),
             Padding(
-              //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, top: 20, bottom: 30),
               child: Text(
@@ -61,34 +59,6 @@ class _CompResultDemo extends State<CompResultDemo> {
                 style: TextStyle(fontSize: 21),
               ),
             ),
-
-           /* ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-    
-                 ElevatedButton(
-                    onPressed: _incrementCounter,
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Color(0xff28CC9E)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: BorderSide(
-                            color: Color(0xff000000),
-                            width: 0.4,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-              
-                ],
-              ),
-            ),*/
-
-           
             Container(
               height: 50,
               width: 250,
@@ -98,9 +68,8 @@ class _CompResultDemo extends State<CompResultDemo> {
                   borderRadius: BorderRadius.circular(20)),
               child: FlatButton(
                 onPressed: () {
-                   Navigator.push(context,
-                   MaterialPageRoute(builder: (context) => DriverMenu()));
-                     
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => DriverMenu()));
                 },
                 child: Text(
                   'Home',

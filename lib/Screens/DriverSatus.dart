@@ -74,21 +74,7 @@ class DriverStatusScreen extends State<DriverSatus> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               mainAxisSize: MainAxisSize.min,
-                                              children: textList()
-                                              //new Text("Districts:")
-
-                                              ),
-                                          // IconButton(
-                                          //   onPressed: () async {
-                                          //     SharedPreferences prefs =
-                                          //         await SharedPreferences
-                                          //             .getInstance();
-                                          //     await prefs.setBool("stats", true);
-                                          //   },
-                                          //   alignment: Alignment.center,
-                                          //   padding: new EdgeInsets.all(0.0),
-                                          //   icon: Icon(Icons.add_alert_rounded),
-                                          // ),
+                                              children: textList()),
                                           new Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
@@ -187,7 +173,6 @@ class DriverStatusScreen extends State<DriverSatus> {
                                           ),
                                         ],
                                       )),
-
                                   Padding(
                                       padding: EdgeInsets.only(
                                           left: 55.0, right: 25.0, top: 25.0),
@@ -271,12 +256,9 @@ class DriverStatusScreen extends State<DriverSatus> {
                                                 horizontal: 35.0),
                                             child: Text(
                                                 "${_generateDataForDriver("notCollected")}"),
-                                            //status = await readObj(DriverFields.id, DriverStatus)
                                           ),
                                         ],
                                       )),
-
-                                  //  !_status ? _getActionButtons() : new Container(),
                                 ],
                               ),
                             ),
@@ -388,7 +370,7 @@ class DriverStatusScreen extends State<DriverSatus> {
         break;
       default:
         {
-          return (99);
+          return (0);
         }
         break;
     }
@@ -412,57 +394,5 @@ class DriverStatusScreen extends State<DriverSatus> {
     // Clean up the controller when the Widget is disposed
     myFocusNode.dispose();
     super.dispose();
-  }
-
-  Widget _getActionButtons() {
-    return Padding(
-      padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 45.0),
-      child: new Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(right: 10.0, top: 0.0, bottom: 0.0),
-              child: Container(
-                  child: new RaisedButton(
-                child: new Text("Save"),
-                textColor: Colors.white,
-                color: Colors.green,
-                onPressed: () {
-                  setState(() {
-                    _status = true;
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                  });
-                },
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(20.0)),
-              )),
-            ),
-            flex: 2,
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Container(
-                  child: new RaisedButton(
-                child: new Text("Cancel"),
-                textColor: Colors.white,
-                color: Colors.red,
-                onPressed: () {
-                  setState(() {
-                    _status = true;
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                  });
-                },
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(20.0)),
-              )),
-            ),
-            flex: 2,
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -6,9 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_1/Screens/Login.dart';
 import 'package:flutter_application_1/Screens/SendComplaint.dart';
 import 'package:flutter_application_1/Screens/profileScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite/sqflite.dart';
 
 void main() {
   testWidgets("login widget test", (WidgetTester tester) async {
@@ -79,29 +76,21 @@ void main() {
       Widget testWidget = new MediaQuery(
           data: new MediaQueryData(),
           child: new MaterialApp(home: new Profile()));
-
       await tester.pumpWidget(testWidget);
-
-      final controller = TextEditingController();
-      await tester.enterText(find.byType(TextFormField), "lina@gmail.com");
-      //var e = find.text("lina@gmail.com");
-      //var email = find.byKey(ValueKey("addEmail"));
-      // var p = find.byType(TextEditingController.fromValue(Row));
-      // var phone = find.byKey(ValueKey("addPhone"));
+      var email = find.byKey(ValueKey("addEmail"));
+      var phone = find.byKey(ValueKey("addPhone"));
       var save = find.byKey(ValueKey("save"));
       expect(save, findsOneWidget);
       //execute the actual test
-      //await tester.enterText(email, "lina@gmail.com");
-      //await tester.enterText(phone, "05543620821");
+      await tester.enterText(email, "lina@gmail.com");
+      await tester.enterText(phone, "05543620821");
       Future.delayed(Duration.zero, () {
         tester.tap(save);
       });
-      //await tester.pump();
       await tester.pumpAndSettle();
       //check output
-      //expect(phone, findsOneWidget);
       expect(find.text("lina@gmail.com"), findsOneWidget);
-      // expect(find.text("05543620821"), findsOneWidget);
+      expect(find.text("05543620821"), findsOneWidget);
     });
   });
 

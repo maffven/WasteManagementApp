@@ -46,8 +46,6 @@ class AdminMenu extends StatelessWidget {
       tabBuilder: (BuildContext context, int index) {
         switch (index) {
           case 0:
-            //return BarAndPieChartDashboard();
-            //return PieChartDashboard();
             return DriverDistrictList();
             break;
           case 1:
@@ -61,9 +59,6 @@ class AdminMenu extends StatelessWidget {
             break;
           case 4:
             return AdminProfile();
-            // return Notification();
-            //return AdminProfile();
-            // return DriverSatus();
             break;
           default:
             return Login();

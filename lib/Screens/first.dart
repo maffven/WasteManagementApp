@@ -47,12 +47,10 @@ class _FirstDemo extends State<FirstDemo> {
                   ),
                   width: 207,
                   height: 170,
-                  // child: Image.asset('/Users/mac/Desktop/flutter_application_1/assets/images/first.png')),
                 ),
               ),
             ),
             Padding(
-              //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, top: 20, bottom: 30),
               child: Text(
@@ -65,20 +63,22 @@ class _FirstDemo extends State<FirstDemo> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   RawMaterialButton(
-                    onPressed: () {  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => FirstDemo()));},
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => FirstDemo()));
+                    },
                     elevation: 4.0,
-                    fillColor:  Color(0xff28CC9E),
-                   
+                    fillColor: Color(0xff28CC9E),
                     padding: EdgeInsets.all(5.0),
                     shape: CircleBorder(),
                   ),
                   RawMaterialButton(
-                    onPressed: () {  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => second()));},
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => second()));
+                    },
                     elevation: 2.0,
-                    fillColor:  Color(0xff28CC9E),
-                   
+                    fillColor: Color(0xff28CC9E),
                     padding: EdgeInsets.all(5.0),
                     shape: CircleBorder(),
                   )

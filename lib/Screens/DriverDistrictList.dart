@@ -26,6 +26,5 @@ class DriverDistrictList extends StatelessWidget {
         body: new TabBarView(children: [new DriverList(), new DistrictList()]),
       ),
     );
-    //return new MaterialApp(title: "Tabs example", home: tabController);
   }
 }

@@ -42,8 +42,6 @@ class DriverMenu extends StatelessWidget {
         switch (index) {
           case 0:
             return BarAndPieChartDashboard();
-            //return PieChartDashboard();
-            //return DriverDistrictList();
             break;
           case 1:
             return MapScreen();
@@ -56,9 +54,6 @@ class DriverMenu extends StatelessWidget {
             break;
           case 4:
             return Profile();
-            // return Notification();
-            //return AdminProfile();
-            // return DriverSatus();
             break;
           default:
             return Login();

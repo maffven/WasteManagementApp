@@ -1,7 +1,5 @@
 //for driver
-
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_1/Screens/AdminDriverDashboard.dart';
@@ -25,7 +23,6 @@ class BarAndPieChartDashboard extends StatefulWidget {
 class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
   //List to store bar chart data
   List<District> driverDistricts = [];
-  //List<Driver> drivers = [];
   List<DistrictInfo> districtInfo = [];
   var emptyBarData = [], fullBarData = [], halfFullBarData = [];
   Driver driver;
@@ -44,97 +41,19 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
   double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
   bool loading = true;
 
-  // items for district list
-  //final items = [];
-
 //to generate data
 
   @override
   void initState() {
-    // TODO: implement initState
     _getLists();
     super.initState();
     _seriesData = List<charts.Series<BarChartData, String>>();
     _seriesPieDataForDistrict = List<charts.Series<PieChartData, String>>(1);
-    // try {
-    //   _getLists().whenComplete(() => setState(() {
-    //         _generateDataForBarChart();
-    //         value = driverDistricts[0].name;
-    //       }));
-    // } catch (error) {
-    //   print("init error: $error");
-    // }
-
-    // () async {
-    //   await _getLists();
-    //   setState(() {
-
-    //     // Update your UI with the desired changes.
-    //   });
-    // }();
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   await this._getLists();
-    //   setState(() {
-    //     value = driverDistricts[0].name;
-    //     _generateDataForBarChart();
-    //   });
-    // });
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   await this._getLists();
-    //   setState(() {});
-    // });
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return FutureBuilder<void>(
-  //     future: _getLists(),
-  //     builder: (context, snapshot) {
-  //       return buildDriverDashboard();
-  //     },
-  //   );
-  // }
 
   _generateDataForBarChart() {
     _fillDistrictInfo();
-    // emptyBarData = [];
-    // fullBarData = [];
-    // halfFullBarData = [];
-    // for (var i = 0; i < districtInfo.length; i++) {
-    //   print("districtInfo[i].districtName: ${districtInfo[i].districtName}");
-    //   emptyBarData.add(BarChartData(districtInfo[i].districtName, "Empty", 15));
-    //   fullBarData.add(BarChartData(
-    //       districtInfo[i].districtName, "full", districtInfo[i].numberOfFull));
-    //   halfFullBarData.add(BarChartData(districtInfo[i].districtName,
-    //       "half-full", districtInfo[i].numberOfHalfFull));
-    // }
-
-    // var barData1 = [
-    //   //number of bins
-    //   new BarChartData("Alnaseem", "Empty", 30),
-    //   new BarChartData("Alrawda", "Empty", 40),
-    //   new BarChartData("Alwaha", "Empty", 50),
-    // ];
-    // var barData2 = [
-    //   new BarChartData("Alnaseem", 'full', 40),
-    //   new BarChartData("Alrawda", 'full', 10),
-    //   new BarChartData("Alwaha", 'full', 10),
-    // ];
-    // var barData3 = [
-    //   new BarChartData("Alnaseem", 'half-full', 50),
-    //   new BarChartData("Alrawda", 'half-full', 30),
-    //   new BarChartData("Alwaha", 'half-full', 10),
-    // ];
-
-    // var pieData = [
-    //   new PieChartData(50.0, 'Full', Color(0xfff05e5e)),
-    //   new PieChartData(30.0, 'Half-full', Color(0xfff19840)),
-    //   new PieChartData(20.0, 'Empty', Color(0xffa6ed8e)),
-    // ];
-
     //First district
-
     _seriesData.add(
       charts.Series(
         domainFn: (BarChartData data, _) => data.distictName,
@@ -170,56 +89,7 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
             charts.ColorUtil.fromDartColor(Color(0xfff19840)),
       ),
     );
-
-    // _seriesData.add(
-    //   charts.Series(
-    //     domainFn: (BarChartData data, _) => data.distictName,
-    //     measureFn: (BarChartData data, _) => data.numberOfBins,
-    //     id: 'Anaseem',
-    //     data: barData1,
-    //     fillPatternFn: (_, __) => charts.FillPatternType.solid,
-    //     fillColorFn: (BarChartData data, _) =>
-    //         charts.ColorUtil.fromDartColor(Color(0xffa6ed8e)),
-    //   ),
-    // );
-    //second district
-    // _seriesData.add(
-    //   charts.Series(
-    //     domainFn: (BarChartData data, _) => data.distictName,
-    //     measureFn: (BarChartData data, _) => data.numberOfBins,
-    //     id: 'Alrawda',
-    //     data: barData2,
-    //     fillPatternFn: (_, __) => charts.FillPatternType.solid,
-    //     fillColorFn: (BarChartData data, _) =>
-    //         charts.ColorUtil.fromDartColor(Color(0xfff05e5e)),
-    //   ),
-    // );
-
-    //Third district
-    // _seriesData.add(
-    //   charts.Series(
-    //     domainFn: (BarChartData data, _) => data.distictName,
-    //     measureFn: (BarChartData data, _) => data.numberOfBins,
-    //     id: 'Alwaha',
-    //     data: barData3,
-    //     fillPatternFn: (_, __) => charts.FillPatternType.solid,
-    //     fillColorFn: (BarChartData data, _) =>
-    //         charts.ColorUtil.fromDartColor(Color(0xfff19840)),
-    //   ),
-    // );
-
-    // _seriesPieData.add(
-    //   charts.Series(
-    //     domainFn: (PieChartData data, _) => data.state,
-    //     measureFn: (PieChartData data, _) => data.percent,
-    //     colorFn: (PieChartData data, _) =>
-    //         charts.ColorUtil.fromDartColor(data.colorval),
-    //     id: 'Bins state',
-    //     data: pieData,
-    //     labelAccessorFn: (PieChartData row, _) => '${row.percent}',
-    //   ),
-    // );
-  } //generateData
+  }
 
   void _getLists() async {
     CommonFunctions com = new CommonFunctions();
@@ -239,51 +109,10 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     _fillBinsInfoList();
 
     loading = false;
-
-    //retrieve all deivers
-    // CommonFunctions com = new CommonFunctions();
-    // List<Driver> drivers = await com.getDrivers();
-    // await _retriveDriver(drivers);
-    // driverDistricts = [];
-    // //get district based on driver district
-    // List<District> district;
-    // List<dynamic> districtDB = await readAll(tableDistrict);
-    // district = districtDB.cast();
-    // setState(() {
-    //   for (int i = 0; i < district.length; i++) {
-    //     if (district[i].driverID == driver.driverID) {
-    //       driverDistricts.add(district[i]);
-    //     }
-    //   }
-    // });
-
-    //get all bins' level
-    // List<BinLevel> bin;
-    // binsLevel = [];
-    // List<dynamic> binStatus = await readAll(tableBinLevel);
-    // bin = binStatus.cast();
-    // for (var i = 0; i < bin.length; i++) {
-    //   print("binslevel id: ${bin[i].binID} ");
-    // }
-
-    // setState(() {
-    //   binsLevel = bin;
-    // });
-
-    // //get all bins
-    // List<Bin> binsInfo;
-    // bins = [];
-    // List<dynamic> binDB = await readAll("bin_table");
-    // binsInfo = binDB.cast();
-    // setState(() {
-    //   bins = binsInfo;
-    // });
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 
   void _fillDistrictInfo() {
@@ -362,7 +191,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     _fillSelectedDistrict(val);
     //print("district name: ${district.name}");
     //To show piechart based on specific district
-    // bool check = false;
 
     if (selectedDistrict != null) {
       pieBinsInsideSelectedDistrict = [];
@@ -377,9 +205,7 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     pieBinsLevelForSelectedDistrict = [];
     for (int j = 0; j < binsLevel.length; j++) {
       for (int k = 0; k < pieBinsInsideSelectedDistrict.length; k++) {
-        //       print("inside binsLevel $j");
         if (pieBinsInsideSelectedDistrict[k].binID == binsLevel[j].binID) {
-          //         print("inside second if");
           check = true;
           pieBinsLevelForSelectedDistrict.add(binsLevel[j]);
           //       }
@@ -451,10 +277,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        /*appBar: AppBar(
-            backgroundColor: Color(0xffffDD83),
-            title: Text("Dashboard"),
-          ),*/
         appBar: AppBar(
           backgroundColor: Color(0xffffDD83),
           title: Text("Dashboard"),
@@ -488,7 +310,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                 _seriesData,
                                 animate: true,
                                 barGroupingType: charts.BarGroupingType.grouped,
-                                //behaviors: [new charts.SeriesLegend()],
                                 animationDuration: Duration(seconds: 1),
                                 selectionModels: [
                                   charts.SelectionModelConfig(changedListener:

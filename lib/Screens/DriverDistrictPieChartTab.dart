@@ -27,7 +27,7 @@ class DriverDistrictTabs extends StatelessWidget {
         body: new TabBarView(children: [
           new AdminDriverDashboard(),
           new DistrictList()
-        ]), //Chnge will be here
+        ]), //Change will be here
       ),
     );
     return new MaterialApp(title: "Tabs example", home: tabController);

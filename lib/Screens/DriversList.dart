@@ -42,7 +42,6 @@ class _ViewDrivers extends State<ViewDrivers> {
           .toList();
     });
   }
- 
 
   @override
   Widget build(BuildContext context) {
@@ -138,34 +137,33 @@ class _ViewDrivers extends State<ViewDrivers> {
                               });
                             },
                             child: InkWell(
-                             
-         onTap: () => Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) {
-            return AdminDriverStatus(
-                driver: drivers); //PieChartDashboard(driver: drivers[i]);
-          })),
-                            child: Card(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                                side: BorderSide(
-                                    color: Color(0xff28CC9E), width: 1),
-                              ),
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  child: Text("${drivers.driverID}"),
-                                  backgroundColor: Color(0xff28CC9E),
-                                  foregroundColor: Colors.white,
+                              onTap: () => Navigator.push(context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                return AdminDriverStatus(driver: drivers);
+                              })),
+                              child: Card(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                  side: BorderSide(
+                                      color: Color(0xff28CC9E), width: 1),
                                 ),
-                                title: Text(
-                                  drivers.firstName + " " + drivers.lastName,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    child: Text("${drivers.driverID}"),
+                                    backgroundColor: Color(0xff28CC9E),
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  title: Text(
+                                    drivers.firstName + " " + drivers.lastName,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text("${drivers.phone}"),
+                                  trailing: Text("status"),
                                 ),
-                                subtitle: Text("${drivers.phone}"),
-                                trailing: Text("status"),
-                             
                               ),
-                            ),
                             ),
                           );
                         },

@@ -137,7 +137,6 @@ class _LoginDemoState extends State<LoginDemo> {
               ),
             ),
             Padding(
-              //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                   key: ValueKey("addPhone"),
@@ -212,7 +211,6 @@ class _LoginDemoState extends State<LoginDemo> {
                     print(drSt[i].lateStatus);
                     print(drSt[i].driverID);
                   }
-                  //  deleteObj(19, tableComplaints);
                   List<BinLevel> binLevel = [];
                   List<dynamic> compDB = await readAll(tableBinLevel);
                   binLevel = compDB.cast();
@@ -222,7 +220,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     print('the bin id : ' + '${binLevel[i].binID}');
                     print('the id : ' + '${binLevel[i].level}');
                   }
-                  
+
                   //frist, check if text fields are not empty
                   if (phoneController.text == "" &&
                       passwordController.text == "") {
@@ -243,7 +241,8 @@ class _LoginDemoState extends State<LoginDemo> {
                           loggedInId = dd[i].driverID;
                         }
 
-                        bool checkPhone = await LoginField.checkPhone(phone, userType);
+                        bool checkPhone =
+                            await LoginField.checkPhone(phone, userType);
 
                         bool checkPassword =
                             await LoginField.checkPassword(password, userType);
@@ -297,7 +296,8 @@ class _LoginDemoState extends State<LoginDemo> {
                           phoneCheck = true;
                           loggedInId = munList[i].municpalityID;
                         }
-                        bool checkPhone = await LoginField.checkPhone(phone, userType);
+                        bool checkPhone =
+                            await LoginField.checkPhone(phone, userType);
 
                         bool checkPassword =
                             await LoginField.checkPassword(password, userType);

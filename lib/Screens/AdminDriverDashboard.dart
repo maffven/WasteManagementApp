@@ -41,12 +41,8 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getLists();
     super.initState();
-    // getLists().whenComplete(() {
-    //   setState(() {});
-    // });
     _seriesPieDataForDriver = List<charts.Series<PieChartData, String>>();
   }
 
@@ -177,8 +173,6 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
                                               print("clicked");
                                               print("$numberOfEmpty this is");
                                             }
-                                            // print(model.selectedSeries[0]
-                                            //     .measureFn(model.selectedDatum[0].index));
                                           })
                                         ],
                                         defaultRenderer:
@@ -220,35 +214,6 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
   }
 
   _generateDataForDriver() {
-    //data about specific district
-    // await getDistricts();
-    // await getBinLevel();
-    // await getBins();
-
-    //get bins level based on a specific district
-    // for (int i = 0; i < bins.length; i++) {
-    //   if (bins[i].districtId == district.districtID) {
-    //     for (int j = 0; j < binsLevel.length; j++) {
-    //       if (bins[i].binID == binsLevel[j].binID) {
-    //         binsLevelForDistrict.add(binsLevel[j]);
-    //       }
-    //     }
-    //   }
-    // }
-
-    // print("inside generate ${binsLevelForDistrict.length}");
-    // double numberOfFull, numberOfHalfFull, numberOfEmpty;
-    // for (int i = 0; i < binsLevelForDistrict.length; i++) {
-    //   if (binsLevelForDistrict[i].full == true)
-    //     numberOfFull++;
-    //   else if (binsLevelForDistrict[i].half_full == true)
-    //     numberOfHalfFull++;
-    //   else
-    //     numberOfEmpty++;
-    // }
-
-    //print("inside generate ${binsLevelForDistrict.length}");
-
 //All bins inside assigned districts for driver
     binsInsideDistricts = [];
     for (int j = 0; j < bins.length; j++) {
@@ -260,7 +225,6 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
       }
     }
     print("binsInsideDistricts length: ${binsInsideDistricts.length}");
-
     // List of all bins leve that inside assigned district
     binsLevelForDistricts = [];
     for (int i = 0; i < binsLevel.length; i++) {
@@ -327,55 +291,16 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
     _generateDataForDriver();
     _fillBinsInfoList();
     loading = false;
-
-    // List<District> district;
-    // List<dynamic> districtDB = await readAll(tableDistrict);
-    // district = districtDB.cast();
-    // print("in get distric method");
-    // print("district length ${districtDB.length}");
-
-    // setState(() {
-    //   assigneddistricts = [];
-    //   for (int i = 0; i < district.length; i++) {
-    //     if (district[i].driverID == driver.driverID) {
-    //       assigneddistricts.add(district[i]);
-    //     }
-    //   }
-    // });
-
-    // print(assigneddistricts);
-    // binsLevel = [];
-    // List<BinLevel> bin;
-    // List<dynamic> binStatus = await readAll(tableBinLevel);
-    // bin = binStatus.cast();
-    // print("in get binsLevel method");
-    // print("binsLevel length ${binStatus.length}");
-    // binsLevel = bin;
-
-    // print("here inside getBins");
-    // bins = [];
-    // List<Bin> binsInfo;
-    // List<dynamic> binDB = await readAll("bin_table");
-    // binsInfo = binDB.cast();
-    // print("in get bins method");
-    // print("bins length ${binDB.length}");
-    // setState(() {
-    //   bins = binsInfo;
-    // });
-    // print(bins);
   }
 
   //read objects
   //int id, String tableName, dynamic classFields, dynamic className
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
-    //print("mun object: ${munObj.firatName}");
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 }
 

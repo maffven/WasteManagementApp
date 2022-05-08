@@ -35,7 +35,6 @@ class _SendComplaintState extends State<SendComplaintDemo> {
   @override
   void initState() {
     super.initState();
-    // readD();
   }
 
   List<District> disList;
@@ -91,195 +90,161 @@ class _SendComplaintState extends State<SendComplaintDemo> {
         title: Text("Send Complaint"),
       ),
       body: SingleChildScrollView(
-          child: new Column(
-            children:  <Widget>[
-               Padding(
-                padding: const EdgeInsets.only(
-                    left: 24.0, right: 24.0, top: 57, bottom: 24),
-                child: new Row(
-                  children: <Widget>[
-                    new Expanded(
-                        child: new TextField(
-                          key: Key("addBinId"),
-                      controller: binId,
-                      decoration: new InputDecoration(
-                          border: new OutlineInputBorder(
-                              borderSide:
-                                  new BorderSide(color: Colors.greenAccent)),
-                          labelText: 'Bin Id',
-                          suffixStyle: const TextStyle(color: Colors.green)),
-                    )),
-                    new PopupMenuButton<String>(
-                      icon: const Icon(Icons.arrow_drop_down),
-                      onSelected: (String value) {
-                        binId.text = value;
-                        selectedBinId = value;
-                        print(selectedBinId);
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return itemsBin
-                            .map<PopupMenuItem<String>>((String value) {
-                          return new PopupMenuItem(
-                              child: new Text(value), value: value);
-                        }).toList();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              new Padding(
-                padding: const EdgeInsets.only(
-                    left: 24.0, right: 24.0, top: 24, bottom: 55),
-                child: new Row(
-                  children: <Widget>[
-                    new Expanded(
-                        child: new TextField(
-                            key: Key("addDistrict"),
-                      controller: district,
-                      decoration: new InputDecoration(
-                          border: new OutlineInputBorder(
-                              borderSide:
-                                  new BorderSide(color: Colors.greenAccent)),
-                          labelText: 'District',
-                          suffixStyle: const TextStyle(color: Colors.green)),
-                    )),
-                    new PopupMenuButton<String>(
-                      icon: const Icon(Icons.arrow_drop_down),
-                      onSelected: (String value) {
-                        district.text = value;
-                        selectedDist = value;
-                        print(selectedDist);
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return itemsDis
-                            .map<PopupMenuItem<String>>((String value) {
-                          return new PopupMenuItem(
-                              child: new Text(value), value: value);
-                        }).toList();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                  height: 100,
-                  width: 350,
-                 
-                    child: new TextField(
-                        key: Key("addSummary"),
-                      controller: summary,
-                      decoration: new InputDecoration(
-                          border: new OutlineInputBorder(
-                              borderSide:
-                                  new BorderSide(color: Colors.greenAccent)),
-                          labelText: 'Summary',
-                          suffixStyle: const TextStyle(color: Colors.green)),
-                    ),
-                  ),
-              Container(
-                  height: 150,
-                  width: 350,
-      
-                   
+        child: new Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 24.0, right: 24.0, top: 57, bottom: 24),
+              child: new Row(
+                children: <Widget>[
+                  new Expanded(
                       child: new TextField(
-                          key: Key("addDescription"),
-                        controller: description,
-                        keyboardType: TextInputType.multiline,
-                        minLines: 1, //Normal textInputField will be displayed
-                        maxLines: 20, //
-                        decoration: new InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(vertical: 60),
-                            border: new OutlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: Colors.greenAccent)),
-                            labelText: ' Description',
-                            suffixStyle: const TextStyle(color: Colors.green)),
-                      ),
-                   
+                    key: Key("addBinId"),
+                    controller: binId,
+                    decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                            borderSide:
+                                new BorderSide(color: Colors.greenAccent)),
+                        labelText: 'Bin Id',
+                        suffixStyle: const TextStyle(color: Colors.green)),
+                  )),
+                  new PopupMenuButton<String>(
+                    icon: const Icon(Icons.arrow_drop_down),
+                    onSelected: (String value) {
+                      binId.text = value;
+                      selectedBinId = value;
+                      print(selectedBinId);
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return itemsBin
+                          .map<PopupMenuItem<String>>((String value) {
+                        return new PopupMenuItem(
+                            child: new Text(value), value: value);
+                      }).toList();
+                    },
                   ),
-              Container(
-                height: 50,
-                width: 250,
-                margin: const EdgeInsets.only(top: 20.0),
-                decoration: BoxDecoration(
-                    color: Color(0xff28CC9E),
-                    borderRadius: BorderRadius.circular(20)),
-                child: FlatButton( 
-                   key: Key("addComplaint"),
-                  onPressed: () async {
-                    print(ComplaintFields.validateFields(selectedBinId,
-                        district.text, summary.text, description.text));
-                    if (ComplaintFields.validateFields(selectedBinId,
-                            district.text, summary.text, description.text) ==
-                        false) {
-                      print("hi");
-                      showDialog();
-                    } else {
-                      DateTime now = new DateTime.now();
-                      print(now);
+                ],
+              ),
+            ),
+            new Padding(
+              padding: const EdgeInsets.only(
+                  left: 24.0, right: 24.0, top: 24, bottom: 55),
+              child: new Row(
+                children: <Widget>[
+                  new Expanded(
+                      child: new TextField(
+                    key: Key("addDistrict"),
+                    controller: district,
+                    decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                            borderSide:
+                                new BorderSide(color: Colors.greenAccent)),
+                        labelText: 'District',
+                        suffixStyle: const TextStyle(color: Colors.green)),
+                  )),
+                  new PopupMenuButton<String>(
+                    icon: const Icon(Icons.arrow_drop_down),
+                    onSelected: (String value) {
+                      district.text = value;
+                      selectedDist = value;
+                      print(selectedDist);
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return itemsDis
+                          .map<PopupMenuItem<String>>((String value) {
+                        return new PopupMenuItem(
+                            child: new Text(value), value: value);
+                      }).toList();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: 100,
+              width: 350,
+              child: new TextField(
+                key: Key("addSummary"),
+                controller: summary,
+                decoration: new InputDecoration(
+                    border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.greenAccent)),
+                    labelText: 'Summary',
+                    suffixStyle: const TextStyle(color: Colors.green)),
+              ),
+            ),
+            Container(
+              height: 150,
+              width: 350,
+              child: new TextField(
+                key: Key("addDescription"),
+                controller: description,
+                keyboardType: TextInputType.multiline,
+                minLines: 1, //Normal textInputField will be displayed
+                maxLines: 20, //
+                decoration: new InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(vertical: 60),
+                    border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.greenAccent)),
+                    labelText: ' Description',
+                    suffixStyle: const TextStyle(color: Colors.green)),
+              ),
+            ),
+            Container(
+              height: 50,
+              width: 250,
+              margin: const EdgeInsets.only(top: 20.0),
+              decoration: BoxDecoration(
+                  color: Color(0xff28CC9E),
+                  borderRadius: BorderRadius.circular(20)),
+              child: FlatButton(
+                key: Key("addComplaint"),
+                onPressed: () async {
+                  print(ComplaintFields.validateFields(selectedBinId,
+                      district.text, summary.text, description.text));
+                  if (ComplaintFields.validateFields(selectedBinId,
+                          district.text, summary.text, description.text) ==
+                      false) {
+                    print("hi");
+                    showDialog();
+                  } else {
+                    DateTime now = new DateTime.now();
+                    print(now);
 //format the date
-                      var newFormat = DateFormat("yyyy-MM-dd");
-                      String updatedDt = newFormat.format(now);
+                    var newFormat = DateFormat("yyyy-MM-dd");
+                    String updatedDt = newFormat.format(now);
 
-                      DateTime date =
-                          new DateTime(now.year, now.month, now.day);
+                    DateTime date = new DateTime(now.year, now.month, now.day);
 //added the district name column to the complaint table
 //addCol("DistrictName", tableComplaints);
 //delCol("DistrictName", tableComplaints);
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      print(prefs.getInt('id'));
-                      // print(date);
-                      print(district.text);
-                      Complaints c = Complaints(
-                          binID: int.parse(binId.text),
-                          complaintMessage: description.text,
-                          subject: summary.text,
-                          status: false,
-                          driverID: prefs.getInt('id'),
-                          districtName: district.text,
-                          date: now);
-                        addObj(c, tableComplaints);
-                      /* for (int i = 16; i <= 18; i++) {
-                        deleteObj(i, tableComplaints);
-                      }*/
-                      //  deleteObj(14, tableComplaints);
-                      /*  Complaints cc = await readObj(1, tableComplaints);
-                      print(cc.complaintID);*/
-
-                      /* List<dynamic> compList = await readAll(tableComplaints);
-                      complaints = compList.cast();
-                      for (int i = 0; i < complaints.length; i++) {
-                        print("${complaints[i].binID}");
-                        print("${complaints[i].complaintID}");
-                        print("${complaints[i].districtName}");
-                        print("${complaints[i].subject}");
-                        print("${complaints[i].status}");
-                      }*/
-
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CompResult()));
-                      /* BinLevel bin = BinLevel(
-                          binID: 123,
-                          half_full: true,
-                          full: false,
-                          empty: false,
-                          level: 1);
-                      addObj(bin, tableBinLevel);*/
-                    }
-                  },
-                  child: Text(
-                    'Submit',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    print(prefs.getInt('id'));
+                    // print(date);
+                    print(district.text);
+                    Complaints c = Complaints(
+                        binID: int.parse(binId.text),
+                        complaintMessage: description.text,
+                        subject: summary.text,
+                        status: false,
+                        driverID: prefs.getInt('id'),
+                        districtName: district.text,
+                        date: now);
+                    addObj(c, tableComplaints);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CompResult()));
+                  }
+                },
+                child: Text(
+                  'Submit',
+                  style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-     
+      ),
     );
   }
 

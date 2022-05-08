@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/AdminDashboard.dart';
@@ -193,9 +192,7 @@ class _DistrictDashboard extends State<DistrictDashboard> {
       print(
           "binsInsideSelectedDistrict.length: ${binsInsideSelectedDistrict.length}");
       for (int k = 0; k < binsInsideSelectedDistrict.length; k++) {
-        //       print("inside binsLevel $j");
         if (binsInsideSelectedDistrict[k].binID == binsLevel[j].binID) {
-          //         print("inside second if");
           print(
               "${binsInsideSelectedDistrict[k].districtId} and ${binsLevel[j].binID}");
           check = true;
@@ -254,10 +251,6 @@ class _DistrictDashboard extends State<DistrictDashboard> {
     List<Bin> binsList = await com.getBins();
     List<BinLevel> binsLevelList = await com.getBinsLevel();
     List<Driver> drivers = await com.getDrivers();
-    // List<dynamic> driverDB = await readAll(tableDriver);
-    // drivers = driverDB.cast();
-    // print("in get driver method");
-    // print("driver length ${driverDB.length}");
     setState(() {
       for (int i = 0; i < drivers.length; i++) {
         if (drivers[i].driverID == district.driverID) {
@@ -270,38 +263,15 @@ class _DistrictDashboard extends State<DistrictDashboard> {
     _generateDataForDistrict();
     _fillBinsInfoList();
     loading = false;
-
-    // List<BinLevel> bin;
-    // binsLevel = [];
-    // List<dynamic> binStatus = await readAll(tableBinLevel);
-    // bin = binStatus.cast();
-    // print("in get binsLevel method");
-    // print("binsLevel length ${binStatus.length}");
-    // binsLevel = bin;
-
-    // print("here inside getBins");
-    // List<Bin> binsInfo;
-    // bins = [];
-    // List<dynamic> binDB = await readAll("bin_table");
-    // binsInfo = binDB.cast();
-    // print("in get bins method");
-    // print("bins length ${binDB.length}");
-    // setState(() {
-    //   bins = binsInfo;
-    // });
-    // print(bins);
   }
 
   //read objects
   //int id, String tableName, dynamic classFields, dynamic className
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
-    //print("mun object: ${munObj.firatName}");
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 }

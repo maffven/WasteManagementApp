@@ -84,8 +84,7 @@ class _DriverList extends State<DriverList>
           child: InkWell(
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (BuildContext context) {
-              return AdminDriverDashboard(
-                  driver: drivers[i]); //PieChartDashboard(driver: drivers[i]);
+              return AdminDriverDashboard(driver: drivers[i]);
             })),
             child: Card(
               borderOnForeground: true,
@@ -113,11 +112,6 @@ class _DriverList extends State<DriverList>
                     SizedBox(
                       height: 5.0,
                     ),
-                    /*  Text(
-                  "2 Items",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w100),
-                )*/
                   ],
                 ),
               )),
@@ -131,12 +125,9 @@ class _DriverList extends State<DriverList>
   //int id, String tableName, dynamic classFields, dynamic className
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
-    //print("mun object: ${munObj.firatName}");
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 }

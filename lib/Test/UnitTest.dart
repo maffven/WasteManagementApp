@@ -86,7 +86,7 @@ void main() {
         print(error);
       }
     });
-
+    //--------------------------------------------------------------------
     //the purpose of this test is to ensure bins info
     //is retrieved from the DB correctly
     test('Get bins info from DB Test', () async {
@@ -98,7 +98,7 @@ void main() {
         print(error);
       }
     });
-
+    //-------------------------------------------------------------------
     //the purpose of this test is to ensure bins level info
     //is retrieved from the DB correctly
     test('Get bins level info from DB Test', () async {
@@ -110,30 +110,35 @@ void main() {
         print(error);
       }
     });
+    //--------------------------------------------------------------------
     //the purpose of this test is to ensure
     //the validity of the entered email
     test('Empty Email Test', () {
       var result = FieldValidator.validateEmail('');
       expect(result, 'Enter a valid email');
     });
+    //--------------------------------------------------------------------
     //the purpose of this test is to ensure
     //the validity of the entered email
     test('Valid Email Test', () {
       var result = FieldValidator.validateEmail('ajay.kumar@nonstopio.com');
       expect(result, "Valid Email");
     });
+    //--------------------------------------------------------------------
     //the purpose of this test is to ensure
     //the validity of the entered phone number
     test('Valid phone number Test', () {
       var result = FieldValidator.validatePhone(05543620821);
       expect(result, "Valid phone number");
     });
+    //---------------------------------------------------------------------
     //the purpose of this test is to ensure
     //the validity of the entered phone number
     test('Valid phone number Test', () {
       var result = FieldValidator.validatePhone(0);
       expect(result, "Enter a valid phone number");
     });
+    //--------------------------------------------------------------------
     //the purpose of this test is to ensure
     //the ability of retrieve assigned district for a specific driver
     test('Get assigned districts for a specific driver from DB Test', () async {
