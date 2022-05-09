@@ -120,7 +120,10 @@ class DriverStatusScreen extends State<DriverSatus> {
                                       )),
                                   Padding(
                                       padding: EdgeInsets.only(
-                                          left: 55.0, right: 2.0, top: 15.0),
+                                          left: 65.0,
+                                          right: 2.0,
+                                          top: 15.0,
+                                          bottom: 15.0),
                                       child: new Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
@@ -132,17 +135,17 @@ class DriverStatusScreen extends State<DriverSatus> {
                                               new Text(
                                                 ("${_generateDataForDriver("totalBins")}"),
                                                 style: TextStyle(
-                                                    fontSize: 16.0,
+                                                    fontSize: 20.0,
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
                                               SizedBox(
-                                                width: 50,
+                                                width: 150,
                                               ),
                                               new Text(
                                                 "${_generateDataForDriver("performancePercent")}%",
                                                 style: TextStyle(
-                                                    fontSize: 16.0,
+                                                    fontSize: 20.0,
                                                     fontWeight:
                                                         FontWeight.bold),
                                               )
@@ -245,7 +248,10 @@ class DriverStatusScreen extends State<DriverSatus> {
                                       )),
                                   Padding(
                                       padding: EdgeInsets.only(
-                                          left: 55.0, right: 25.0, top: 15.0),
+                                          left: 65.0,
+                                          right: 25.0,
+                                          top: 15.0,
+                                          bottom: 15.0),
                                       child: new Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
@@ -257,16 +263,16 @@ class DriverStatusScreen extends State<DriverSatus> {
                                               new Text(
                                                   ("${_generateDataForDriver("emptyBins")}"),
                                                   style: TextStyle(
-                                                      fontSize: 16.0,
+                                                      fontSize: 20.0,
                                                       fontWeight:
                                                           FontWeight.bold)),
                                               SizedBox(
-                                                width: 50,
+                                                width: 150,
                                               ),
                                               new Text(
                                                 "${_generateDataForDriver("notCollected")}",
                                                 style: TextStyle(
-                                                    fontSize: 16.0,
+                                                    fontSize: 20.0,
                                                     fontWeight:
                                                         FontWeight.bold),
                                               )
