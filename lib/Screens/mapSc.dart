@@ -158,7 +158,7 @@ class _MapScreenState extends State<MapScreen> {
         backgroundColor: Color(0xffffDD83),
         title: Text("Map"),
       ),
-      body: GoogleMap(
+      body: GoogleMap(key: Key("Map"),
         markers: Set<Marker>.of(markerss),
         initialCameraPosition: INITIAL_CAMERA_POSITION,
       ),

@@ -227,10 +227,6 @@ class _ForgotPasswordState extends State<ForgotPasswordDemo> {
                             List<dynamic> drListd = await readAll(tableDriver);
                             dd = drListd.cast();
                             for (int i = 0; i < dd.length; i++) {
-                              print("${dd[i].driverID}");
-                              print("${dd[i].phone}");
-                              print("${dd[i].password}");
-
                               if (phone == dd[i].phone) {
                                 driverId = dd[i].driverID;
                                 fname = dd[i].firstName;
@@ -242,7 +238,6 @@ class _ForgotPasswordState extends State<ForgotPasswordDemo> {
                             }
                             print("$driverId");
                             //create a driver object with the new updated password
-
                             Driver updatedDriver = Driver(
                                 driverID: driverId,
                                 municpalityID: munId,
@@ -252,7 +247,6 @@ class _ForgotPasswordState extends State<ForgotPasswordDemo> {
                                 email: email,
                                 phone: phone,
                                 workTime: workTime);
-
                             //update password in the database
                             updateObj(driverId, updatedDriver, tableDriver);
                             showDialogSuccess();

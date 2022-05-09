@@ -167,7 +167,7 @@ class _LoginDemoState extends State<LoginDemo> {
                   width: 20,
                 ), //SizedBox
                 Text(
-                  'Are You An Admin? ',
+                  'Are You an Admin? ',
                   style: TextStyle(fontSize: 15.0),
                 ), //Text
                 Checkbox(

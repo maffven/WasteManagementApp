@@ -58,7 +58,7 @@ class _FirstDemo extends State<FirstDemo> {
                 style: TextStyle(fontSize: 24),
               ),
             ),
-            ListTile(
+          /*  ListTile(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -84,7 +84,7 @@ class _FirstDemo extends State<FirstDemo> {
                   )
                 ],
               ),
-            ),
+            ),*/
             Container(
               height: 50,
               width: 250,

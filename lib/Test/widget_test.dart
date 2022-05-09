@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/AdminDriverStatus.dart';
 import 'package:flutter_application_1/Screens/DriverDashboard.dart';
+import 'package:flutter_application_1/Screens/Notification.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_application_1/Screens/mapSc.dart';
 import 'package:flutter_application_1/Screens/Login.dart';
 import 'package:flutter_application_1/Screens/SendComplaint.dart';
 import 'package:flutter_application_1/Screens/profileScreen.dart';
@@ -67,6 +69,30 @@ void main() {
 
       //check output
       expect(tab, findsOneWidget);
+    });
+  });
+   testWidgets("Notification widget test", (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      await tester.pumpWidget(
+          MaterialApp(home: Scaffold(body: ViewNotification())));
+
+      var tab = find.byKey(ValueKey("Notification"));
+      var tab1 = find.byKey(ValueKey("Performance"));
+      //check output
+      expect(tab, findsOneWidget);
+      expect(tab1, findsOneWidget);
+    });
+  });
+ testWidgets("Map widget test", (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      await tester.pumpWidget(
+          MaterialApp(home: Scaffold(body: MapScreen())));
+
+      var tab = find.byKey(ValueKey("Map"));
+      
+      //check output
+      expect(tab, findsOneWidget);
+    
     });
   });
 

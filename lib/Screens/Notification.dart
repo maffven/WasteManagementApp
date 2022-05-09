@@ -7,6 +7,7 @@ import 'package:flutter_application_1/model/Bin.dart';
 import 'package:flutter_application_1/model/DriverStatus.dart';
 import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Complaints.dart';
+import 'package:flutter_application_1/Screens/mapSc.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -94,7 +95,7 @@ class _ViewNotification extends State<ViewNotification>
   List<District> districts;
   Color color;
   String level;
-  var status;
+  var lateStatus;
   String distName;
 
   @override
@@ -250,18 +251,19 @@ class _ViewNotification extends State<ViewNotification>
     and store the drier status*/
     for (int i = 0; i < theDriversStatus.length; i++) {
       if (theDriversStatus[i].driverID == loggedInId) {
-        status = theDriversStatus[i].lateStatus;
+        lateStatus = theDriversStatus[i].lateStatus;
       }
     }
 
     _fillDistrictInfo(); //to display full bins from assigned districts
 //check if the driver has an alert from the admin of late status som show the alert
     for (int i = 0; i < theLevels.length; i++) {
-      if (level == "Full" && status == true) {
+      if (level == "Full" && lateStatus == true) {
         boxWidgets.add(SizedBox(
           width: 370.0,
           height: 70.0,
           child: Card(
+              key: Key("Performance"),
             borderOnForeground: true,
             color: Colors.white,
             elevation: 2.0,
@@ -298,12 +300,17 @@ class _ViewNotification extends State<ViewNotification>
         ));
       }
       if (level == "Full" && numberOfFull > 0) {
-        //don't show the empty and half-full ones and of assigned districts
+        //don't show the empty and half-full ones and of assigned districts (only full ones)
         boxWidgets.add(SizedBox(
             width: 370.0,
             height: 70.0,
             child: InkWell(
-              child: Card(
+               onTap: () {
+            MapUtils.openMap(
+                21.4893852, 39.2462446); //to open google map app/direct
+          },
+              child: Card( 
+                  key: Key("Notification"),
                 borderOnForeground: true,
                 color: Colors.white,
                 elevation: 2.0,
@@ -311,6 +318,7 @@ class _ViewNotification extends State<ViewNotification>
                     side: BorderSide(color: Color(0xff28CC9E), width: 1),
                     borderRadius: BorderRadius.circular(20)),
                 child: Center(
+                  
                     child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -331,7 +339,7 @@ class _ViewNotification extends State<ViewNotification>
                         color: color,
                       ),
                       Text(
-                        "\t" + level + " in bin " + '${theLevels[i].binID}',
+                        "\t" + level + "Bin ID " + '${theLevels[i].binID}',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,

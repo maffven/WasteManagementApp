@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 
 class AdminDriverStatus extends StatefulWidget {
   final Driver driver;
+  
   @override
   AdminDriverStatus({Key key, this.driver}) : super(key: key);
   AdminDriverStatusScreen createState() =>
@@ -21,6 +22,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
   double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
   District selectedDistrict;
   bool alert;
+  double performancePercernt=0.0;
   String value;
   List<BinLevel> binsLevelForSelectedDistrict = [];
   List<BinLevel> binsLevel;
@@ -438,7 +440,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     int totalBin = (binsInsideDistricts.length);
     double notCollected = (numberOfHalfFull + numberOfFull);
     double performance = ((totalBin - notCollected) / totalBin);
-    double performancePercernt = performance * 100;
+     performancePercernt = performance * 100;
 
     switch (val) {
       case ("totalBins"):

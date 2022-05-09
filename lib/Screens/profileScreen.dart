@@ -517,7 +517,7 @@ class ProfileState extends State<Profile> {
     return await DatabaseHelper.instance.generalReadAll(tableName);
   }
 
-  void _getLoginedDriver() async {
+  Future <void> _getLoginedDriver() async {
     CommonFunctions com = new CommonFunctions();
     Driver loginedDriver = await com.retriveDriver();
     setState(() {

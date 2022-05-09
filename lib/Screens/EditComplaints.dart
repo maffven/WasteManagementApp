@@ -31,9 +31,9 @@ class _EditComplaints extends State<EditComplaints> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
 
-  void showDialog() {
+  }
+void showDialog() {
     showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -52,7 +52,6 @@ class _EditComplaints extends State<EditComplaints> {
       },
     );
   }
-
   bool status = false;
   _EditComplaints({this.complaint});
 
@@ -68,7 +67,9 @@ class _EditComplaints extends State<EditComplaints> {
           backgroundColor: Color(0xffffDD83),
           title: Text("Edit Complaint"),
         ),
-        body: new Center(
+        body: 
+        
+        new Center(
           child: new Container(
             child: new Column(
               children: [
@@ -120,21 +121,23 @@ class _EditComplaints extends State<EditComplaints> {
                     ],
                   ),
                 ),
-                new Padding(
+               new Padding(
                   padding: const EdgeInsets.only(
-                      left: 1.0, right: 235.0, top: 0, bottom: 0),
-                  child: Text("Description: ",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17.0)),
-                ),
+                      left: 1.0, right: 235.0, top: 0, bottom: 0),child:    
+                Text("Description: ",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0)),),
                 new Padding(
                   padding:
                       const EdgeInsets.only(left: 20.0, top: 24, bottom: 10),
-                  child: Text("${complaint.complaintMessage} ",
-                      maxLines: 10,
-                      style: TextStyle(color: Colors.black, fontSize: 16.0)),
+                  child: 
+                      Text("${complaint.complaintMessage} ",
+                          maxLines: 10,
+                          style:
+                              TextStyle(color: Colors.black, fontSize: 16.0)),
+                   
                 ),
 
                 new Padding(
@@ -147,15 +150,14 @@ class _EditComplaints extends State<EditComplaints> {
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 17.0)),
-                      Text(DateFormat('yyyy-MM-dd').format(complaint.date),
+                      Text(DateFormat('yyyy-MM-dd').format(complaint.date) ,
                           style:
                               TextStyle(color: Colors.black, fontSize: 16.0)),
-                      Text('  Time: ',
-                          style: TextStyle(
+                              Text('  Time: ', style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 17.0)),
-                      Text(DateFormat('HH:mm').format(complaint.date)),
+                              Text(DateFormat('HH:mm').format(complaint.date)),
                     ],
                   ),
                 ),
@@ -194,11 +196,7 @@ class _EditComplaints extends State<EditComplaints> {
                       borderRadius: BorderRadius.circular(20)),
                   child: FlatButton(
                     onPressed: () async {
-                      if (status == true) {
-                        print("${complaint.status}");
-                        print(complaint.complaintID);
-                        print(complaint.subject);
-                        print(complaint.complaintMessage);
+                      if (status== true) {//if the solved checkbox is checked (true)
                         Complaints c = Complaints(
                           complaintID: complaint.complaintID,
                           binID: complaint.binID,
@@ -210,18 +208,21 @@ class _EditComplaints extends State<EditComplaints> {
                           districtName: complaint.districtName,
                         );
 
-                        List<dynamic> drListd = await readAll(tableComplaints);
-                        complaints = drListd.cast();
-                        for (int i = 0; i < complaints.length; i++) {
-                          print(complaints[i].status);
-                          print(complaints[i].subject);
-                        }
-                        //to update teh states from false (Not solved) to true (solved)
+                          List<dynamic> drListd = await readAll(tableComplaints);
+                      complaints = drListd.cast();
+                      for (int i = 0; i < complaints.length; i++) {
+                        print(complaints[i].status);
+                        print(complaints[i].subject);
+           
+                      }
+                      //to update teh states from false (Not solved) to true (solved)
                         updateObj(complaint.complaintID, c, tableComplaints);
                         showDialog();
-                      } else {
+                      }else{
                         print('true');
                       }
+
+                     
                     },
                     child: Text(
                       'Submit',
@@ -253,17 +254,19 @@ class _EditComplaints extends State<EditComplaints> {
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
+    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
+    // print("mun object: ${munList[0].firatName}");
   }
 
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
+    //print("mun object: ${munObj.firatName}");
   }
 
   Future updateObj(int id, dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalUpdate(tableName, id, obj);
   }
-
   Future deleteObj(int id, String tableName) async {
     await DatabaseHelper.instance.gneralDelete(id, tableName);
     print("Object is deleted");

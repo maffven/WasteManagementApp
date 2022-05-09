@@ -158,7 +158,6 @@ class _MyAppDemoState extends State<MyAppDemo> {
                 full: false,
                 half_full: false,
                 empty: true);
-
             updateObj(level.level, level, tableBinLevel);
           }
         }
