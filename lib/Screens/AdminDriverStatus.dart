@@ -192,55 +192,30 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                 )),
                             Padding(
                                 padding: EdgeInsets.only(
-                                    left: 25.0, right: 2.0, top: 2.0),
+                                    left: 70.0,
+                                    right: 2.0,
+                                    top: 15.0,
+                                    bottom: 15.0),
                                 child: new Row(
-                                  //mainAxisSize: MainAxisSize.max,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    Align(
-                                      child: Container(
-                                        height: 50,
-                                        width: 100,
-                                        margin: EdgeInsets.only(
-                                            top: 20, left: 40, right: 25),
-                                        /*decoration: new BoxDecoration(
-                                          color: Color.fromARGB(
-                                              255, 162, 255, 229),
-                                          border: Border.all(
-                                              color: Color(0xff28CC9E),
-                                              width: 0.0),
-                                          borderRadius: new BorderRadius.all(
-                                              Radius.elliptical(100, 50)),
-                                        ),*/
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 35.0),
-                                        child: Text(
-                                            ("${_generateDataForDriver("totalBins")}"),
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                    ),
-                                    new Container(
-                                      height: 50,
-                                      width: 100,
-                                      margin: EdgeInsets.only(
-                                          top: 20, left: 50, right: 0),
-                                      /*decoration: new BoxDecoration(
-                                        color:
-                                            Color.fromARGB(255, 162, 255, 229),
-                                        border: Border.all(
-                                            color: Color(0xff28CC9E),
-                                            width: 0.0),
-                                        borderRadius: new BorderRadius.all(
-                                            Radius.elliptical(100, 50)),
-                                      ),*/
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0, horizontal: 30.0),
-                                      child: Text(
+                                    new Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        new Text(
+                                          ("${_generateDataForDriver("totalBins")}"),
+                                          style: TextStyle(fontSize: 20.0),
+                                        ),
+                                        SizedBox(
+                                          width: 150,
+                                        ),
+                                        new Text(
                                           "${_generateDataForDriver("performancePercent")}%",
-                                          style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold)),
+                                          style: TextStyle(fontSize: 20.0),
+                                        )
+                                      ],
                                     ),
                                   ],
                                 )),
@@ -276,55 +251,29 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                 )),
                             Padding(
                                 padding: EdgeInsets.only(
-                                    left: 25.0, right: 25.0, top: 2.0),
+                                    left: 70.0,
+                                    right: 25.0,
+                                    top: 15.0,
+                                    bottom: 15.0),
                                 child: new Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    Align(
-                                      child: Container(
-                                        height: 50,
-                                        width: 100,
-                                        margin: EdgeInsets.only(
-                                            top: 20, left: 40, right: 25),
-                                        /* decoration: new BoxDecoration(
-                                          color: Color.fromARGB(
-                                              255, 162, 255, 229),
-                                          border: Border.all(
-                                              color: Color(0xff28CC9E),
-                                              width: 0.0),
-                                          borderRadius: new BorderRadius.all(
-                                              Radius.elliptical(100, 50)),
-                                        ),*/
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 35.0),
-                                        child: Text(
+                                    new Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        new Text(
                                             ("${_generateDataForDriver("emptyBins")}"),
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                    ),
-                                    new Container(
-                                      height: 50,
-                                      width: 100,
-                                      margin: EdgeInsets.only(
-                                          top: 20, left: 50, right: 0),
-                                      /*decoration: new BoxDecoration(
-                                        color:
-                                            Color.fromARGB(255, 162, 255, 229),
-                                        border: Border.all(
-                                            color: Color(0xff28CC9E),
-                                            width: 0.0),
-                                        borderRadius: new BorderRadius.all(
-                                            Radius.elliptical(100, 50)),
-                                      ),*/
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0, horizontal: 35.0),
-                                      child: Text(
+                                            style: TextStyle(fontSize: 20.0)),
+                                        SizedBox(
+                                          width: 150,
+                                        ),
+                                        new Text(
                                           "${_generateDataForDriver("notCollected")}",
-                                          style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold)),
+                                          style: TextStyle(fontSize: 20.0),
+                                        )
+                                      ],
                                     ),
                                   ],
                                 )),
