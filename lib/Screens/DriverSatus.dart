@@ -120,7 +120,7 @@ class DriverStatusScreen extends State<DriverSatus> {
                                       )),
                                   Padding(
                                       padding: EdgeInsets.only(
-                                          left: 25.0, right: 2.0, top: 2.0),
+                                          left: 55.0, right: 2.0, top: 15.0),
                                       child: new Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
@@ -245,7 +245,7 @@ class DriverStatusScreen extends State<DriverSatus> {
                                       )),
                                   Padding(
                                       padding: EdgeInsets.only(
-                                          left: 25.0, right: 25.0, top: 2.0),
+                                          left: 55.0, right: 25.0, top: 15.0),
                                       child: new Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
