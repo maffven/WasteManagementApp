@@ -122,6 +122,38 @@ class DriverStatusScreen extends State<DriverSatus> {
                                       padding: EdgeInsets.only(
                                           left: 25.0, right: 2.0, top: 2.0),
                                       child: new Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          new Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              new Text(
+                                                ("${_generateDataForDriver("totalBins")}"),
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                width: 50,
+                                              ),
+                                              new Text(
+                                                "${_generateDataForDriver("performancePercent")}%",
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                  /*Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 2.0, top: 2.0),
+                                      child: new Row(
                                         //mainAxisSize: MainAxisSize.max,
                                         children: <Widget>[
                                           Align(
@@ -130,7 +162,7 @@ class DriverStatusScreen extends State<DriverSatus> {
                                               width: 100,
                                               margin: EdgeInsets.only(
                                                   top: 20, left: 40, right: 25),
-                                              decoration: new BoxDecoration(
+                                              /* decoration: new BoxDecoration(
                                                 color: Color.fromARGB(
                                                     255, 162, 255, 229),
                                                 border: Border.all(
@@ -139,15 +171,17 @@ class DriverStatusScreen extends State<DriverSatus> {
                                                 borderRadius: new BorderRadius
                                                         .all(
                                                     Radius.elliptical(100, 50)),
-                                              ),
+                                              ),*/
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 10.0,
                                                       horizontal: 35.0),
                                               child: Text(
-                                                  ("${_generateDataForDriver("totalBins")}")),
-                                              // _generateDataForDistrict(totalBin);
-                                              //district=await readObj(DriverFields.id, district)
+                                                  ("${_generateDataForDriver("totalBins")}"),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
                                             ),
                                           ),
                                           new Container(
@@ -169,10 +203,14 @@ class DriverStatusScreen extends State<DriverSatus> {
                                                 vertical: 10.0,
                                                 horizontal: 30.0),
                                             child: Text(
-                                                "${_generateDataForDriver("performancePercent")}%"),
+                                                "${_generateDataForDriver("performancePercent")}%",
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                           ),
                                         ],
-                                      )),
+                                      )),*/
                                   Padding(
                                       padding: EdgeInsets.only(
                                           left: 55.0, right: 25.0, top: 25.0),
@@ -211,13 +249,44 @@ class DriverStatusScreen extends State<DriverSatus> {
                                       child: new Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
+                                          new Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              new Text(
+                                                  ("${_generateDataForDriver("emptyBins")}"),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              SizedBox(
+                                                width: 50,
+                                              ),
+                                              new Text(
+                                                "${_generateDataForDriver("notCollected")}",
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                  /*Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 2.0),
+                                      child: new Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
                                           Align(
                                             child: Container(
                                               height: 50,
                                               width: 100,
                                               margin: EdgeInsets.only(
                                                   top: 20, left: 40, right: 25),
-                                              decoration: new BoxDecoration(
+                                              /* decoration: new BoxDecoration(
                                                 color: Color.fromARGB(
                                                     255, 162, 255, 229),
                                                 border: Border.all(
@@ -226,14 +295,17 @@ class DriverStatusScreen extends State<DriverSatus> {
                                                 borderRadius: new BorderRadius
                                                         .all(
                                                     Radius.elliptical(100, 50)),
-                                              ),
+                                              ),*/
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 10.0,
                                                       horizontal: 35.0),
                                               child: Text(
-                                                  ("${_generateDataForDriver("emptyBins")}")),
-                                              //status = await readObj(DriverFields.id, DriverStatus)
+                                                  ("${_generateDataForDriver("emptyBins")}"),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
                                             ),
                                           ),
                                           new Container(
@@ -241,7 +313,7 @@ class DriverStatusScreen extends State<DriverSatus> {
                                             width: 100,
                                             margin: EdgeInsets.only(
                                                 top: 20, left: 50, right: 0),
-                                            decoration: new BoxDecoration(
+                                            /*  decoration: new BoxDecoration(
                                               color: Color.fromARGB(
                                                   255, 162, 255, 229),
                                               border: Border.all(
@@ -250,15 +322,19 @@ class DriverStatusScreen extends State<DriverSatus> {
                                               borderRadius: new BorderRadius
                                                       .all(
                                                   Radius.elliptical(100, 50)),
-                                            ),
+                                            ),*/
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 10.0,
                                                 horizontal: 35.0),
                                             child: Text(
-                                                "${_generateDataForDriver("notCollected")}"),
+                                                "${_generateDataForDriver("notCollected")}",
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                           ),
                                         ],
-                                      )),
+                                      )),*/
                                 ],
                               ),
                             ),
@@ -344,7 +420,9 @@ class DriverStatusScreen extends State<DriverSatus> {
     int totalBin = (binsInsideDistricts.length);
     double notCollected = (numberOfHalfFull + numberOfFull);
     double performance = ((totalBin - notCollected) / totalBin);
-    double performancePercernt = performance * 100;
+    double performancePercernt1 = performance * 100;
+    String roundedPercent = performancePercernt1.toStringAsFixed(0);
+    double performancePercernt = double.parse(roundedPercent);
 
     switch (val) {
       case ("totalBins"):
@@ -380,13 +458,10 @@ class DriverStatusScreen extends State<DriverSatus> {
   //int id, String tableName, dynamic classFields, dynamic className
   Future<dynamic> readObj(int id, String tableName) async {
     return await DatabaseHelper.instance.generalRead(tableName, id);
-    //print("mun object: ${munObj.firatName}");
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 
   @override
