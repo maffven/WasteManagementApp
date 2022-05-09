@@ -77,9 +77,11 @@ void main() {
           data: new MediaQueryData(),
           child: new MaterialApp(home: new Profile()));
       await tester.pumpWidget(testWidget);
-      var email = find.byKey(ValueKey("addEmail"));
-      var phone = find.byKey(ValueKey("addPhone"));
-      var save = find.byKey(ValueKey("save"));
+      Finder email = find.byKey(ValueKey("addEmail"));
+      expect(email, findsOneWidget);
+      Finder phone = find.byKey(ValueKey("addPhone"));
+      expect(phone, findsOneWidget);
+      Finder save = find.byKey(ValueKey("save"));
       expect(save, findsOneWidget);
       //execute the actual test
       await tester.enterText(email, "lina@gmail.com");
@@ -93,33 +95,4 @@ void main() {
       expect(find.text("05543620821"), findsOneWidget);
     });
   });
-
-  testWidgets("Admin alert widget test", (WidgetTester tester) async {
-    await tester.runAsync(() async {
-      Driver driver = new Driver();
-      Key key;
-      final alert = find.byKey(ValueKey("addAlert"));
-
-      await tester.pumpWidget(AdminDriverStatus(driver: driver));
-      await tester.tap(alert);
-      await tester.pump();
-
-      expect(alert, findsOneWidget);
-      //   final alert = find.byIcon(Icons.add_alert_rounded);
-      //final Finder buttonToTap = find.byKey(const Key('addAlert'));
-      //  await tester.pumpWidget(AdminDriverStatus(driver: driver));
-      // await tester.tap(alert);
-      //await tester.pump();
-      /*await tester.dragUntilVisible(
-      buttonToTap, // what you want to find
-      find.byType(DefaultTabController), // widget you want to scroll
-      const Offset(0, 50), // delta to move
-    );*/
-      //await tester.tap(buttonToTap);
-      //await tester.pump();
-      // expect(alert, findsOneWidget);
-    });
-  });
 }
-
-mixin AppLocalizations {}

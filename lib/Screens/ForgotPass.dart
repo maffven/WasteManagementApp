@@ -209,7 +209,6 @@ class _ForgotPasswordState extends State<ForgotPasswordDemo> {
                   child: FlatButton(
                     key: Key("submit"),
                     onPressed: () async {
-                
                       //frist, check if text fields are not empty
                       if (newPass.text == "" && confPass.text == "") {
                         showDialog();
@@ -300,8 +299,6 @@ class _ForgotPasswordState extends State<ForgotPasswordDemo> {
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
-    //We have to define list here as dynamci *******
     return await DatabaseHelper.instance.generalReadAll(tableName);
-    // print("mun object: ${munList[0].firatName}");
   }
 }
