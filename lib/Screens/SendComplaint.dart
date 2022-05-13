@@ -191,12 +191,12 @@ class _SendComplaintState extends State<SendComplaintDemo> {
               ),
             ),
             Container(
-              height: 50,
+              height: 40,
               width: 250,
               margin: const EdgeInsets.only(top: 20.0),
               decoration: BoxDecoration(
                   color: Color(0xff28CC9E),
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(10)),
               child: FlatButton(
                 key: Key("addComplaint"),
                 onPressed: () async {
@@ -233,7 +233,7 @@ class _SendComplaintState extends State<SendComplaintDemo> {
                 },
                 child: Text(
                   'Submit',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: TextStyle(color: Colors.white, fontSize: 22),
                 ),
               ),
             ),

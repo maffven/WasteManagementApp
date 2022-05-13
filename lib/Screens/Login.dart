@@ -198,11 +198,11 @@ class _LoginDemoState extends State<LoginDemo> {
             ),
 
             Container(
-              height: 50,
+              height: 40,
               width: 250,
               decoration: BoxDecoration(
                   color: Color(0xff28CC9E),
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(10)),
               child: FlatButton(
                 key: Key("loginButton"),
                 onPressed: () async {
@@ -216,7 +216,7 @@ class _LoginDemoState extends State<LoginDemo> {
                   List<dynamic> muniList = await readAll(tableDriverStatus);
                   List<DriverStatus> drSt = muniList.cast();
                   for (int i = 0; i < drSt.length; i++) {
-                    print(drSt[i].statusID);
+                  
                     print( drSt[i].performanceRate);
                     print("driver id " + "${drSt[i].driverID}");
                     print(drSt[i].lateStatus);
@@ -354,7 +354,7 @@ class _LoginDemoState extends State<LoginDemo> {
                 },
                 child: Text(
                   'Login',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: TextStyle(color: Colors.white, fontSize: 22),
                 ),
               ),
             ),

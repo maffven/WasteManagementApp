@@ -40,7 +40,7 @@ class _LogoDemoState extends State<LogoDemo> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Color(0xffffDD83),
-        title: Text("Hello"),
+        title: Text("Hello" ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -52,25 +52,27 @@ class _LogoDemoState extends State<LogoDemo> {
                   MaterialPageRoute(builder: (context) => first()),
                 );
               },
-              child: Container(
-                margin: const EdgeInsets.only(top: 240.0, right: 10),
-                child: Center(
+            
+              child: new Padding(
+              padding: const EdgeInsets.only(left:10, top: 240.0),
+              child: Center(
                   child: Container(
                     decoration: new BoxDecoration(
                       image: new DecorationImage(
                         image: AssetImage(
-                            "/Users/mac/Desktop/499/Untitled/WasteManagementApp/assets/images/ourLogo.png"),
+                            "/Users/mac/Desktop/499/Untitled/WasteManagementApp/assets/images/logo.png"),
                         fit: BoxFit.cover,
                       ),
                     ),
-                    width: 207,
-                    height: 170,
+                    width: 235,
+                    height: 200,
                   ),
                   
-                ),
               ),
-              
+              ),
+
             )
+            
           ],
         ),
       ),

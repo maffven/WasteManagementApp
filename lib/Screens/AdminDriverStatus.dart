@@ -21,6 +21,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
   double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
   District selectedDistrict;
   bool alert;
+  double notCollected;
   double performancePercernt = 0.0;
   String value;
   List<Driver> dd;
@@ -81,7 +82,6 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
             title: Text("Alert Driver"),
           ),
           body: TabBarView(
-            
             children: [
               Padding(
                 padding: EdgeInsets.only(bottom: 25.0),
@@ -129,14 +129,23 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                                 driverStatusList[i].completed;
                                           }
                                         }
-                                        DriverStatus alert = new DriverStatus(
-                                            driverID: driver.driverID,
-                                            statusID: statusID,
-                                            completed: completed,
-                                            incomplete: incomplete,
-                                            lateStatus: true);
+                                        DriverStatus d1 = new DriverStatus(
+                                          statusID: statusID,
+                                          driverID: driver.driverID,
+                                          completed: false,
+                                          incomplete: false,
+                                          lateStatus: true,
+                                          binsNotCollected:
+                                              notCollected.toInt().toString(),
+                                          binsCollected:
+                                              notCollected.toString(),
+                                          performanceRate: performancePercernt
+                                              .ceilToDouble()
+                                              .toString(),
+                                        );
+
                                         updateObj(
-                                            statusID, alert, tableDriverStatus);
+                                            statusID, d1, tableDriverStatus);
                                         showDialog();
                                         List<dynamic> muniList =
                                             await readAll(tableDriverStatus);
@@ -149,7 +158,8 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                       },
                                       alignment: Alignment.center,
                                       padding: new EdgeInsets.all(0.0),
-                                      icon: Icon(Icons.add_alert_rounded,size: 35, color: Colors.red),
+                                      icon: Icon(Icons.add_alert_rounded,
+                                          size: 35, color: Colors.red),
                                     ),
                                     new Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -246,7 +256,6 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.bold),
                                         )
-                                  
                                       ],
                                     ),
                                   ],
@@ -389,24 +398,24 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     }
 
     int totalBin = (binsInsideDistricts.length);
-    double notCollected = (numberOfHalfFull + numberOfFull);
+     notCollected = (numberOfHalfFull + numberOfFull);
     double performance = ((totalBin - notCollected) / totalBin);
     performancePercernt = performance * 100;
 
-print("bins not collected " + "${notCollected.toInt().toString()}");
+    print("bins not collected " + "${notCollected.toInt().toString()}");
 
     DriverStatus d1 = new DriverStatus(
-        statusID: 3,
-        driverID: 3,
-        completed: false,
-        incomplete: false,
-        lateStatus: false,
-        binsNotCollected: notCollected.toInt().toString(),
-        binsCollected: notCollected.toString(),
-        performanceRate: performancePercernt.ceilToDouble().toString(),
-        );
-        
-   // updateObj(3, d1, tableDriverStatus);
+      statusID: 1,
+      driverID: 1,
+      completed: false,
+      incomplete: false,
+      lateStatus: true,
+      binsNotCollected: notCollected.toInt().toString(),
+      binsCollected: notCollected.toString(),
+      performanceRate: performancePercernt.ceilToDouble().toString(),
+    );
+
+    //updateObj(1, d1, tableDriverStatus);
 
     switch (val) {
       case ("totalBins"):
@@ -452,10 +461,12 @@ print("bins not collected " + "${notCollected.toInt().toString()}");
   Future<List<dynamic>> readAll(String tableName) async {
     return await DatabaseHelper.instance.generalReadAll(tableName);
   }
-Future addObj(dynamic obj, String tableName) async {
+
+  Future addObj(dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalCreate(obj, tableName);
     print("object inserted");
   }
+
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed

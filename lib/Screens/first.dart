@@ -27,25 +27,25 @@ class _FirstDemo extends State<FirstDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+    appBar: AppBar(
         backgroundColor: Color(0xffffDD83),
-        title: Text("Start"),
+        title: Text("Start" ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 150.0),
+              padding: const EdgeInsets.only(top: 180.0),
               child: Center(
                 child: Container(
                   decoration: new BoxDecoration(
                     image: new DecorationImage(
                       image: AssetImage(
-                          "/Applications/XAMPP/xamppfiles/htdocs/Untitled/SeniorProject498/assets/images/third.png"),
+                          "/Users/mac/Desktop/499/Untitled/WasteManagementApp/assets/images/third.png"),
                       fit: BoxFit.cover,
                     ),
                   ),
-                  width: 207,
+                  width: 210,
                   height: 170,
                 ),
               ),
@@ -96,12 +96,12 @@ class _FirstDemo extends State<FirstDemo> {
               ),
             ),*/
             Container(
-              height: 50,
+              height: 40,
               width: 250,
               margin: const EdgeInsets.only(top: 40.0),
               decoration: BoxDecoration(
                   color: Color(0xff28CC9E),
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(10)),
               child: FlatButton(
                 onPressed: () {
                   Navigator.push(context,
@@ -109,7 +109,7 @@ class _FirstDemo extends State<FirstDemo> {
                 },
                 child: Text(
                   'Login',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: TextStyle(color: Colors.white, fontSize: 22),
                 ),
               ),
             ),

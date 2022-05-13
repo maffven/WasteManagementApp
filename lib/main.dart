@@ -5,11 +5,13 @@ import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/Screens/Logo.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/DriverStatus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'model/BinLevel.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp()
       .then((value) => print("connected " + value.options.asMap.toString()))
       .catchError((e) => print(e.toString()));
@@ -49,9 +51,19 @@ class _MyAppDemoState extends State<MyAppDemo> {
   @override
   void initState() {
     super.initState();
+    var iOSIntilization = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(iOS: iOSIntilization);
+    localNotification = new FlutterLocalNotificationsPlugin();
+    localNotification.initialize(initializationSettings);
     readDistance();
   }
 
+  FlutterLocalNotificationsPlugin localNotification;
+  void _showNotification() async{
+    var iosDetails = new IOSNotificationDetails();
+    var generalNotoficatoonDetails = new NotificationDetails(iOS: iosDetails);
+    await localNotification.show(0, "Full bins alert", "Please come collect the bin as soon as possible", generalNotoficatoonDetails);
+  }
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
@@ -82,7 +94,7 @@ class _MyAppDemoState extends State<MyAppDemo> {
       //     statusID: 1,
       //     completed: false,
       //     incomplete: false,
-      //     performance: 
+      //     performance:
       //     lateStatus: false);
       // //addObj(d1, tableDriverStatus);
       // DriverStatus d2 = new DriverStatus(
@@ -114,10 +126,9 @@ class _MyAppDemoState extends State<MyAppDemo> {
       //     lateStatus: false);
       //addObj(d5, tableDriverStatus);
 // addObj(level, tableBinLevel);
-
-
     });
   }
+
   Future deleteObj(int id, String tableName) async {
     print("$id rawan");
     await DatabaseHelper.instance.gneralDelete(id, tableName);
@@ -142,8 +153,7 @@ class _MyAppDemoState extends State<MyAppDemo> {
         loadData = true;
         if (loadData) {
           if (distance <= 15.0) {
-            NotificationApi.showNotification(title: "Full Bin Alert", body: "Please come collect the bin as soon as possible",
-            payload: 'waste.abs',);
+           _showNotification();
             //full
             level = BinLevel(
                 level: level.level,
@@ -153,8 +163,7 @@ class _MyAppDemoState extends State<MyAppDemo> {
                 empty: false);
             await updateObj(level.level, level, tableBinLevel);
           } else if (distance > 15.0 && distance < 900.0) {
-             NotificationApi.showNotification(title: "Full Bin Alert", body: "Please come collect the bin as soon as possible",
-            payload: 'waste.abs',);
+         _showNotification();
             //half-full
             level = BinLevel(
                 level: level.level,
