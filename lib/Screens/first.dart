@@ -35,7 +35,7 @@ class _FirstDemo extends State<FirstDemo> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 180.0),
+              padding: const EdgeInsets.only(top: 160.0),
               child: Center(
                 child: Container(
                   decoration: new BoxDecoration(

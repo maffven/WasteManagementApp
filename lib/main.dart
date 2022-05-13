@@ -59,11 +59,7 @@ class _MyAppDemoState extends State<MyAppDemo> {
   }
 
   FlutterLocalNotificationsPlugin localNotification;
-  void _showNotification() async{
-    var iosDetails = new IOSNotificationDetails();
-    var generalNotoficatoonDetails = new NotificationDetails(iOS: iosDetails);
-    await localNotification.show(0, "Full bins alert", "Please come collect the bin as soon as possible", generalNotoficatoonDetails);
-  }
+  
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
@@ -198,5 +194,10 @@ class _MyAppDemoState extends State<MyAppDemo> {
         addObj(level, tableBinLevel);
       });
     }
+  }
+  void _showNotification() async{
+    var iosDetails = new IOSNotificationDetails();
+    var generalNotoficatoonDetails = new NotificationDetails(iOS: iosDetails);
+    await localNotification.show(0, "Full bins alert", "Please come collect the bin as soon as possible", generalNotoficatoonDetails);
   }
 }
