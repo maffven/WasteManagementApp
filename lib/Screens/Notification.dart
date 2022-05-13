@@ -1,6 +1,9 @@
+import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/CommonFunctions.dart';
+import 'package:flutter_application_1/Screens/AdminDriverStatus.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
 import 'package:flutter_application_1/model/Bin.dart';
@@ -9,6 +12,7 @@ import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Complaints.dart';
 import 'package:flutter_application_1/Screens/mapSc.dart';
 import 'package:flutter_application_1/model/Driver.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +38,8 @@ class _ViewNotification extends State<ViewNotification>
   //define all needed variables
   var loggedInId;
   var driverStatus;
+  String performance;
+  String uncollectedBins;
   List<District> assignedDistricts = [];
   int driverId;
   List<BinLevel> theLevels = [];
@@ -95,6 +101,7 @@ class _ViewNotification extends State<ViewNotification>
   List<District> districts;
   Color color;
   String level;
+  String performanceRate;
   var lateStatus;
   String distName;
 
@@ -239,21 +246,29 @@ class _ViewNotification extends State<ViewNotification>
   //get box widgets
   Future<List<Widget>> getWidgets() async {
     theLevels = [];
+    bool check=false;
     theLevels = await getBinLevels();
     boxWidgets = [];
-
     List<DriverStatus> theDriversStatus = [];
     theDriversStatus = await getDriversStatus();
+       print(theDriversStatus.length);
     //retrieve the loggedin id
     SharedPreferences prefs = await SharedPreferences.getInstance();
     loggedInId = prefs.getInt('id');
+    print("the id " + "${loggedInId}");
     /*get the driver status and check if its equivalent to the loggedIn Id
     and store the drier status*/
     for (int i = 0; i < theDriversStatus.length; i++) {
       if (theDriversStatus[i].driverID == loggedInId) {
+        print("hi "+ theDriversStatus[i].binsNotCollected);
         lateStatus = theDriversStatus[i].lateStatus;
+        performanceRate = theDriversStatus[i].performanceRate;
+        uncollectedBins = theDriversStatus[i].binsNotCollected;
+        break;
       }
+      
     }
+
 
     _fillDistrictInfo(); //to display full bins from assigned districts
 //check if the driver has an alert from the admin of late status som show the alert
@@ -261,7 +276,7 @@ class _ViewNotification extends State<ViewNotification>
       if (level == "Full" && lateStatus == true) {
         boxWidgets.add(SizedBox(
           width: 370.0,
-          height: 70.0,
+          height: 100.0,
           child: Card(
               key: Key("Performance"),
             borderOnForeground: true,
@@ -276,7 +291,7 @@ class _ViewNotification extends State<ViewNotification>
               child: Row(
                 children: <Widget>[
                   SizedBox(
-                    height: 5.0,
+                    height: 30.0,
                   ),
                   Text("\t \t"),
                   Icon(
@@ -284,14 +299,16 @@ class _ViewNotification extends State<ViewNotification>
                     color: Colors.red,
                   ),
                   Text(
-                    "Performance alerts",
+                    " Your performance is below average " +performanceRate + "\n You have " + uncollectedBins +" uncollected bin \n  Please collect bins before 8PM" ,
                     style: TextStyle(
                         color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0),
+                        fontSize: 15.0),
                   ),
+                  
+                 
+                  
                   SizedBox(
-                    height: 2.0,
+                    height: 10.0,
                   ),
                 ],
               ),
@@ -318,7 +335,6 @@ class _ViewNotification extends State<ViewNotification>
                     side: BorderSide(color: Color(0xff28CC9E), width: 1),
                     borderRadius: BorderRadius.circular(20)),
                 child: Center(
-                  
                     child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -339,7 +355,7 @@ class _ViewNotification extends State<ViewNotification>
                         color: color,
                       ),
                       Text(
-                        "\t" + level + "Bin ID " + '${theLevels[i].binID}',
+                        "\t" + level + " Bin ID " + '${theLevels[i].binID}',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,

@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 
 class AdminDriverStatus extends StatefulWidget {
   final Driver driver;
-
   @override
   AdminDriverStatus({Key key, this.driver}) : super(key: key);
   AdminDriverStatusScreen createState() =>
@@ -24,6 +23,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
   bool alert;
   double performancePercernt = 0.0;
   String value;
+  List<Driver> dd;
   List<BinLevel> binsLevelForSelectedDistrict = [];
   List<BinLevel> binsLevel;
   List<Bin> bins;
@@ -81,6 +81,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
             title: Text("Alert Driver"),
           ),
           body: TabBarView(
+            
             children: [
               Padding(
                 padding: EdgeInsets.only(bottom: 25.0),
@@ -148,7 +149,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                       },
                                       alignment: Alignment.center,
                                       padding: new EdgeInsets.all(0.0),
-                                      icon: Icon(Icons.add_alert_rounded),
+                                      icon: Icon(Icons.add_alert_rounded,size: 35, color: Colors.red),
                                     ),
                                     new Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -245,6 +246,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.bold),
                                         )
+                                  
                                       ],
                                     ),
                                   ],
@@ -389,9 +391,22 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     int totalBin = (binsInsideDistricts.length);
     double notCollected = (numberOfHalfFull + numberOfFull);
     double performance = ((totalBin - notCollected) / totalBin);
-    double performancePercernt1 = performance * 100;
-    String roundedPercent = performancePercernt1.toStringAsFixed(0);
-    double performancePercernt = double.parse(roundedPercent);
+    performancePercernt = performance * 100;
+
+print("bins not collected " + "${notCollected.toInt().toString()}");
+
+    DriverStatus d1 = new DriverStatus(
+        statusID: 3,
+        driverID: 3,
+        completed: false,
+        incomplete: false,
+        lateStatus: false,
+        binsNotCollected: notCollected.toInt().toString(),
+        binsCollected: notCollected.toString(),
+        performanceRate: performancePercernt.ceilToDouble().toString(),
+        );
+        
+   // updateObj(3, d1, tableDriverStatus);
 
     switch (val) {
       case ("totalBins"):
@@ -407,7 +422,7 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
         break;
       case ("performancePercent"):
         {
-          return performancePercernt;
+          return performancePercernt.ceilToDouble();
         }
         break;
       case ("emptyBins"):
@@ -431,12 +446,16 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
 
   Future updateObj(int id, dynamic obj, String tableName) async {
     await DatabaseHelper.instance.generalUpdate(tableName, id, obj);
+    print("object updated");
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
     return await DatabaseHelper.instance.generalReadAll(tableName);
   }
-
+Future addObj(dynamic obj, String tableName) async {
+    await DatabaseHelper.instance.generalCreate(obj, tableName);
+    print("object inserted");
+  }
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed

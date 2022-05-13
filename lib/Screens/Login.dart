@@ -205,13 +205,20 @@ class _LoginDemoState extends State<LoginDemo> {
               child: FlatButton(
                 key: Key("loginButton"),
                 onPressed: () async {
+                //  deleteObj(1, tableDriverStatus);
+           //     addCol("performanceRate", tableDriverStatus);
+           /*    addCol("BinsCollected", tableDriverStatus);
+            addCol("BinsNotCollected", tableDriverStatus);*/
+           // delCol("performance", tableDriverStatus);
                   List<dynamic> muniList = await readAll(tableDriverStatus);
                   List<DriverStatus> drSt = muniList.cast();
                   for (int i = 0; i < drSt.length; i++) {
+                    print(drSt[i].statusID);
+                    print( drSt[i].performanceRate);
+                    print("driver id " + "${drSt[i].driverID}");
                     print(drSt[i].lateStatus);
-                    print(drSt[i].driverID);
                   }
-                  List<BinLevel> binLevel = [];
+                 /* List<BinLevel> binLevel = [];
                   List<dynamic> compDB = await readAll(tableBinLevel);
                   binLevel = compDB.cast();
                   print(binLevel.length);
@@ -219,7 +226,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     print('the id : ' + '${binLevel[i].full}');
                     print('the bin id : ' + '${binLevel[i].binID}');
                     print('the id : ' + '${binLevel[i].level}');
-                  }
+                  }*/
 
                   //frist, check if text fields are not empty
                   if (phoneController.text == "" &&
@@ -400,4 +407,13 @@ class _LoginDemoState extends State<LoginDemo> {
     final db = await DatabaseHelper.instance.database;
     db.close();
   }
+  Future addCol(dynamic obj, String tableName) async {
+    await DatabaseHelper.instance.alterTable(tableName, obj);
+    print("column inserted");
+  }
+  Future delCol(dynamic obj, String tableName) async {
+    await DatabaseHelper.instance.alterTable1(tableName, obj);
+    print("column deleted");
+  }
+
 }

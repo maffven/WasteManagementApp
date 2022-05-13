@@ -210,11 +210,6 @@ class _SendComplaintState extends State<SendComplaintDemo> {
                   } else {
                     DateTime now = new DateTime.now();
                     print(now);
-//format the date
-                    var newFormat = DateFormat("yyyy-MM-dd");
-                    String updatedDt = newFormat.format(now);
-
-                    DateTime date = new DateTime(now.year, now.month, now.day);
 //added the district name column to the complaint table
 //addCol("DistrictName", tableComplaints);
 //delCol("DistrictName", tableComplaints);

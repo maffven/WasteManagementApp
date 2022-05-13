@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_application_1/model/notification_api.dart';
 import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/Screens/Logo.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
@@ -81,6 +82,7 @@ class _MyAppDemoState extends State<MyAppDemo> {
       //     statusID: 1,
       //     completed: false,
       //     incomplete: false,
+      //     performance: 
       //     lateStatus: false);
       // //addObj(d1, tableDriverStatus);
       // DriverStatus d2 = new DriverStatus(
@@ -112,7 +114,14 @@ class _MyAppDemoState extends State<MyAppDemo> {
       //     lateStatus: false);
       //addObj(d5, tableDriverStatus);
 // addObj(level, tableBinLevel);
+
+
     });
+  }
+  Future deleteObj(int id, String tableName) async {
+    print("$id rawan");
+    await DatabaseHelper.instance.gneralDelete(id, tableName);
+    print("Object is deleted");
   }
 
   Future addObj(dynamic obj, String tableName) async {
@@ -133,6 +142,8 @@ class _MyAppDemoState extends State<MyAppDemo> {
         loadData = true;
         if (loadData) {
           if (distance <= 15.0) {
+            NotificationApi.showNotification(title: "Full Bin Alert", body: "Please come collect the bin as soon as possible",
+            payload: 'waste.abs',);
             //full
             level = BinLevel(
                 level: level.level,

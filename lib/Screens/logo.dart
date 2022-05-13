@@ -59,15 +59,17 @@ class _LogoDemoState extends State<LogoDemo> {
                     decoration: new BoxDecoration(
                       image: new DecorationImage(
                         image: AssetImage(
-                            "/Users/mac/Desktop/flutter_application_1/assets/images/ourLogo.png"),
+                            "/Users/mac/Desktop/499/Untitled/WasteManagementApp/assets/images/ourLogo.png"),
                         fit: BoxFit.cover,
                       ),
                     ),
                     width: 207,
                     height: 170,
                   ),
+                  
                 ),
               ),
+              
             )
           ],
         ),

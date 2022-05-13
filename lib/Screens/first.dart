@@ -52,11 +52,21 @@ class _FirstDemo extends State<FirstDemo> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 20, bottom: 30),
+                  left: 15.0, right: 15.0, top: 10, bottom: 5),
               child: Text(
                 '\n Track your bins effectively \n   for a better enviroment',
-                style: TextStyle(fontSize: 24),
-              ),
+                style: TextStyle(fontSize: 24, fontWeight:FontWeight.bold),
+              ), 
+             
+            ),
+    Padding(
+              padding: const EdgeInsets.only(
+                  left: 15.0, right: 15.0, top: 0, bottom: 0),
+              child: Text(
+                '\n To manage the waste and \nbe notified when bins are full',
+                style: TextStyle(fontSize: 17),
+              ), 
+             
             ),
           /*  ListTile(
               title: Row(
