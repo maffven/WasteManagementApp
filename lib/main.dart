@@ -153,6 +153,8 @@ class _MyAppDemoState extends State<MyAppDemo> {
                 empty: false);
             await updateObj(level.level, level, tableBinLevel);
           } else if (distance > 15.0 && distance < 900.0) {
+             NotificationApi.showNotification(title: "Full Bin Alert", body: "Please come collect the bin as soon as possible",
+            payload: 'waste.abs',);
             //half-full
             level = BinLevel(
                 level: level.level,

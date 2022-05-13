@@ -29,7 +29,7 @@ class DriverStatus {
   final bool lateStatus;
   final String binsNotCollected;
   final String binsCollected;
-final String performanceRate;
+  final String performanceRate;
   const DriverStatus({
     @required this.driverID,
     @required this.statusID,

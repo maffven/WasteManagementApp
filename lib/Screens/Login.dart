@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/model/notification_api.dart';
 import 'package:flutter_application_1/Screens/DriverMenu.dart';
 import 'package:flutter_application_1/Screens/ForgotPass.dart';
 import 'package:flutter_application_1/model/Complaints.dart';
@@ -205,6 +206,8 @@ class _LoginDemoState extends State<LoginDemo> {
               child: FlatButton(
                 key: Key("loginButton"),
                 onPressed: () async {
+                     NotificationApi.showNotification(title: "Full Bin Alert", body: "Please come collect the bin as soon as possible",
+            payload: 'waste.abs',);
                 //  deleteObj(1, tableDriverStatus);
            //     addCol("performanceRate", tableDriverStatus);
            /*    addCol("BinsCollected", tableDriverStatus);
