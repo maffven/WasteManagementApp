@@ -106,7 +106,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     _generateDataForBarChart();
     value = driverDistricts[0].name;
     _generateDataForPieChart(value);
-    _fillBinsInfoList();
 
     loading = false;
   }
@@ -135,10 +134,14 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
             //         print("inside second if");
             //check = true;
             barBinsLevelForDistrict.add(binsLevel[l]);
+
             //       }
           }
         }
       }
+      print(
+          "barBinsLevelForDistrict length inside district info ${barBinsLevelForDistrict.length}");
+
       //binsLevelForDistrict  and binIsideDistrict are done
 
       //classify bins based on full, half-full, empty
@@ -158,7 +161,8 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
           driverDistricts[i].name,
           numberOfEmpty,
           numberOfFull,
-          numberOfHalfFull);
+          numberOfHalfFull,
+          barBinsLevelForDistrict);
       districtInfo.add(district);
 
       //recreate numberOfEmpty, numberOfFull, numberOfHalfFullattributes
@@ -263,12 +267,51 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     }
   }
 
-  _fillBinsInfoList() {
+  _fillBarBinsInfoList(String districtName, String status) {
     //create BinInfoObjects
     binsInfo = [];
-    for (var i = 0; i < pieBinsLevelForSelectedDistrict.length; i++) {
-      binsInfo
-          .add(new BinInfo(pieBinsLevelForSelectedDistrict[i].binID, value));
+    print("districtInfo ${districtInfo.length}");
+    for (var i = 0; i < districtInfo.length; i++) {
+      if (districtInfo[i].districtName == districtName) {
+        for (var j = 0; j < districtInfo[i].binslevel.length; j++) {
+          if (status == "Empty" && districtInfo[i].binslevel[j].empty) {
+            print(" ${districtInfo[i].binslevel[j].empty} is empty");
+            binsInfo.add(
+                new BinInfo(districtInfo[i].binslevel[j].binID, districtName));
+          } else if (status == "Full" && districtInfo[i].binslevel[j].full) {
+            binsInfo.add(
+                new BinInfo(districtInfo[i].binslevel[j].binID, districtName));
+          } else if (status == "HalfFull" &&
+              districtInfo[i].binslevel[j].half_full) {
+            binsInfo.add(
+                new BinInfo(districtInfo[i].binslevel[j].binID, districtName));
+          } else {
+            print("nothing match");
+            // }
+          }
+        }
+      }
+    }
+  }
+
+  _fillPieBinsInfoList(String districtName, String status) {
+    binsInfo = [];
+    for (var j = 0; j < pieBinsLevelForSelectedDistrict.length; j++) {
+      if (status == "Empty" && pieBinsLevelForSelectedDistrict[j].empty) {
+        print(" ${pieBinsLevelForSelectedDistrict[j].empty} is empty");
+        binsInfo.add(new BinInfo(
+            pieBinsLevelForSelectedDistrict[j].binID, districtName));
+      } else if (status == "Full" && pieBinsLevelForSelectedDistrict[j].full) {
+        binsInfo.add(new BinInfo(
+            pieBinsLevelForSelectedDistrict[j].binID, districtName));
+      } else if (status == "HalfFull" &&
+          pieBinsLevelForSelectedDistrict[j].half_full) {
+        binsInfo.add(new BinInfo(
+            pieBinsLevelForSelectedDistrict[j].binID, districtName));
+      } else {
+        print("nothing match");
+        // }
+      }
     }
   }
 
@@ -315,9 +358,16 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                   charts.SelectionModelConfig(changedListener:
                                       (charts.SelectionModel model) {
                                     if (model.hasDatumSelection) {
-                                      if ((model.selectedSeries[0].measureFn(
-                                              model.selectedDatum[0].index)) ==
-                                          numberOfEmpty) {
+                                      String districtName = "";
+                                      if ((model
+                                              .selectedSeries[0].displayName) ==
+                                          "emptyBar") {
+                                        districtName = (model.selectedSeries[0])
+                                            .domainFn(
+                                                model.selectedDatum[0].index)
+                                            .toString();
+                                        _fillBarBinsInfoList(
+                                            districtName, "Empty");
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -327,10 +377,15 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                                     binsInfo: binsInfo,
                                                   )),
                                         ).then((value) => setState(() {}));
-                                      } else if ((model.selectedSeries[0]
-                                              .measureFn(model
-                                                  .selectedDatum[0].index)) ==
-                                          numberOfFull) {
+                                      } else if ((model
+                                              .selectedSeries[0].displayName) ==
+                                          "fullBar") {
+                                        districtName = (model.selectedSeries[0])
+                                            .domainFn(
+                                                model.selectedDatum[0].index)
+                                            .toString();
+                                        _fillBarBinsInfoList(
+                                            districtName, "Full");
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -340,6 +395,12 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                                       binsInfo: binsInfo)),
                                         ).then((value) => setState(() {}));
                                       } else {
+                                        districtName = (model.selectedSeries[0])
+                                            .domainFn(
+                                                model.selectedDatum[0].index)
+                                            .toString();
+                                        _fillBarBinsInfoList(
+                                            districtName, "HalfFull");
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -435,11 +496,13 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                             changedListener:
                                                 (charts.SelectionModel model) {
                                           if (model.hasDatumSelection) {
-                                            if ((model.selectedSeries[0]
-                                                    .measureFn(model
-                                                        .selectedDatum[0]
-                                                        .index)) ==
-                                                numberOfEmpty) {
+                                            if (model.selectedSeries[0]
+                                                    .domainFn(model
+                                                        .selectedDatum[0].index)
+                                                    .toString() ==
+                                                "Empty") {
+                                              _fillPieBinsInfoList(
+                                                  value, "Empty");
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -450,11 +513,13 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                                         )),
                                               ).then(
                                                   (value) => setState(() {}));
-                                            } else if ((model.selectedSeries[0]
-                                                    .measureFn(model
-                                                        .selectedDatum[0]
-                                                        .index)) ==
-                                                numberOfFull) {
+                                            } else if (model.selectedSeries[0]
+                                                    .domainFn(model
+                                                        .selectedDatum[0].index)
+                                                    .toString() ==
+                                                "Full") {
+                                              _fillPieBinsInfoList(
+                                                  value, "Full");
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -466,6 +531,8 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                               ).then(
                                                   (value) => setState(() {}));
                                             } else {
+                                              _fillPieBinsInfoList(
+                                                  value, "HalfFull");
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -532,6 +599,7 @@ class DistrictInfo {
   String districtName;
   int districtID;
   double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
+  List<BinLevel> binslevel;
   DistrictInfo(this.districtID, this.districtName, this.numberOfEmpty,
-      this.numberOfFull, this.numberOfHalfFull);
+      this.numberOfFull, this.numberOfHalfFull, this.binslevel);
 }
