@@ -1,19 +1,13 @@
-import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Screens/AdminDashboard.dart';
 import 'package:flutter_application_1/Screens/AdminDriverDashboard.dart';
 import 'package:flutter_application_1/Screens/BinsListAllDistricts.dart';
 import 'package:flutter_application_1/Screens/CommonFunctions.dart';
-import 'package:flutter_application_1/Screens/DistrictListTab.dart';
 import 'package:flutter_application_1/Screens/DriverDashboard.dart';
-import 'package:flutter_application_1/Screens/DriverListTab.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/Bin.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
 import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Driver.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 void main() => runApp(MaterialApp(home: DistrictDashboard()));
@@ -189,12 +183,8 @@ class _DistrictDashboard extends State<DistrictDashboard> {
     bool check = false;
     binsLevelForSelectedDistrict = [];
     for (int j = 0; j < binsLevel.length; j++) {
-      print(
-          "binsInsideSelectedDistrict.length: ${binsInsideSelectedDistrict.length}");
       for (int k = 0; k < binsInsideSelectedDistrict.length; k++) {
         if (binsInsideSelectedDistrict[k].binID == binsLevel[j].binID) {
-          print(
-              "${binsInsideSelectedDistrict[k].districtId} and ${binsLevel[j].binID}");
           check = true;
           binsLevelForSelectedDistrict.add(binsLevel[j]);
           //       }
@@ -219,7 +209,6 @@ class _DistrictDashboard extends State<DistrictDashboard> {
       new PieChartData(numberOfEmpty, 'Empty', Color(0xffa6ed8e)),
     ];
     if (check) {
-      print("yes there");
       _seriesPieDataForDistrict = [];
 
       _seriesPieDataForDistrict.add(
@@ -234,14 +223,10 @@ class _DistrictDashboard extends State<DistrictDashboard> {
         ),
       );
 
-      print(
-          "There is data on series ${_seriesPieDataForDistrict.elementAt(0)}");
-
       setState(() {});
     } else {
       _seriesPieDataForDistrict = [];
       setState(() {});
-      print("empty");
     }
   }
 
