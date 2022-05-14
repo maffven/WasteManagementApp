@@ -66,6 +66,7 @@ Future<List<dynamic>> readAll(String tableName) async {
 final databaseReference = FirebaseDatabase.instance.reference();
 //to read the distance from the firebase
 void readDistance() {
+ 
   //this means the data is up to date
   databaseReference.onValue.listen((event) {
     final distanceFirebase =

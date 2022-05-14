@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_application_1/model/notification_api.dart';
+
 import 'package:flutter_application_1/Screens/CommonFunctions.dart';
 import 'package:flutter_application_1/Screens/Logo.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/DriverStatus.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'model/BinLevel.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -51,15 +51,10 @@ class _MyAppDemoState extends State<MyAppDemo> {
   @override
   void initState() {
     super.initState();
-    var iOSIntilization = new IOSInitializationSettings();
-    var initializationSettings = new InitializationSettings(iOS: iOSIntilization);
-    localNotification = new FlutterLocalNotificationsPlugin();
-    localNotification.initialize(initializationSettings);
+
     readDistance();
   }
 
-  FlutterLocalNotificationsPlugin localNotification;
-  
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
@@ -71,7 +66,9 @@ class _MyAppDemoState extends State<MyAppDemo> {
 //Create a firebase database reference
   final databaseReference = FirebaseDatabase.instance.reference();
 //to read the distance from the firebase
-  void readDistance() {
+  void readDistance() async {
+    
+
     print("entered read distance");
     //this means the data is up to date
     databaseReference.onValue.listen((event) {
@@ -81,6 +78,7 @@ class _MyAppDemoState extends State<MyAppDemo> {
       distance = distanceFirebase['Distance'].toDouble();
       binId = distanceFirebase['BinId'];
       print(distance);
+
       print(binId); //get teh distance from the firebase
       //
       _getList();
@@ -149,7 +147,6 @@ class _MyAppDemoState extends State<MyAppDemo> {
         loadData = true;
         if (loadData) {
           if (distance <= 15.0) {
-           _showNotification();
             //full
             level = BinLevel(
                 level: level.level,
@@ -159,7 +156,6 @@ class _MyAppDemoState extends State<MyAppDemo> {
                 empty: false);
             await updateObj(level.level, level, tableBinLevel);
           } else if (distance > 15.0 && distance < 900.0) {
-         _showNotification();
             //half-full
             level = BinLevel(
                 level: level.level,
@@ -194,10 +190,5 @@ class _MyAppDemoState extends State<MyAppDemo> {
         addObj(level, tableBinLevel);
       });
     }
-  }
-  void _showNotification() async{
-    var iosDetails = new IOSNotificationDetails();
-    var generalNotoficatoonDetails = new NotificationDetails(iOS: iosDetails);
-    await localNotification.show(0, "Full bins alert", "Please come collect the bin as soon as possible", generalNotoficatoonDetails);
   }
 }
