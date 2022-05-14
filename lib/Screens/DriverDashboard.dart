@@ -53,6 +53,7 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
 
   _generateDataForBarChart() {
     _fillDistrictInfo();
+    //First district
     _seriesData.add(
       charts.Series(
         domainFn: (BarChartData data, _) => data.distictName,
@@ -105,7 +106,7 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     _generateDataForBarChart();
     value = driverDistricts[0].name;
     _generateDataForPieChart(value);
-    //_fillBinsInfoList(); // value = driverDistricts[0].name
+    _fillBinsInfoList();
 
     loading = false;
   }
@@ -187,7 +188,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
 
   //Generate data for pie chart
   _generateDataForPieChart(String val) {
-    _fillBinsInfoListForPieChart(val);
     _fillSelectedDistrict(val);
     //print("district name: ${district.name}");
     //To show piechart based on specific district
@@ -250,8 +250,8 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
           measureFn: (PieChartData data, _) => data.percent,
           colorFn: (PieChartData data, _) =>
               charts.ColorUtil.fromDartColor(data.colorval),
+          id: 'Bins state',
           data: pieData,
-          id: "bin state",
           labelAccessorFn: (PieChartData row, _) => '${row.percent}',
         ),
       );
@@ -263,20 +263,12 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     }
   }
 
-  _fillBinsInfoListForPieChart(String districtName) {
+  _fillBinsInfoList() {
     //create BinInfoObjects
     binsInfo = [];
     for (var i = 0; i < pieBinsLevelForSelectedDistrict.length; i++) {
-      binsInfo.add(
-          new BinInfo(pieBinsLevelForSelectedDistrict[i].binID, districtName));
-    }
-  }
-
-  _fillBinsInfoListForBarChart(String districtName) {
-    //create BinInfoObjects
-    binsInfo = [];
-    for (var i = 0; i < barBinsLevelForDistrict.length; i++) {
-      binsInfo.add(new BinInfo(barBinsLevelForDistrict[i].binID, districtName));
+      binsInfo
+          .add(new BinInfo(pieBinsLevelForSelectedDistrict[i].binID, value));
     }
   }
 
@@ -323,19 +315,9 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                   charts.SelectionModelConfig(changedListener:
                                       (charts.SelectionModel model) {
                                     if (model.hasDatumSelection) {
-                                      if ((model
-                                              .selectedSeries[0].displayName) ==
-                                          "emptyBar") {
-                                        List<BarChartData> emptyData =
-                                            emptyBarData.cast();
-                                        _fillBinsInfoListForBarChart(
-                                            emptyData[0].distictName);
-                                        for (var i = 0;
-                                            i < binsInfo.length;
-                                            i++) {
-                                          print(
-                                              "bin name: ${binsInfo[i].districtName}");
-                                        }
+                                      if ((model.selectedSeries[0].measureFn(
+                                              model.selectedDatum[0].index)) ==
+                                          numberOfEmpty) {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -345,13 +327,10 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                                     binsInfo: binsInfo,
                                                   )),
                                         ).then((value) => setState(() {}));
-                                      } else if ((model
-                                              .selectedSeries[0].displayName) ==
-                                          "fullBar") {
-                                        List<BarChartData> fullData =
-                                            fullBarData.cast();
-                                        _fillBinsInfoListForBarChart(
-                                            fullData[0].distictName);
+                                      } else if ((model.selectedSeries[0]
+                                              .measureFn(model
+                                                  .selectedDatum[0].index)) ==
+                                          numberOfFull) {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -361,10 +340,6 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                                       binsInfo: binsInfo)),
                                         ).then((value) => setState(() {}));
                                       } else {
-                                        List<BarChartData> halfFullData =
-                                            halfFullBarData.cast();
-                                        _fillBinsInfoListForBarChart(
-                                            halfFullData[0].distictName);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -460,13 +435,11 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                             changedListener:
                                                 (charts.SelectionModel model) {
                                           if (model.hasDatumSelection) {
-                                            print(
-                                                "model.selectedSeries[0].colorFn ${model.selectedSeries[0].domainFn(model.selectedDatum[0].index).toString()}");
-                                            if (model.selectedSeries[0]
-                                                    .domainFn(model
-                                                        .selectedDatum[0].index)
-                                                    .toString() ==
-                                                "Empty") {
+                                            if ((model.selectedSeries[0]
+                                                    .measureFn(model
+                                                        .selectedDatum[0]
+                                                        .index)) ==
+                                                numberOfEmpty) {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -477,11 +450,11 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                                         )),
                                               ).then(
                                                   (value) => setState(() {}));
-                                            } else if (model.selectedSeries[0]
-                                                    .domainFn(model
-                                                        .selectedDatum[0].index)
-                                                    .toString() ==
-                                                "Full") {
+                                            } else if ((model.selectedSeries[0]
+                                                    .measureFn(model
+                                                        .selectedDatum[0]
+                                                        .index)) ==
+                                                numberOfFull) {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
