@@ -398,14 +398,13 @@ class AdminDriverStatusScreen extends State<AdminDriverStatus> {
     }
 
     int totalBin = (binsInsideDistricts.length);
-     notCollected = (numberOfHalfFull + numberOfFull);
+    notCollected = (numberOfHalfFull + numberOfFull);
     double performance = ((totalBin - notCollected) / totalBin);
     performancePercernt = performance * 100;
 
     print("bins not collected " + "${notCollected.toInt().toString()}");
 
     DriverStatus d1 = new DriverStatus(
-      statusID: 1,
       driverID: 1,
       completed: false,
       incomplete: false,
