@@ -124,11 +124,13 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
                                                   (charts.SelectionModel
                                                       model) {
                                             if (model.hasDatumSelection) {
-                                              if ((model.selectedSeries[0]
-                                                      .measureFn(model
+                                              if (model.selectedSeries[0]
+                                                      .domainFn(model
                                                           .selectedDatum[0]
-                                                          .index)) ==
-                                                  numberOfEmpty) {
+                                                          .index)
+                                                      .toString() ==
+                                                  "Empty") {
+                                                _fillBinsInfoList("Empty");
                                                 print("it is here");
                                                 Navigator.push(
                                                   context,
@@ -140,12 +142,13 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
                                                           )),
                                                 ).then(
                                                     (value) => setState(() {}));
-                                              } else if ((model
-                                                      .selectedSeries[0]
-                                                      .measureFn(model
+                                              } else if (model.selectedSeries[0]
+                                                      .domainFn(model
                                                           .selectedDatum[0]
-                                                          .index)) ==
-                                                  numberOfFull) {
+                                                          .index)
+                                                      .toString() ==
+                                                  "Full") {
+                                                _fillBinsInfoList("Full");
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -158,6 +161,7 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
                                                 ).then(
                                                     (value) => setState(() {}));
                                               } else {
+                                                _fillBinsInfoList("HalfFull");
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -195,7 +199,7 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
   }
 
 //Class methods
-  _fillBinsInfoList() {
+  _fillBinsInfoList(String status) {
     //create BinInfoObjects
     binsInfo = [];
     for (var i = 0; i < binsLevelForDistricts.length; i++) {
@@ -204,8 +208,19 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
           if (binsLevelForDistricts[i].binID == binsInsideDistricts[k].binID) {
             if (binsInsideDistricts[k].districtId ==
                 driverDistricts[j].districtID) {
-              binsInfo.add(new BinInfo(
-                  binsLevelForDistricts[i].binID, driverDistricts[j].name));
+              if (status == "Empty" && binsLevelForDistricts[i].empty) {
+                binsInfo.add(new BinInfo(
+                    binsLevelForDistricts[i].binID, driverDistricts[j].name));
+              } else if (status == "Full" && binsLevelForDistricts[i].full) {
+                binsInfo.add(new BinInfo(
+                    binsLevelForDistricts[i].binID, driverDistricts[j].name));
+              } else if (status == "HalfFull" &&
+                  binsLevelForDistricts[i].half_full) {
+                binsInfo.add(new BinInfo(
+                    binsLevelForDistricts[i].binID, driverDistricts[j].name));
+              } else {
+                print("nothing match");
+              }
             }
           }
         }
@@ -289,7 +304,6 @@ class _AdminDriverDashboard extends State<AdminDriverDashboard> {
       binsLevel = binsLevelList;
     });
     _generateDataForDriver();
-    _fillBinsInfoList();
     loading = false;
   }
 

@@ -40,6 +40,7 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
   District selectedDistrict;
   double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
   bool loading = true;
+  CommonFunctions com = new CommonFunctions();
   _AdminDistrictDashboard({this.driver});
 
   @override
@@ -65,6 +66,21 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.only(top: 70.0),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 1),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Color(0xff28CC9E),
+                            width: 1,
+                          ),
+                        ),
+                        child: Text("Assigned District for driver",
+                            style: TextStyle(fontSize: 22),
+                            textAlign: TextAlign.center),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 30.0),
                         padding:
                             EdgeInsets.symmetric(horizontal: 12, vertical: 1),
                         decoration: BoxDecoration(
@@ -122,10 +138,16 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
                                   charts.SelectionModelConfig(changedListener:
                                       (charts.SelectionModel model) {
                                     if (model.hasDatumSelection) {
-                                      if ((model.selectedSeries[0].measureFn(
-                                              model.selectedDatum[0].index)) ==
-                                          numberOfEmpty) {
-                                        print("it is here");
+                                      if (model.selectedSeries[0]
+                                              .domainFn(
+                                                  model.selectedDatum[0].index)
+                                              .toString() ==
+                                          "Empty") {
+                                        binsInfo = [];
+                                        binsInfo = com.fillPieBinsInfoList(
+                                            value,
+                                            "Empty",
+                                            binsLevelForSelectedDistrict);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -135,10 +157,16 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
                                                     binsInfo: binsInfo,
                                                   )),
                                         ).then((value) => setState(() {}));
-                                      } else if ((model.selectedSeries[0]
-                                              .measureFn(model
-                                                  .selectedDatum[0].index)) ==
-                                          numberOfFull) {
+                                      } else if (model.selectedSeries[0]
+                                              .domainFn(
+                                                  model.selectedDatum[0].index)
+                                              .toString() ==
+                                          "Full") {
+                                        binsInfo = [];
+                                        binsInfo = com.fillPieBinsInfoList(
+                                            value,
+                                            "Full",
+                                            binsLevelForSelectedDistrict);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -148,6 +176,11 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
                                                       binsInfo: binsInfo)),
                                         ).then((value) => setState(() {}));
                                       } else {
+                                        binsInfo = [];
+                                        binsInfo = com.fillPieBinsInfoList(
+                                            value,
+                                            "HalfFull",
+                                            binsLevelForSelectedDistrict);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -205,13 +238,13 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
     }
   }
 
-  _fillBinsInfoList() {
-    //create BinInfoObjects
-    binsInfo = [];
-    for (var i = 0; i < binsLevelForSelectedDistrict.length; i++) {
-      binsInfo.add(new BinInfo(binsLevelForSelectedDistrict[i].binID, value));
-    }
-  }
+  // _fillBinsInfoList() {
+  //   //create BinInfoObjects
+  //   binsInfo = [];
+  //   for (var i = 0; i < binsLevelForSelectedDistrict.length; i++) {
+  //     binsInfo.add(new BinInfo(binsLevelForSelectedDistrict[i].binID, value));
+  //   }
+  // }
 
   _generateDataForDistrict(String val) {
     _fillSelectedDistrict(val);
@@ -298,7 +331,6 @@ class _AdminDistrictDashboard extends State<AdminDistrictDashboard> {
     });
     value = driverDistricts[0].name;
     _generateDataForDistrict(value);
-    _fillBinsInfoList();
     loading = false;
   }
 

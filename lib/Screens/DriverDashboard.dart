@@ -40,6 +40,7 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
   District selectedDistrict;
   double numberOfFull = 0, numberOfHalfFull = 0, numberOfEmpty = 0;
   bool loading = true;
+  CommonFunctions com = new CommonFunctions();
 
 //to generate data
 
@@ -294,26 +295,26 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
     }
   }
 
-  _fillPieBinsInfoList(String districtName, String status) {
-    binsInfo = [];
-    for (var j = 0; j < pieBinsLevelForSelectedDistrict.length; j++) {
-      if (status == "Empty" && pieBinsLevelForSelectedDistrict[j].empty) {
-        print(" ${pieBinsLevelForSelectedDistrict[j].empty} is empty");
-        binsInfo.add(new BinInfo(
-            pieBinsLevelForSelectedDistrict[j].binID, districtName));
-      } else if (status == "Full" && pieBinsLevelForSelectedDistrict[j].full) {
-        binsInfo.add(new BinInfo(
-            pieBinsLevelForSelectedDistrict[j].binID, districtName));
-      } else if (status == "HalfFull" &&
-          pieBinsLevelForSelectedDistrict[j].half_full) {
-        binsInfo.add(new BinInfo(
-            pieBinsLevelForSelectedDistrict[j].binID, districtName));
-      } else {
-        print("nothing match");
-        // }
-      }
-    }
-  }
+  // _fillPieBinsInfoList(String districtName, String status) {
+  //   binsInfo = [];
+  //   for (var j = 0; j < pieBinsLevelForSelectedDistrict.length; j++) {
+  //     if (status == "Empty" && pieBinsLevelForSelectedDistrict[j].empty) {
+  //       print(" ${pieBinsLevelForSelectedDistrict[j].empty} is empty");
+  //       binsInfo.add(new BinInfo(
+  //           pieBinsLevelForSelectedDistrict[j].binID, districtName));
+  //     } else if (status == "Full" && pieBinsLevelForSelectedDistrict[j].full) {
+  //       binsInfo.add(new BinInfo(
+  //           pieBinsLevelForSelectedDistrict[j].binID, districtName));
+  //     } else if (status == "HalfFull" &&
+  //         pieBinsLevelForSelectedDistrict[j].half_full) {
+  //       binsInfo.add(new BinInfo(
+  //           pieBinsLevelForSelectedDistrict[j].binID, districtName));
+  //     } else {
+  //       print("nothing match");
+  //       // }
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -501,8 +502,11 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                                         .selectedDatum[0].index)
                                                     .toString() ==
                                                 "Empty") {
-                                              _fillPieBinsInfoList(
-                                                  value, "Empty");
+                                              binsInfo = [];
+                                              binsInfo = com.fillPieBinsInfoList(
+                                                  value,
+                                                  "Empty",
+                                                  pieBinsLevelForSelectedDistrict);
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -518,8 +522,11 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                                         .selectedDatum[0].index)
                                                     .toString() ==
                                                 "Full") {
-                                              _fillPieBinsInfoList(
-                                                  value, "Full");
+                                              binsInfo = [];
+                                              binsInfo = com.fillPieBinsInfoList(
+                                                  value,
+                                                  "Full",
+                                                  pieBinsLevelForSelectedDistrict);
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -531,8 +538,11 @@ class _BarAndPieChartDashboard extends State<BarAndPieChartDashboard> {
                                               ).then(
                                                   (value) => setState(() {}));
                                             } else {
-                                              _fillPieBinsInfoList(
-                                                  value, "HalfFull");
+                                              binsInfo = [];
+                                              binsInfo = com.fillPieBinsInfoList(
+                                                  value,
+                                                  "HalfFull",
+                                                  pieBinsLevelForSelectedDistrict);
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(

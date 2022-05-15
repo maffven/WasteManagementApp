@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_application_1/Screens/AdminDriverDashboard.dart';
 import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/Bin.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
@@ -72,6 +73,27 @@ class CommonFunctions {
       }
     }
     return driverDistricts;
+  }
+
+  //To fill bins info list with appropriate information then use it
+  //to display the information as a list instead of chart
+  List<BinInfo> fillPieBinsInfoList(
+      String districtName, String status, List<BinLevel> binslevel) {
+    List<BinInfo> binsInfo = [];
+    for (var j = 0; j < binslevel.length; j++) {
+      if (status == "Empty" && binslevel[j].empty) {
+        print(" ${binslevel[j].empty} is empty");
+        binsInfo.add(new BinInfo(binslevel[j].binID, districtName));
+      } else if (status == "Full" && binslevel[j].full) {
+        binsInfo.add(new BinInfo(binslevel[j].binID, districtName));
+      } else if (status == "HalfFull" && binslevel[j].half_full) {
+        binsInfo.add(new BinInfo(binslevel[j].binID, districtName));
+      } else {
+        print("nothing match");
+        // }
+      }
+    }
+    return binsInfo;
   }
 
   Future<List<dynamic>> readAll(String tableName) async {
