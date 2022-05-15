@@ -67,8 +67,6 @@ class _MyAppDemoState extends State<MyAppDemo> {
   final databaseReference = FirebaseDatabase.instance.reference();
 //to read the distance from the firebase
   void readDistance() async {
-    
-
     print("entered read distance");
     //this means the data is up to date
     databaseReference.onValue.listen((event) {

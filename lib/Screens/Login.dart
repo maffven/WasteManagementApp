@@ -208,6 +208,42 @@ class _LoginDemoState extends State<LoginDemo> {
                 onPressed: () async {
                      NotificationApi.showNotification(title: "Full Bin Alert", body: "Please come collect the bin as soon as possible",
             payload: 'waste.abs',);
+            //Adding bins & binLevels
+      Bin bin = Bin(binID: 150, capacity: 10, districtId: 2); //half
+      Bin bin1 = Bin(binID: 160, capacity: 25, districtId: 2); // half
+      Bin bin2 = Bin(binID: 170, capacity: 40, districtId: 2); //empty
+      Bin bin3 = Bin(binID: 180, capacity: 40, districtId: 2); //empty
+      Bin bin4 = Bin(binID: 190, capacity: 40, districtId: 7); //half
+      Bin bin5 = Bin(binID: 200, capacity: 40, districtId: 7); //empty
+     /*  addObj(bin, tableBin);
+       addObj(bin1, tableBin);
+       addObj(bin2, tableBin);
+       addObj(bin3, tableBin);
+       addObj(bin4, tableBin);
+       addObj(bin5, tableBin);*/
+
+      //Adding bin level
+
+      BinLevel binlevel =
+          BinLevel(binID: 150, full: false, half_full: true, empty: false);
+      BinLevel binlevel1 =
+          BinLevel(binID: 160, full: false, half_full: true, empty: false);
+      BinLevel binlevel2 =
+          BinLevel(binID: 170, full: false, half_full: false, empty: true);
+      BinLevel binlevel3 =
+          BinLevel(binID: 180, full: false, half_full: false, empty: true);
+      BinLevel binlevel4 =
+          BinLevel(binID: 190, full: false, half_full: true, empty: false);
+      BinLevel binlevel5 =
+          BinLevel(binID: 200, full: false, half_full: false, empty: true);
+
+      /* addObj(binlevel, tableBinLevel);
+       addObj(binlevel1, tableBinLevel);
+       addObj(binlevel2, tableBinLevel);
+       addObj(binlevel3, tableBinLevel);
+       addObj(binlevel4, tableBinLevel);
+       addObj(binlevel5, tableBinLevel);*/
+
                 //  deleteObj(1, tableDriverStatus);
            //     addCol("performanceRate", tableDriverStatus);
            /*    addCol("BinsCollected", tableDriverStatus);

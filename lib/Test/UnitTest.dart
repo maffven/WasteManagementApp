@@ -46,7 +46,7 @@ void main() {
     //-------------------------------------------------------------
     test('password in database check', () async {
       try {
-        bool result = await LoginField.checkPassword("7890", true);
+        bool result = await LoginField.checkPassword("Manar1234", true);
         expect(result, true);
       } catch (error, stackTrace) {
         return Future.error(error, stackTrace);

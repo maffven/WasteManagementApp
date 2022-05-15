@@ -166,13 +166,13 @@ class _ViewNotification extends State<ViewNotification>
 
     for (int i = 0; i < binLevel.length; i++) {
       if (binLevel[i].empty == true) {
-        level = "Empty";
+        level = "Empty";break;
       } else if (binLevel[i].half_full == true) {
         color = Color(0xfff19840);
-        level = "Half-Full";
+        level = "Half-Full";break;
       } else {
         color = Color(0xfff05e5e);
-        level = "Full";
+        level = "Full";break;
       }
 
       //----------------------------------------------

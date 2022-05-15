@@ -112,7 +112,27 @@ void readDistance() {
           onTap: () {
             MapUtils.openMap(
                 21.4893852, 39.2462446); //to open google map app/direct
-          })
+          }),
+
+           Marker(
+          infoWindow: InfoWindow(title: titlee),
+          markerId: MarkerId('Green'),
+          position: LatLng(21.4897, 39.2502),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          onTap: () {
+            MapUtils.openMap(
+                21.4897,39.2502); //to open google map app/direct
+          }),
+          /* Marker(
+          infoWindow: InfoWindow(title: titlee),
+          markerId: MarkerId('Orange'),
+          position: LatLng(, ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+          onTap: () {
+            MapUtils.openMap(
+                21.4893852, 39.2462446); //to open google map app/direct
+          })*/
+       
     ];
   });
 }
