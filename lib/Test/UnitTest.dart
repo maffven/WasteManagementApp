@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/Screens/CommonFunctions.dart';
+import 'package:flutter_application_1/db/DatabaseHelper.dart';
 import 'package:flutter_application_1/model/Bin.dart';
 import 'package:flutter_application_1/model/BinLevel.dart';
 import 'package:flutter_application_1/model/District.dart';
 import 'package:flutter_application_1/model/Driver.dart';
 import 'package:flutter_application_1/model/FieldValidator.dart';
+import 'package:sqflite/sqlite_api.dart';
 import 'package:test/test.dart';
 import 'package:flutter_application_1/model/LoginField.dart';
 import 'package:flutter_application_1/model/ComplaintFields.dart';
@@ -147,9 +149,18 @@ void main() {
         List<Driver> drivers = await com.getDrivers();
         List<District> result = await com.getAssignedDistricts(drivers[0]);
         expect(result[0].driverID, drivers[0].driverID);
-      } catch (error) {
+      } on DatabaseException catch (error) {
         print(error);
       }
     });
   });
+}
+
+class LateInitializationError implements Exception {
+  final _message;
+  LateInitializationError([this._message]);
+  String toString() {
+    if (_message == null) return "Exception";
+    return "Exeption : $_message";
+  }
 }
